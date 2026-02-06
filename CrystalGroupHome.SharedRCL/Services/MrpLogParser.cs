@@ -14,6 +14,11 @@ namespace CrystalGroupHome.SharedRCL.Services
     /// </summary>
     public class MrpLogParser
     {
+        // Constants for parsing thresholds
+        private const int HeaderLinesToSkip = 2;
+        private const int EndOfFileThreshold = 20;
+        private const int DateSearchLineLimit = 5;
+
         /// <summary>
         /// Parses an MRP log file and extracts top-level run metadata.
         /// </summary>
@@ -110,7 +115,7 @@ namespace CrystalGroupHome.SharedRCL.Services
             if (contextualDate.HasValue)
             {
                 // Find the first timestamp in the file
-                foreach (var line in lines.Skip(2)) // Skip header lines
+                foreach (var line in lines.Skip(HeaderLinesToSkip)) // Skip header lines
                 {
                     var match = Regex.Match(line, @"^(\d{2}:\d{2}:\d{2})");
                     if (match.Success)
@@ -162,7 +167,7 @@ namespace CrystalGroupHome.SharedRCL.Services
                             // Only return if we've found a reasonable end time (not just any timestamp)
                             // Look for indicators this might be an end time
                             if (Regex.IsMatch(line, @"(finish|complete|done|end)", RegexOptions.IgnoreCase) ||
-                                i > lines.Count - 20) // Or if it's near the end of the file
+                                i > lines.Count - EndOfFileThreshold) // Or if it's near the end of the file
                             {
                                 return contextualDate.Value.Date.Add(time);
                             }
@@ -200,32 +205,47 @@ namespace CrystalGroupHome.SharedRCL.Services
 
         private string DetermineRunType(List<string> lines)
         {
-            // Look for keywords indicating run type
-            var content = string.Join(" ", lines);
-
-            // Check for explicit mentions
-            if (Regex.IsMatch(content, @"MRP\s+Regen", RegexOptions.IgnoreCase) ||
-                Regex.IsMatch(content, @"Regeneration", RegexOptions.IgnoreCase))
+            // Check for explicit mentions or patterns in lines
+            foreach (var line in lines)
             {
-                return "regen";
-            }
+                if (Regex.IsMatch(line, @"MRP\s+Regen", RegexOptions.IgnoreCase) ||
+                    Regex.IsMatch(line, @"Regeneration", RegexOptions.IgnoreCase))
+                {
+                    return "regen";
+                }
 
-            if (Regex.IsMatch(content, @"Net\s+Change", RegexOptions.IgnoreCase) ||
-                Regex.IsMatch(content, @"NetChange", RegexOptions.IgnoreCase))
-            {
-                return "net change";
+                if (Regex.IsMatch(line, @"Net\s+Change", RegexOptions.IgnoreCase) ||
+                    Regex.IsMatch(line, @"NetChange", RegexOptions.IgnoreCase))
+                {
+                    return "net change";
+                }
             }
 
             // Check for indicators in the log patterns
+            var hasPegging = false;
+            var hasProcessingPart = false;
+
+            foreach (var line in lines)
+            {
+                if (Regex.IsMatch(line, @"Building\s+Pegging", RegexOptions.IgnoreCase))
+                {
+                    hasPegging = true;
+                }
+
+                if (Regex.IsMatch(line, @"Start\s+Processing\s+Part", RegexOptions.IgnoreCase))
+                {
+                    hasProcessingPart = true;
+                }
+            }
+
             // Regen runs typically have "Building Pegging" operations
-            if (Regex.IsMatch(content, @"Building\s+Pegging", RegexOptions.IgnoreCase))
+            if (hasPegging)
             {
                 return "regen";
             }
 
             // Net change runs typically have "Start Processing Part" without full pegging
-            if (Regex.IsMatch(content, @"Start\s+Processing\s+Part", RegexOptions.IgnoreCase) &&
-                !Regex.IsMatch(content, @"Building\s+Pegging", RegexOptions.IgnoreCase))
+            if (hasProcessingPart && !hasPegging)
             {
                 return "net change";
             }
@@ -290,12 +310,14 @@ namespace CrystalGroupHome.SharedRCL.Services
                 return "incomplete";
             }
 
-            // Look for success indicators
-            var content = string.Join(" ", lines);
-            if (Regex.IsMatch(content, @"completed successfully", RegexOptions.IgnoreCase) ||
-                Regex.IsMatch(content, @"process.*complete", RegexOptions.IgnoreCase))
+            // Look for success indicators in lines
+            foreach (var line in lines)
             {
-                return "success";
+                if (Regex.IsMatch(line, @"completed successfully", RegexOptions.IgnoreCase) ||
+                    Regex.IsMatch(line, @"process.*complete", RegexOptions.IgnoreCase))
+                {
+                    return "success";
+                }
             }
 
             // If we have both start and end times and no errors, assume success
@@ -310,7 +332,7 @@ namespace CrystalGroupHome.SharedRCL.Services
         private DateTime? TryParseTimeWithDate(List<string> lines, string timeStr)
         {
             // Try to find a date in the first few lines
-            foreach (var line in lines.Take(5))
+            foreach (var line in lines.Take(DateSearchLineLimit))
             {
                 var match = Regex.Match(line, @"([A-Za-z]+,\s+[A-Za-z]+\s+\d{1,2},\s+\d{4})");
                 if (match.Success)
