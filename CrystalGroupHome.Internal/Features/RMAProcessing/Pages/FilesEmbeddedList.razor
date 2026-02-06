@@ -1,0 +1,17 @@
+@page "/rma-processing/files-embedded/list"
+@attribute [Authorize(Policy = AuthorizationPolicies.RMAProcessingAccess)]
+@using CrystalGroupHome.Internal.Authorization
+@layout IframeLayout
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Components
+@using Blazorise
+@using Blazorise.Components
+@inherits FilesEmbeddedListPageBase
+
+<PageTitle>RMA Files</PageTitle>
+
+<RMAFileList RmaNumber="@RmaNumber"
+             RmaLineNumber="@RmaLineNumber" 
+             SerialNumber="@SerialNumber"
+             ShowAllFiles="@ShowAllFiles" />

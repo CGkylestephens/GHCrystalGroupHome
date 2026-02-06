@@ -1,0 +1,47 @@
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.JSInterop
+
+@using CrystalGroupHome.Internal
+@using CrystalGroupHome.SharedRCL
+@using CrystalGroupHome.SharedRCL.Components
+@using CrystalGroupHome.SharedRCL.Data
+@using CrystalGroupHome.SharedRCL.Data.Employees
+@using CrystalGroupHome.SharedRCL.Data.Labor
+@using CrystalGroupHome.SharedRCL.Data.Parts
+@using CrystalGroupHome.SharedRCL.Data.Vendor
+@using CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms
+@using CrystalGroupHome.SharedRCL.Helpers
+
+@using System
+@using System.Linq
+@using System.Collections.Generic
+@using Blazorise
+@using Blazorise.Components
+@using Blazorise.Snackbar
+@using Blazorise.DataGrid
+@using Blazorise.Bootstrap5
+@using Blazorise.LoadingIndicator
+@using Blazorise.Icons.FontAwesome
+
+@using CrystalGroupHome.Internal.Common.Data.Customers
+@using CrystalGroupHome.Internal.Common.Data.Labor
+@using CrystalGroupHome.Internal.Common.Data.Parts
+@using CrystalGroupHome.Internal.Features.ProductFailures.Data
+@using CrystalGroupHome.Internal.Features.JobbyJobs.Data
+@using CrystalGroupHome.Internal.Features.FirstTimeYield.Data
+@using CrystalGroupHome.Internal.Features.CMHub.CMDex.Data
+@using CrystalGroupHome.Internal.Features.CMHub.CMDex.Models
+@using CrystalGroupHome.Internal.Features.CMHub.VendorComms.Data
+@using CrystalGroupHome.Internal.Features.CMHub.CustComms.Data
+@using CrystalGroupHome.Internal.Features.CMHub.CustComms.Models
+@using CrystalGroupHome.Internal.Features.CMHub.CMNotif.Data
+@using CrystalGroupHome.Internal.Features.CMHub.CMNotif.Models
+@using CrystalGroupHome.Internal.Features.EnvironmentComparer.Data
+@using CrystalGroupHome.Internal.Navigation
+@using CrystalGroupHome.Internal.Pages

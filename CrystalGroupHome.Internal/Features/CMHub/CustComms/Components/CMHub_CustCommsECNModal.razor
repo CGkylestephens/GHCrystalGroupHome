@@ -1,0 +1,45 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.CustComms.Components
+@inherits CMHub_CustCommsECNModalBase
+
+<Modal @ref="ModalRef">
+    <ModalContent Centered="true" style="position: relative;">
+        <ModalHeader>
+            <ModalTitle>@(IsPrompt ? $"Task Completed: Enter ECN (Optional)" : $"Edit ECN for {PartChangeTask?.ImpactedPartNum}")</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            @if (PartChangeTask != null)
+            {
+                <Field>
+                    <FieldLabel>ECN Number</FieldLabel>
+                    <TextEdit @bind-Text="@CurrentECNValue" Placeholder="Enter ECN Number" />
+                </Field>
+            }
+            else
+            {
+                <p>Loading task details...</p>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="Cancel">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="SaveChanges">Save ECN</Button>
+        </ModalFooter>
+    </ModalContent>
+
+    @if (IsSaving)
+    {
+        <div style="
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(255,255,255,0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Saving...</span>
+            </div>
+        </div>
+    }
+</Modal>

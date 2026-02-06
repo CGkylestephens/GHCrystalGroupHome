@@ -1,0 +1,22 @@
+﻿@inherits CMHub_CMDexPartEmployeeDialogBase
+
+<ModalHeader>
+    <ModalTitle>Add @(EmployeeType.ToString())</ModalTitle>
+    <CloseButton />
+</ModalHeader>
+<EditForm Model="DraftPartEmployeeIndex" OnValidSubmit="HandleValidSubmit">
+    <ModalBody>
+        <Label for="partEmployeeSelect">Select @(EmployeeType.ToString())</Label>
+        <Select TValue="int" @bind-SelectedValue="DraftPartEmployeeIndex" id="partEmployeeSelect">
+            <SelectItem Value="-1">N/A</SelectItem>
+            @foreach (var partEmp in PartEmployees)
+            {
+                <SelectItem Value="@PartEmployees.IndexOf(partEmp)">@partEmp.DisplayName</SelectItem>
+            }
+        </Select>
+    </ModalBody>
+    <ModalFooter>
+        <Button Color="Color.Primary" Type="ButtonType.Submit" class="me-2">Add @(EmployeeType.ToString())</Button>
+        <Button Color="Color.Secondary" Clicked="Cancel">Cancel</Button>
+    </ModalFooter>
+</EditForm>

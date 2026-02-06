@@ -1,0 +1,61 @@
+﻿@using Blazorise
+@inject IModalService Modal
+
+<Modal @bind-Visible="@IsVisible" Title="@Title">
+    <ModalContent Size="ModalSize.Large" Centered>
+        <ModalHeader>
+            <strong>@Title</strong>
+        </ModalHeader>
+        <ModalBody>
+            <div class="modal-body">
+                @if (ChildContent != null)
+                {
+                    @ChildContent
+                }
+                else
+                {
+                    @((MarkupString)Message)
+                }
+            </div>
+        </ModalBody>
+        <ModalFooter>
+            @if (IsErrorMode)
+            {
+                <Button Color="Color.Primary" Clicked="Confirm">OK</Button>
+            }
+            else
+            {
+                <Button Color="Color.Secondary" Clicked="Cancel">Cancel</Button>
+                <Button Color="Color.Success" Clicked="Confirm">Confirm</Button>
+            }
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Confirm";
+    [Parameter] public string Message { get; set; } = "Are you sure?";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+    [Parameter] public bool IsVisible { get; set; } = false;
+    [Parameter] public bool IsErrorMode { get; set; } = false;
+
+    public async Task ShowAsync(bool errorMode = false)
+    {
+        IsErrorMode = errorMode;
+        IsVisible = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task Confirm()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync(true);
+    }
+
+    private async Task Cancel()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync(false);
+    }
+}

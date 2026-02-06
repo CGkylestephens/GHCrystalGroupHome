@@ -1,0 +1,1082 @@
+﻿@attribute [Route(NavHelpers.EpicompareMainPage)]
+@using Blazorise.DataGrid
+@using CrystalGroupHome.Internal.Features.EnvironmentComparer.Data
+@using CrystalGroupHome.Internal.Features.EnvironmentComparer.Models
+@using CrystalGroupHome.Internal.Features.EnvironmentComparer.Components
+@using CrystalGroupHome.SharedRCL.Data
+@using BlazorTextDiff
+@using CrystalGroupHome.SharedRCL.Helpers
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+
+@attribute [Authorize(Roles = AccessOverrides.ITRole)]
+
+<style>
+    .code-view-container {
+        background-color: #212529;
+        color: white;
+        border: 1px solid #343a40;
+        border-radius: 0.25rem;
+        padding: 1rem;
+        max-width: 100%;
+        overflow: hidden; /* Prevent horizontal overflow */
+    }
+
+    .code-view-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 0.875em;
+        table-layout: fixed; /* Force table to respect width constraints */
+    }
+
+        .code-view-table td {
+            padding: 0;
+            vertical-align: top;
+        }
+
+    .line-number {
+        padding-right: 1rem !important;
+        text-align: right;
+        color: #6c757d;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border-right: 1px solid var(--diff-border-primary);
+        width: 4rem; /* Fixed width for line numbers */
+    }
+
+    .code-line {
+        white-space: pre-wrap; /* Allow wrapping while preserving some whitespace formatting */
+        word-wrap: break-word; /* Break long words if necessary */
+        word-break: break-all; /* Break long unbreakable strings */
+        width: calc(100% - 4rem); /* Take remaining width after line numbers */
+        padding-left: 1rem !important;
+        overflow-wrap: break-word; /* Modern property for better word breaking */
+    }
+
+    .loading-status {
+        color: #6c757d;
+        font-style: italic;
+        margin-left: 0.5rem;
+    }
+
+    .performance-stats {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+    }
+
+    .content-loading-panel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        margin-top: 1rem;
+    }
+
+    .content-loading-text {
+        margin-left: 0.75rem;
+        color: #6c757d;
+        font-style: italic;
+    }
+
+    .custom-filter-select {
+        min-width: 80px;
+        font-size: 0.875rem;
+    }
+
+    .unauthorized-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .unauthorized-icon {
+        font-size: 4rem;
+        color: #dc3545;
+        margin-bottom: 1rem;
+    }
+
+    .comparison-options {
+        padding: 0.75rem 1rem;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+    }
+
+    .comparison-options-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .comparison-options-title {
+        font-weight: 600;
+        color: #495057;
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .comparison-options-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .comparison-options-body {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem 1.5rem;
+        align-items: center;
+    }
+
+    .comparison-checkbox {
+        display: flex;
+        align-items: center;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        transition: background-color 0.15s ease-in-out;
+        cursor: pointer;
+    }
+
+    .comparison-checkbox:hover {
+        background-color: #e9ecef;
+    }
+
+    .comparison-checkbox input {
+        margin-right: 0.5rem;
+    }
+
+    .comparison-checkbox label {
+        cursor: pointer;
+        margin-bottom: 0;
+        font-size: 0.875rem;
+    }
+
+    .comparison-count {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-left: 0.5rem;
+    }
+
+    .comparison-warning {
+        display: flex;
+        align-items: center;
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        background-color: #fff5f5;
+        border-radius: 0.25rem;
+    }
+
+    .comparison-warning i {
+        margin-right: 0.5rem;
+    }
+</style>
+
+<PageTitle>Epicompare</PageTitle>
+
+@if (!_isAuthorized && _authorizationChecked)
+{
+    <div class="unauthorized-container">
+        <div class="unauthorized-icon">
+            <i class="fa fa-lock"></i>
+        </div>
+        <h2>Access Denied</h2>
+        <p class="text-muted">You don't have permission to access this page.</p>
+        <p class="text-muted">This feature is restricted to IT personnel only.</p>
+        <Button Color="Color.Primary" Clicked="@(() => NavigationManager.NavigateTo("/"))">
+            <span class="fa fa-home me-2"></span>Return to Home
+        </Button>
+    </div>
+}
+else if (_isAuthorized)
+{
+    <h1>Epicompare</h1>
+
+    <Div class="row mb-3">
+        <Div class="col-md-4">
+            <label for="sourceEnv" class="form-label">Source Environment</label>
+            <Select TValue="string" id="sourceEnv" @bind-SelectedValue="_sourceEnvironment">
+                <SelectItem Value="@string.Empty">Select Source...</SelectItem>
+                @foreach (var env in _environments)
+                {
+                    <SelectItem Value="@env.Name">@env.Name</SelectItem>
+                }
+            </Select>
+        </Div>
+        <Div class="col-md-4">
+            <label for="targetEnv" class="form-label">Target Environment</label>
+            <Select TValue="string" id="targetEnv" @bind-SelectedValue="_targetEnvironment">
+                <SelectItem Value="@string.Empty">Select Target...</SelectItem>
+                @foreach (var env in _environments)
+                {
+                    <SelectItem Value="@env.Name">@env.Name</SelectItem>
+                }
+            </Select>
+        </Div>
+        <Div class="col-md-4 d-flex align-items-end">
+            <Button Color="Color.Primary" @onclick="CompareEnvironments" Disabled="@(_isLoading || !HasAnyComparisonSelected)">
+                @if (_isLoading)
+                {
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Loading...</span>
+                }
+                else
+                {
+                    <span>Compare</span>
+                }
+            </Button>
+            @if (_isLoading && !string.IsNullOrEmpty(_loadingStatus))
+            {
+                <span class="loading-status">@_loadingStatus</span>
+            }
+        </Div>
+    </Div>
+
+    <Div class="row mb-3">
+        <Div class="col-12">
+            <div class="comparison-options">
+                <div class="comparison-options-header">
+                    <h6 class="comparison-options-title">
+                        <i class="fa fa-sliders me-2"></i>Comparison Options
+                        <span class="comparison-count">(@SelectedComparisonCount of 4 selected)</span>
+                    </h6>
+                    <div class="comparison-options-actions">
+                        <button type="button" class="btn btn-sm btn-outline-primary" @onclick="SelectAllComparisons" disabled="@(_isLoading || HasAllComparisonsSelected)">
+                            <i class="fa fa-check-square me-1"></i>Select All
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="ClearAllComparisons" disabled="@(_isLoading || !HasAnyComparisonSelected)">
+                            <i class="fa fa-square-o me-1"></i>Clear All
+                        </button>
+                    </div>
+                </div>
+                <div class="comparison-options-body">
+                    <div class="comparison-checkbox">
+                        <input class="form-check-input" type="checkbox" id="chkBaqs" @bind="_compareBaqs" disabled="@_isLoading">
+                        <label class="form-check-label" for="chkBaqs">BAQs</label>
+                    </div>
+                    <div class="comparison-checkbox">
+                        <input class="form-check-input" type="checkbox" id="chkBpms" @bind="_compareBpms" disabled="@_isLoading">
+                        <label class="form-check-label" for="chkBpms">BPM Directives</label>
+                    </div>
+                    <div class="comparison-checkbox">
+                        <input class="form-check-input" type="checkbox" id="chkUdColumns" @bind="_compareUdColumns" disabled="@_isLoading">
+                        <label class="form-check-label" for="chkUdColumns">UD Columns</label>
+                    </div>
+                    <div class="comparison-checkbox">
+                        <input class="form-check-input" type="checkbox" id="chkAppLayers" @bind="_compareAppLayers" disabled="@_isLoading">
+                        <label class="form-check-label" for="chkAppLayers">Application Layers</label>
+                    </div>
+                </div>
+                @if (!HasAnyComparisonSelected)
+                {
+                    <div class="comparison-warning">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <span>Select at least one comparison type to continue</span>
+                    </div>
+                }
+            </div>
+        </Div>
+    </Div>
+
+    @if (_performanceStats != null)
+    {
+        <div class="performance-stats">
+            <strong>Comparison Statistics:</strong>
+            @if (_performanceStats.CompareBaqs)
+            {
+                <text>BAQs: @_performanceStats.BaqCount items (@($"{_performanceStats.BaqLoadTime.TotalSeconds:F1}"))s | </text>
+            }
+            @if (_performanceStats.CompareBpms)
+            {
+                <text>BPM Directives: @_performanceStats.BpmCount items (@($"{_performanceStats.BpmLoadTime.TotalSeconds:F1}"))s | </text>
+            }
+            @if (_performanceStats.CompareUdColumns)
+            {
+                <text>UD Columns: @_performanceStats.UdColumnCount items (@($"{_performanceStats.UdColumnLoadTime.TotalSeconds:F1}"))s | </text>
+            }
+            @if (_performanceStats.CompareAppLayers)
+            {
+                <text>App Layers: @_performanceStats.AppLayerCount items (@($"{_performanceStats.AppLayerLoadTime.TotalSeconds:F1}"))s | </text>
+            }
+            Total Time: @($"{_performanceStats.TotalTime.TotalSeconds:F1}")s
+        </div>
+    }
+
+    @if ((_lastComparedBaqs && _baqComparisonResult != null) || 
+         (_lastComparedBpms && _bpmComparisonResult != null) || 
+         (_lastComparedUdColumns && _udColumnComparisonResult != null) ||
+         (_lastComparedAppLayers && _appLayerComparisonResult != null))
+    {
+        <Tabs SelectedTab="@_selectedMainTab" SelectedTabChanged="@OnMainTabChanged">
+            <Items>
+                @if (_lastComparedBaqs && _baqComparisonResult != null)
+                {
+                    <Tab Name="baqs">BAQ Comparison</Tab>
+                }
+                @if (_lastComparedBpms && _bpmComparisonResult != null)
+                {
+                    <Tab Name="bpms">BPM Directive Comparison</Tab>
+                }
+                @if (_lastComparedUdColumns && _udColumnComparisonResult != null)
+                {
+                    <Tab Name="udcolumns">UD Column Comparison</Tab>
+                }
+                @if (_lastComparedAppLayers && _appLayerComparisonResult != null)
+                {
+                    <Tab Name="applayers">Application Layer Comparison</Tab>
+                }
+            </Items>
+            <Content>
+                @if (_lastComparedBaqs)
+                {
+                <TabPanel Name="baqs">
+                    @if (_baqComparisonResult != null)
+                    {
+                        <Card class="mb-4">
+                            <CardHeader>
+                                <h2>BAQ Comparison Results</h2>
+                            </CardHeader>
+                            <CardBody>
+                                <Tabs SelectedTab="@_selectedBaqTab" SelectedTabChanged="@(s => OnTabChanged(s, "baq"))">
+                                    <Items>
+                                        <Tab Name="identical">Identical (@_baqComparisonResult.Identical.Count)</Tab>
+                                        <Tab Name="differences">Differences (@_baqComparisonResult.Differences.Count)</Tab>
+                                        <Tab Name="onlyInSource">Only In @_lastComparedSourceEnvironment (@_baqComparisonResult.ExistsOnlyInSource.Count)</Tab>
+                                        <Tab Name="onlyInTarget">Only In @_lastComparedTargetEnvironment (@_baqComparisonResult.ExistsOnlyInTarget.Count)</Tab>
+                                    </Items>
+                                    <Content>
+                                        <TabPanel Name="identical">
+                                            <DataGrid TItem="BaqDefinition"
+                                                      Data="@_baqComparisonResult.Identical"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10"
+                                                      SelectedRowChanged="@(row => OnBaqIdenticalSelected(row))"
+                                                      SelectionMode="DataGridSelectionMode.Single">
+                                                <DataGridColumn Field="@nameof(BaqDefinition.QueryID)" Caption="Query ID" />
+                                                <DataGridColumn Field="@nameof(BaqDefinition.Description)" Caption="Description" />
+                                                <DataGridColumn Field="@nameof(BaqDefinition.AuthorID)" Caption="Author" />
+                                            </DataGrid>
+                                            @if (_isContentLoading && _loadingContentType == "baq_identical")
+                                            {
+                                                <div class="content-loading-panel">
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    <span class="content-loading-text">Loading BAQ content...</span>
+                                                </div>
+                                            }
+                                            else if (_selectedIdenticalBaq != null)
+                                            {
+                                                <Div class="mt-4">
+                                                    <h3>Content for <strong>@_selectedIdenticalBaq.QueryID</strong></h3>
+                                                    <div class="code-view-container">
+                                                        <table class="code-view-table">
+                                                            <tbody>
+                                                                @foreach (var (line, index) in GetFormattedContentLines(_selectedIdenticalBaq.DisplayPhrase, $"baq_identical_{_selectedIdenticalBaq.QueryID}"))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="line-number">@(index + 1)</td>
+                                                                        <td class="code-line">@line</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </Div>
+                                            }
+                                        </TabPanel>
+                                        <TabPanel Name="differences">
+                                            <DataGrid TItem="ComparisonDifference<BaqDefinition>"
+                                                      Data="@_baqComparisonResult.Differences"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10"
+                                                      SelectedRowChanged="@(row => OnBaqDifferenceSelected(row))"
+                                                      SelectionMode="DataGridSelectionMode.Single">
+                                                <DataGridColumn Field="SourceItem.QueryID" Caption="Query ID" />
+                                                <DataGridColumn Field="SourceItem.Description" Caption="Description" />
+                                                <DataGridColumn Field="SourceItem.AuthorID" Caption="Author" />
+                                            </DataGrid>
+                                            @if (_isContentLoading && _loadingContentType == "baq_difference")
+                                            {
+                                                <div class="content-loading-panel">
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    <span class="content-loading-text">Processing BAQ comparison...</span>
+                                                </div>
+                                            }
+                                            else if (_selectedBaqDifference != null)
+                                            {
+                                                <Div class="mt-4">
+                                                    <h3>Comparison for <strong>@_selectedBaqDifference.SourceItem.QueryID</strong></h3>
+                                                    <Div class="row mt-3">
+                                                        <Div class="col-md-6">
+                                                            <Card>
+                                                                <CardHeader>Source: @_sourceEnvironment</CardHeader>
+                                                                <CardBody>
+                                                                    <dl>
+                                                                        <dt>Description</dt>
+                                                                        <dd>@_selectedBaqDifference.SourceItem.Description</dd>
+                                                                        <dt>Author</dt>
+                                                                        <dd>@_selectedBaqDifference.SourceItem.AuthorID</dd>
+                                                                    </dl>
+                                                                </CardBody>
+                                                            </Card>
+                                                        </Div>
+                                                        <Div class="col-md-6">
+                                                            <Card>
+                                                                <CardHeader>Target: @_lastComparedTargetEnvironment</CardHeader>
+                                                                <CardBody>
+                                                                    <dl>
+                                                                        <dt>Description</dt>
+                                                                        <dd>@_selectedBaqDifference.TargetItem.Description</dd>
+                                                                        <dt>Author</dt>
+                                                                        <dd>@_selectedBaqDifference.TargetItem.AuthorID</dd>
+                                                                    </dl>
+                                                                </CardBody>
+                                                            </Card>
+                                                        </Div>
+                                                    </Div>
+                                                    <h4 class="mt-4">BAQ Content Comparison</h4>
+                                                    <TextDiff OldText="@_selectedBaqDifference.SourceItem.DisplayPhrase" NewText="@_selectedBaqDifference.TargetItem.DisplayPhrase" />
+                                                </Div>
+                                            }
+                                        </TabPanel>
+                                        <TabPanel Name="onlyInSource">
+                                            <DataGrid TItem="BaqDefinition"
+                                                      Data="@_baqComparisonResult.ExistsOnlyInSource"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      ShowSearchBar="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10"
+                                                      SelectedRowChanged="@(row => OnBaqOnlyInSourceSelected(row))"
+                                                      SelectionMode="DataGridSelectionMode.Single">
+                                                <DataGridColumn Field="@nameof(BaqDefinition.QueryID)" Caption="Query ID" />
+                                                <DataGridColumn Field="@nameof(BaqDefinition.Description)" Caption="Description" />
+                                                <DataGridColumn Field="@nameof(BaqDefinition.AuthorID)" Caption="Author" />
+                                            </DataGrid>
+                                            @if (_isContentLoading && _loadingContentType == "baq_onlyInSource")
+                                            {
+                                                <div class="content-loading-panel">
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    <span class="content-loading-text">Loading BAQ content...</span>
+                                                </div>
+                                            }
+                                            else if (_selectedOnlyInSourceBaq != null)
+                                            {
+                                                <Div class="mt-4">
+                                                    <h3>Content for <strong>@_selectedOnlyInSourceBaq.QueryID</strong></h3>
+                                                    <div class="code-view-container">
+                                                        <table class="code-view-table">
+                                                            <tbody>
+                                                                @foreach (var (line, index) in GetFormattedContentLines(_selectedOnlyInSourceBaq.DisplayPhrase, $"baq_source_{_selectedOnlyInSourceBaq.QueryID}"))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="line-number">@(index + 1)</td>
+                                                                        <td class="code-line">@line</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </Div>
+                                            }
+                                        </TabPanel>
+                                        <TabPanel Name="onlyInTarget">
+                                            <DataGrid TItem="BaqDefinition"
+                                                      Data="@_baqComparisonResult.ExistsOnlyInTarget"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10"
+                                                      SelectedRowChanged="@(row => OnBaqOnlyInTargetSelected(row))"
+                                                      SelectionMode="DataGridSelectionMode.Single">
+                                                <DataGridColumn Field="@nameof(BaqDefinition.QueryID)" Caption="Query ID" />
+                                                <DataGridColumn Field="@nameof(BaqDefinition.Description)" Caption="Description" />
+                                                <DataGridColumn Field="@nameof(BaqDefinition.AuthorID)" Caption="Author" />
+                                            </DataGrid>
+                                            @if (_isContentLoading && _loadingContentType == "baq_onlyInTarget")
+                                            {
+                                                <div class="content-loading-panel">
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    <span class="content-loading-text">Loading BAQ content...</span>
+                                                </div>
+                                            }
+                                            else if (_selectedOnlyInTargetBaq != null)
+                                            {
+                                                <Div class="mt-4">
+                                                    <h3>Content for <strong>@_selectedOnlyInTargetBaq.QueryID</strong></h3>
+                                                    <div class="code-view-container">
+                                                        <table class="code-view-table">
+                                                            <tbody>
+                                                                @foreach (var (line, index) in GetFormattedContentLines(_selectedOnlyInTargetBaq.DisplayPhrase, $"baq_target_{_selectedOnlyInTargetBaq.QueryID}"))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="line-number">@(index + 1)</td>
+                                                                        <td class="code-line">@line</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </Div>
+                                            }
+                                        </TabPanel>
+                                    </Content>
+                                </Tabs>
+                            </CardBody>
+                        </Card>
+                    }
+                </TabPanel>
+                }
+                @if (_lastComparedBpms)
+                {
+                <TabPanel Name="bpms">
+                    @if (_bpmComparisonResult != null)
+                    {
+                        <Card class="mb-4">
+                            <CardHeader>
+                                <h2>BPM Directive Comparison Results</h2>
+                            </CardHeader>
+                            <CardBody>
+                                <Tabs SelectedTab="@_selectedBpmTab" SelectedTabChanged="@(s => OnTabChanged(s, "bpm"))">
+                                    <Items>
+                                        <Tab Name="identical">Identical (@_bpmComparisonResult.Identical.Count)</Tab>
+                                        <Tab Name="differences">Differences (@_bpmComparisonResult.Differences.Count)</Tab>
+                                        <Tab Name="onlyInSource">Only In @_lastComparedSourceEnvironment (@_bpmComparisonResult.ExistsOnlyInSource.Count)</Tab>
+                                        <Tab Name="onlyInTarget">Only In @_lastComparedTargetEnvironment (@_bpmComparisonResult.ExistsOnlyInTarget.Count)</Tab>
+                                    </Items>
+                                    <Content>
+                                        <TabPanel Name="identical">
+                                            <DataGrid TItem="BpmDirectiveDefinition"
+                                                      Data="@_bpmComparisonResult.Identical"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10"
+                                                      SelectedRowChanged="@(row => OnBpmIdenticalSelected(row))"
+                                                      SelectionMode="DataGridSelectionMode.Single">
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.BpMethodCode)" Caption="Method" />
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.Name)" Caption="Directive Name" />
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.BusinessObject)" Caption="Business Object" />
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.IsEnabled)" Caption="Enabled" CustomFilter="@OnIsEnabledCustomFilter">
+                                                    <DisplayTemplate>
+                                                        @if (context.IsEnabled)
+                                                        {
+                                                            <span class="badge bg-success">Yes</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary">No</span>
+                                                        }
+                                                    </DisplayTemplate>
+                                                    <FilterTemplate>
+                                                        <Select TValue="EnabledFilter" Class="custom-filter-select" SelectedValueChanged="@(e => context.TriggerFilterChange(e))">
+                                                            @foreach (var filter in Enum.GetValues<EnabledFilter>())
+                                                            {
+                                                                <SelectItem Value="@filter">
+                                                                    @(filter switch
+                                                                    {
+                                                                        EnabledFilter.All => "All",
+                                                                        EnabledFilter.Yes => "Yes",
+                                                                        EnabledFilter.No => "No",
+                                                                        _ => filter.ToString()
+                                                                    })
+                                                </SelectItem>
+                                                                                                }
+                                                        </Select>
+                                                    </FilterTemplate>
+                                                </DataGridColumn>
+                                            </DataGrid>
+                                            @if (_isContentLoading && _loadingContentType == "bpm_identical")
+                                            {
+                                                <div class="content-loading-panel">
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    <span class="content-loading-text">Processing BPM XML content...</span>
+                                                </div>
+                                            }
+                                            else if (_selectedIdenticalBpm != null)
+                                            {
+                                                <Div class="mt-4">
+                                                    <h3>Directive: <strong>@_selectedIdenticalBpm.Name</strong> (@_selectedIdenticalBpm.BpMethodCode)</h3>
+                                                    <Div class="row mb-3">
+                                                        <Div class="col-md-6">
+                                                            <dl class="row">
+                                                                <dt class="col-sm-4">Description:</dt>
+                                                                <dd class="col-sm-8">@(_selectedIdenticalBpm.Description ?? "N/A")</dd>
+                                                                <dt class="col-sm-4">Enabled:</dt>
+                                                                <dd class="col-sm-8">@(_selectedIdenticalBpm.IsEnabled ? "Yes" : "No")</dd>
+                                                                <dt class="col-sm-4">Order:</dt>
+                                                                <dd class="col-sm-8">@_selectedIdenticalBpm.Order</dd>
+                                                            </dl>
+                                                        </Div>
+                                                        <Div class="col-md-6">
+                                                            <dl class="row">
+                                                                <dt class="col-sm-4">Business Object:</dt>
+                                                                <dd class="col-sm-8">@_selectedIdenticalBpm.BusinessObject</dd>
+                                                                <dt class="col-sm-4">Method:</dt>
+                                                                <dd class="col-sm-8">@_selectedIdenticalBpm.MethodName</dd>
+                                                                <dt class="col-sm-4">System:</dt>
+                                                                <dd class="col-sm-8">@_selectedIdenticalBpm.SystemCode</dd>
+                                                            </dl>
+                                                        </Div>
+                                                    </Div>
+                                                    <h4>Directive XML Content</h4>
+                                                    <div class="code-view-container">
+                                                        <table class="code-view-table">
+                                                            <tbody>
+                                                                @foreach (var (line, index) in GetFormattedXmlLines(_selectedIdenticalBpm.Body, $"bpm_identical_{_selectedIdenticalBpm.DirectiveID}"))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="line-number">@(index + 1)</td>
+                                                                        <td class="code-line">@line</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </Div>
+                                            }
+                                        </TabPanel>
+                                        <TabPanel Name="differences">
+                                            <DataGrid TItem="ComparisonDifference<BpmDirectiveDefinition>"
+                                                      Data="@_bpmComparisonResult.Differences"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10"
+                                                      SelectedRowChanged="@(row => OnBpmDifferenceSelected(row))"
+                                                      SelectionMode="DataGridSelectionMode.Single">
+                                                <DataGridColumn Field="SourceItem.BpMethodCode" Caption="Method" />
+                                                <DataGridColumn Field="SourceItem.Name" Caption="Directive Name" />
+                                                <DataGridColumn Field="SourceItem.BusinessObject" Caption="Business Object" />
+                                                <DataGridColumn Field="SourceItem.IsEnabled" Caption="Source Enabled" CustomFilter="@OnIsEnabledCustomFilter">
+                                                    <DisplayTemplate>
+                                                        @if (context.SourceItem.IsEnabled)
+                                                        {
+                                                            <span class="badge bg-success">Yes</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary">No</span>
+                                                        }
+                                                    </DisplayTemplate>
+                                                    <FilterTemplate>
+                                                        <Select TValue="EnabledFilter" Class="custom-filter-select" SelectedValueChanged="@(e => context.TriggerFilterChange(e))">
+                                                            @foreach (var filter in Enum.GetValues<EnabledFilter>())
+                                                            {
+                                                                <SelectItem Value="@filter">
+                                                                    @(filter switch
+                                                                    {
+                                                                        EnabledFilter.All => "All",
+                                                                        EnabledFilter.Yes => "Yes",
+                                                                        EnabledFilter.No => "No",
+                                                                        _ => filter.ToString()
+                                                                    })
+                                                </SelectItem>
+                                                                                                }
+                                                        </Select>
+                                                    </FilterTemplate>
+                                                </DataGridColumn>
+
+                                                <DataGridColumn Field="TargetItem.IsEnabled" Caption="Target Enabled" CustomFilter="@OnIsEnabledCustomFilter">
+                                                    <DisplayTemplate>
+                                                        @if (context.TargetItem.IsEnabled)
+                                                        {
+                                                            <span class="badge bg-success">Yes</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary">No</span>
+                                                        }
+                                                    </DisplayTemplate>
+                                                    <FilterTemplate>
+                                                        <Select TValue="EnabledFilter" Class="custom-filter-select" SelectedValueChanged="@(e => context.TriggerFilterChange(e))">
+                                                            @foreach (var filter in Enum.GetValues<EnabledFilter>())
+                                                            {
+                                                                <SelectItem Value="@filter">
+                                                                    @(filter switch
+                                                                    {
+                                                                        EnabledFilter.All => "All",
+                                                                        EnabledFilter.Yes => "Yes",
+                                                                        EnabledFilter.No => "No",
+                                                                        _ => filter.ToString()
+                                                                    })
+                                                </SelectItem>
+                                                                                                }
+                                                        </Select>
+                                                    </FilterTemplate>
+                                                </DataGridColumn>
+                                            </DataGrid>
+                                            @if (_isContentLoading && _loadingContentType == "bpm_difference")
+                                            {
+                                                <div class="content-loading-panel">
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    <span class="content-loading-text">Processing BPM comparison...</span>
+                                                </div>
+                                            }
+                                            else if (_selectedBpmDifference != null)
+                                            {
+                                                <Div class="mt-4">
+                                                    <h3>Comparison for <strong>@_selectedBpmDifference.SourceItem.Name</strong> (@_selectedBpmDifference.SourceItem.BpMethodCode)</h3>
+                                                    <Div class="row mt-3">
+                                                        <Div class="col-md-6">
+                                                            <Card>
+                                                                <CardHeader>Source: @_lastComparedSourceEnvironment</CardHeader>
+                                                                <CardBody>
+                                                                    <dl class="row">
+                                                                        <dt class="col-sm-4">Description:</dt>
+                                                                        <dd class="col-sm-8">@(_selectedBpmDifference.SourceItem.Description ?? "N/A")</dd>
+                                                                        <dt class="col-sm-4">Enabled:</dt>
+                                                                        <dd class="col-sm-8">@(_selectedBpmDifference.SourceItem.IsEnabled ? "Yes" : "No")</dd>
+                                                                        <dt class="col-sm-4">Order:</dt>
+                                                                        <dd class="col-sm-8">@_selectedBpmDifference.SourceItem.Order</dd>
+                                                                        <dt class="col-sm-4">Business Object:</dt>
+                                                                        <dd class="col-sm-8">@_selectedBpmDifference.SourceItem.BusinessObject</dd>
+                                                                    </dl>
+                                                                </CardBody>
+                                                            </Card>
+                                                        </Div>
+                                                        <Div class="col-md-6">
+                                                            <Card>
+                                                                <CardHeader>Target: @_targetEnvironment</CardHeader>
+                                                                <CardBody>
+                                                                    <dl class="row">
+                                                                        <dt class="col-sm-4">Description:</dt>
+                                                                        <dd class="col-sm-8">@(_selectedBpmDifference.TargetItem.Description ?? "N/A")</dd>
+                                                                        <dt class="col-sm-4">Enabled:</dt>
+                                                                        <dd class="col-sm-8">@(_selectedBpmDifference.TargetItem.IsEnabled ? "Yes" : "No")</dd>
+                                                                        <dt class="col-sm-4">Order:</dt>
+                                                                        <dd class="col-sm-8">@_selectedBpmDifference.TargetItem.Order</dd>
+                                                                        <dt class="col-sm-4">Business Object:</dt>
+                                                                        <dd class="col-sm-8">@_selectedBpmDifference.TargetItem.BusinessObject</dd>
+                                                                    </dl>
+                                                                </CardBody>
+                                                            </Card>
+                                                        </Div>
+                                                    </Div>
+                                                    <h4 class="mt-4">Directive XML Comparison</h4>
+                                                    <TextDiff OldText="@GetFormattedXml(_selectedBpmDifference.SourceItem.Body, $"bpm_diff_source_{_selectedBpmDifference.SourceItem.DirectiveID}")"
+                                                              NewText="@GetFormattedXml(_selectedBpmDifference.TargetItem.Body, $"bpm_diff_target_{_selectedBpmDifference.TargetItem.DirectiveID}")" />
+                                                </Div>
+                                            }
+                                        </TabPanel>
+                                        <TabPanel Name="onlyInSource">
+                                            <DataGrid TItem="BpmDirectiveDefinition"
+                                                      Data="@_bpmComparisonResult.ExistsOnlyInSource"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      ShowSearchBar="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10"
+                                                      SelectedRowChanged="@(row => OnBpmOnlyInSourceSelected(row))"
+                                                      SelectionMode="DataGridSelectionMode.Single">
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.BpMethodCode)" Caption="Method" />
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.Name)" Caption="Directive Name" />
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.BusinessObject)" Caption="Business Object" />
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.IsEnabled)" Caption="Enabled" CustomFilter="@OnIsEnabledCustomFilter">
+                                                    <DisplayTemplate>
+                                                        @if (context.IsEnabled)
+                                                        {
+                                                            <span class="badge bg-success">Yes</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary">No</span>
+                                                        }
+                                                    </DisplayTemplate>
+                                                    <FilterTemplate>
+                                                        <Select TValue="EnabledFilter" Class="custom-filter-select" SelectedValueChanged="@(e => context.TriggerFilterChange(e))">
+                                                            @foreach (var filter in Enum.GetValues<EnabledFilter>())
+                                                            {
+                                                                <SelectItem Value="@filter">
+                                                                    @(filter switch
+                                                                    {
+                                                                        EnabledFilter.All => "All",
+                                                                        EnabledFilter.Yes => "Yes",
+                                                                        EnabledFilter.No => "No",
+                                                                        _ => filter.ToString()
+                                                                    })
+                                                </SelectItem>
+                                                                                                }
+                                                        </Select>
+                                                    </FilterTemplate>
+                                                </DataGridColumn>
+                                            </DataGrid>
+                                            @if (_isContentLoading && _loadingContentType == "bpm_onlyInSource")
+                                            {
+                                                <div class="content-loading-panel">
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    <span class="content-loading-text">Processing BPM XML content...</span>
+                                                </div>
+                                            }
+                                            else if (_selectedOnlyInSourceBpm != null)
+                                            {
+                                                <Div class="mt-4">
+                                                    <h3>Directive: <strong>@_selectedOnlyInSourceBpm.Name</strong> (@_selectedOnlyInSourceBpm.BpMethodCode)</h3>
+                                                    <Div class="row mb-3">
+                                                        <Div class="col-md-6">
+                                                            <dl class="row">
+                                                                <dt class="col-sm-4">Description:</dt>
+                                                                <dd class="col-sm-8">@(_selectedOnlyInSourceBpm.Description ?? "N/A")</dd>
+                                                                <dt class="col-sm-4">Enabled:</dt>
+                                                                <dd class="col-sm-8">@(_selectedOnlyInSourceBpm.IsEnabled ? "Yes" : "No")</dd>
+                                                                <dt class="col-sm-4">Order:</dt>
+                                                                <dd class="col-sm-8">@_selectedOnlyInSourceBpm.Order</dd>
+                                                            </dl>
+                                                        </Div>
+                                                        <Div class="col-md-6">
+                                                            <dl class="row">
+                                                                <dt class="col-sm-4">Business Object:</dt>
+                                                                <dd class="col-sm-8">@_selectedOnlyInSourceBpm.BusinessObject</dd>
+                                                                <dt class="col-sm-4">Method:</dt>
+                                                                <dd class="col-sm-8">@_selectedOnlyInSourceBpm.MethodName</dd>
+                                                                <dt class="col-sm-4">System:</dt>
+                                                                <dd class="col-sm-8">@_selectedOnlyInSourceBpm.SystemCode</dd>
+                                                            </dl>
+                                                        </Div>
+                                                    </Div>
+                                                    <h4>Directive XML Content</h4>
+                                                    <div class="code-view-container">
+                                                        <table class="code-view-table">
+                                                            <tbody>
+                                                                @foreach (var (line, index) in GetFormattedXmlLines(_selectedOnlyInSourceBpm.Body, $"bpm_source_{_selectedOnlyInSourceBpm.DirectiveID}"))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="line-number">@(index + 1)</td>
+                                                                        <td class="code-line">@line</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </Div>
+                                            }
+                                        </TabPanel>
+                                        <TabPanel Name="onlyInTarget">
+                                            <DataGrid TItem="BpmDirectiveDefinition"
+                                                      Data="@_bpmComparisonResult.ExistsOnlyInTarget"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10"
+                                                      SelectedRowChanged="@(row => OnBpmOnlyInTargetSelected(row))"
+                                                      SelectionMode="DataGridSelectionMode.Single">
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.BpMethodCode)" Caption="Method" />
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.Name)" Caption="Directive Name" />
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.BusinessObject)" Caption="Business Object" />
+                                                <DataGridColumn Field="@nameof(BpmDirectiveDefinition.IsEnabled)" Caption="Enabled" CustomFilter="@OnIsEnabledCustomFilter">
+                                                    <DisplayTemplate>
+                                                        @if (context.IsEnabled)
+                                                        {
+                                                            <span class="badge bg-success">Yes</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary">No</span>
+                                                        }
+                                                    </DisplayTemplate>
+                                                    <FilterTemplate>
+                                                        <Select TValue="EnabledFilter" Class="custom-filter-select" SelectedValueChanged="@(e => context.TriggerFilterChange(e))">
+                                                            @foreach (var filter in Enum.GetValues<EnabledFilter>())
+                                                            {
+                                                                <SelectItem Value="@filter">
+                                                                    @(filter switch
+                                                                    {
+                                                                        EnabledFilter.All => "All",
+                                                                        EnabledFilter.Yes => "Yes",
+                                                                        EnabledFilter.No => "No",
+                                                                        _ => filter.ToString()
+                                                                    })
+                                                </SelectItem>
+                                                                                                }
+                                                        </Select>
+                                                    </FilterTemplate>
+                                                </DataGridColumn>
+                                            </DataGrid>
+                                            @if (_isContentLoading && _loadingContentType == "bpm_onlyInTarget")
+                                            {
+                                                <div class="content-loading-panel">
+                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    <span class="content-loading-text">Processing BPM XML content...</span>
+                                                </div>
+                                            }
+                                            else if (_selectedOnlyInTargetBpm != null)
+                                            {
+                                                <Div class="mt-4">
+                                                    <h3>Directive: <strong>@_selectedOnlyInTargetBpm.Name</strong> (@_selectedOnlyInTargetBpm.BpMethodCode)</h3>
+                                                    <Div class="row mb-3">
+                                                        <Div class="col-md-6">
+                                                            <dl class="row">
+                                                                <dt class="col-sm-4">Description:</dt>
+                                                                <dd class="col-sm-8">@(_selectedOnlyInTargetBpm.Description ?? "N/A")</dd>
+                                                                <dt class="col-sm-4">Enabled:</dt>
+                                                                <dd class="col-sm-8">@(_selectedOnlyInTargetBpm.IsEnabled ? "Yes" : "No")</dd>
+                                                                <dt class="col-sm-4">Order:</dt>
+                                                                <dd class="col-sm-8">@_selectedOnlyInTargetBpm.Order</dd>
+                                                            </dl>
+                                                        </Div>
+                                                        <Div class="col-md-6">
+                                                            <dl class="row">
+                                                                <dt class="col-sm-4">Business Object:</dt>
+                                                                <dd class="col-sm-8">@_selectedOnlyInTargetBpm.BusinessObject</dd>
+                                                                <dt class="col-sm-4">Method:</dt>
+                                                                <dd class="col-sm-8">@_selectedOnlyInTargetBpm.MethodName</dd>
+                                                                <dt class="col-sm-4">System:</dt>
+                                                                <dd class="col-sm-8">@_selectedOnlyInTargetBpm.SystemCode</dd>
+                                                            </dl>
+                                                        </Div>
+                                                    </Div>
+                                                    <h4>Directive XML Content</h4>
+                                                    <div class="code-view-container">
+                                                        <table class="code-view-table">
+                                                            <tbody>
+                                                                @foreach (var (line, index) in GetFormattedXmlLines(_selectedOnlyInTargetBpm.Body, $"bpm_target_{_selectedOnlyInTargetBpm.DirectiveID}"))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="line-number">@(index + 1)</td>
+                                                                        <td class="code-line">@line</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </Div>
+                                            }
+                                        </TabPanel>
+                                    </Content>
+                                </Tabs>
+                            </CardBody>
+                        </Card>
+                    }
+                </TabPanel>
+                }
+                @if (_lastComparedUdColumns)
+                {
+                <TabPanel Name="udcolumns">
+                    @if (_udColumnComparisonResult != null)
+                    {
+                        <Card class="mb-4">
+                            <CardHeader>
+                                <h2>UD Column Comparison Results</h2>
+                            </CardHeader>
+                            <CardBody>
+                                <Tabs SelectedTab="@_selectedUdColumnTab" SelectedTabChanged="@(s => OnTabChanged(s, "udcolumn"))">
+                                    <Items>
+                                        <Tab Name="identical">Identical (@_udColumnComparisonResult.Identical.Count)</Tab>
+                                        <Tab Name="onlyInSource">Only In @_lastComparedSourceEnvironment (@_udColumnComparisonResult.ExistsOnlyInSource.Count)</Tab>
+                                        <Tab Name="onlyInTarget">Only In @_lastComparedTargetEnvironment (@_udColumnComparisonResult.ExistsOnlyInTarget.Count)</Tab>
+                                    </Items>
+                                    <Content>
+                                        <TabPanel Name="identical">
+                                            <DataGrid TItem="UDColumnDTO"
+                                                      Data="@_udColumnComparisonResult.Identical"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10">
+                                                <DataGridColumn Field="@nameof(UDColumnDTO.TableName)" Caption="Table Name" />
+                                                <DataGridColumn Field="@nameof(UDColumnDTO.ColumnName)" Caption="Column Name" />
+                                            </DataGrid>
+                                        </TabPanel>
+                                        <TabPanel Name="onlyInSource">
+                                            <DataGrid TItem="UDColumnDTO"
+                                                      Data="@_udColumnComparisonResult.ExistsOnlyInSource"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10">
+                                                <DataGridColumn Field="@nameof(UDColumnDTO.TableName)" Caption="Table Name" />
+                                                <DataGridColumn Field="@nameof(UDColumnDTO.ColumnName)" Caption="Column Name" />
+                                            </DataGrid>
+                                        </TabPanel>
+                                        <TabPanel Name="onlyInTarget">
+                                            <DataGrid TItem="UDColumnDTO"
+                                                      Data="@_udColumnComparisonResult.ExistsOnlyInTarget"
+                                                      Filterable="true"
+                                                      Sortable="true"
+                                                      Striped="true"
+                                                      Hoverable="true"
+                                                      ShowPager="true"
+                                                      PageSize="10">
+                                                <DataGridColumn Field="@nameof(UDColumnDTO.TableName)" Caption="Table Name" />
+                                                <DataGridColumn Field="@nameof(UDColumnDTO.ColumnName)" Caption="Column Name" />
+                                            </DataGrid>
+                                        </TabPanel>
+                                    </Content>
+                                </Tabs>
+                            </CardBody>
+                        </Card>
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted p-4">
+                            <h4>No UD Column comparison data available</h4>
+                            <p>Please run a comparison to see UD Column results.</p>
+                        </div>
+                    }
+                </TabPanel>
+                }
+                @if (_lastComparedAppLayers)
+                {
+                <TabPanel Name="applayers">
+                    @if (_appLayerComparisonResult != null)
+                    {
+                        <ApplicationLayerComparisonPanel 
+                            ComparisonResult="_appLayerComparisonResult"
+                            SourceEnvironmentName="@_lastComparedSourceEnvironment"
+                            TargetEnvironmentName="@_lastComparedTargetEnvironment"
+                            IsContentLoading="_isContentLoading"
+                            LoadingContentType="@_loadingContentType"
+                            SelectedDifference="_selectedAppLayerDifference"
+                            SelectedIdentical="_selectedIdenticalAppLayer"
+                            SelectedOnlyInSource="_selectedOnlyInSourceAppLayer"
+                            SelectedOnlyInTarget="_selectedOnlyInTargetAppLayer"
+                            OnDifferenceSelectedCallback="OnAppLayerDifferenceSelected"
+                            OnIdenticalSelectedCallback="OnAppLayerIdenticalSelected"
+                            OnOnlyInSourceSelectedCallback="OnAppLayerOnlyInSourceSelected"
+                            OnOnlyInTargetSelectedCallback="OnAppLayerOnlyInTargetSelected"
+                            OnTabChangedCallback="@(s => OnTabChanged(s, "applayer"))" />
+                    }
+                </TabPanel>
+                }
+            </Content>
+        </Tabs>
+     }
+}

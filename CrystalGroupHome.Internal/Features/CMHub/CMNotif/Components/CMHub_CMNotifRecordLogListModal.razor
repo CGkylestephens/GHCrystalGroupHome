@@ -1,0 +1,107 @@
+﻿@using Blazorise
+@inject IModalService Modal
+@using CrystalGroupHome.Internal.Features.CMHub.CMNotif.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+@using System.IO
+
+<Modal @bind-Visible="IsVisible" Centered>
+    <ModalContent Size="ModalSize.Large">
+        <ModalHeader>
+            @Title
+        </ModalHeader>
+        <ModalBody Style="max-height: 80%; overflow-y: auto;">
+            @if (RecordLogs == null || !RecordLogs.Any())
+            {
+                <p>No logs found for this part.</p>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var log in RecordLogs.OrderByDescending(l => l.LogDate))
+                    {
+                        <li style="margin-bottom: 1rem;">
+                            <div style="display: flex; flex-direction: row; align-items: center;">
+                                <strong>@log.LogDate.ToLocalTime()</strong>
+                                <div style="font-size: 0.85rem; color: var(--gray); margin-left: 0.5rem;">
+                                    @log.LoggedByEmployee?.DisplayName |
+                                    @(string.IsNullOrWhiteSpace(log.LogAssociatedWithPartNum)
+                                                                ? "Record-Level Log"
+                                                                : $"Part: {log.LogAssociatedWithPartNum}")
+                        </div>
+                    </div>
+
+                            <div style="margin: 0.25rem 0;">
+                                @log.LogMessage
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(log.LogFileLocation))
+                            {
+                                <div style="font-size: 0.8rem; color: var(--blue);">
+                                    File: <a href="@($"{NavHelpers.FileServe}{log.LogFileLocation}&ct={GetMimeType(log.LogFileLocation)}")" target="_blank">@(GetFileLinkText(log))</a>
+                                </div>
+                            }
+
+                            <div style="font-size: 0.75rem; color: var(--gray);">
+                                @((log.IsManualLogEntry ? "Manual Entry" : "System Generated") + (log.Deleted ? " (Deleted)" : ""))
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="Close">Close</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public List<CMHub_CMNotifRecordLogModel> RecordLogs { get; set; } = [];
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public string Title { get; set; } = "Log History";
+
+    private async Task Close()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync();
+    }
+
+    public void Show(string title, List<CMHub_CMNotifRecordLogModel> recordLogs)
+    {
+        Title = title;
+        RecordLogs = recordLogs;
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    private string GetMimeType(string fileName)
+    {
+        // A more robust implementation could use a library or a more extensive switch statement.
+        // For now, this handles common cases.
+        var extension = Path.GetExtension(fileName).ToLowerInvariant();
+        return extension switch
+        {
+            ".pdf" => "application/pdf",
+            ".jpg" => "image/jpeg",
+            ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            ".gif" => "image/gif",
+            ".txt" => "text/plain",
+            ".doc" => "application/msword",
+            ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            ".xls" => "application/vnd.ms-excel",
+            ".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            _ => "application/octet-stream",
+        };
+    }
+
+    private string GetFileLinkText(CMHub_CMNotifRecordLogModel log)
+    {
+        if (log.LogMessage != null && (log.LogMessage.StartsWith("Evidence of acceptance uploaded:") || log.LogMessage.StartsWith("Additional evidence uploaded:")))
+        {
+            return $"Evidence Document for Log {log.Id}";
+        }
+        return $"Notification Document for Log {log.Id}";
+    }
+}

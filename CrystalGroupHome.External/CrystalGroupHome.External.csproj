@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<ScopedCssEnabled>true</ScopedCssEnabled>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Blazorise" Version="1.8.2" />
+		<PackageReference Include="Blazorise.Bootstrap5" Version="1.8.2" />
+		<PackageReference Include="Blazorise.DataGrid" Version="1.8.2" />
+		<PackageReference Include="Blazorise.LoadingIndicator" Version="1.8.2" />
+		<PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.8.2" />
+		<PackageReference Include="Blazorise.Snackbar" Version="1.8.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.9" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\CrystalGroupHome.SharedRCL\CrystalGroupHome.SharedRCL.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Components\Examples\" />
+	</ItemGroup>
+
+</Project>

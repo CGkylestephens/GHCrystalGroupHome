@@ -1,0 +1,133 @@
+﻿/* Enhanced Survey Page Styles */
+.survey-page {
+    background: none;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.survey-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Loading state */
+.loading-card {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.loading-content {
+    padding: 3rem;
+}
+
+.loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    border-width: 4px;
+}
+
+/* Alert states */
+.survey-alert {
+    border-radius: 12px;
+    border: none;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+.alert-danger.survey-alert {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-left: 6px solid #dc2626;
+}
+
+.alert-success.survey-alert {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-left: 6px solid #16a34a;
+}
+
+.alert-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.alert-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4b5563;
+}
+
+/* Survey form container */
+.survey-form-container {
+    background-color: rgba(255, 255, 255, 0.98);
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .survey-page {
+        padding: 1rem 0;
+    }
+
+    .loading-content {
+        padding: 2rem 1rem;
+    }
+
+    .survey-alert {
+        padding: 1.5rem;
+        margin: 0 1rem;
+    }
+
+    .alert-title {
+        font-size: 1.1rem;
+    }
+
+    .alert-description {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .survey-page {
+        padding: 0.5rem;
+    }
+
+    .survey-alert {
+        margin: 0 0.5rem;
+        padding: 1rem;
+    }
+}
+
+/* Page title styling */
+.survey-page-title {
+    color: white;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 300;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Floating animation for alerts */
+.survey-alert {
+    animation: floatIn 0.6s ease-out;
+}
+
+@keyframes floatIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

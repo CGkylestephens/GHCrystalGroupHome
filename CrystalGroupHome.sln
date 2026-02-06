@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrystalGroupHome.Internal", "CrystalGroupHome.Internal\CrystalGroupHome.Internal.csproj", "{C967CC84-C0C9-405C-BCC2-3316406D89E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{60012CF7-F416-463C-9235-D644D91A9D62}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		CrystalGroupHome.yml = CrystalGroupHome.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrystalGroupHome.External", "CrystalGroupHome.External\CrystalGroupHome.External.csproj", "{5A51CDD4-865E-4089-8C4A-EF02DD6EAC6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrystalGroupHome.SharedRCL", "CrystalGroupHome.SharedRCL\CrystalGroupHome.SharedRCL.csproj", "{20AEB0B1-D8F8-46B4-9522-04C9F03E0D83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{0D9E31C1-B14F-4545-AB6E-1B825C0E09D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "security", "security", "{FA75744C-EDA5-4E1F-B9BD-B1F3F57B5372}"
+	ProjectSection(SolutionItems) = preProject
+		docs\security\CHANGES_SUMMARY.md = docs\security\CHANGES_SUMMARY.md
+		docs\security\IIS_DEPLOYMENT_GUIDE.md = docs\security\IIS_DEPLOYMENT_GUIDE.md
+		docs\security\IIS_DEPLOYMENT_SUMMARY.md = docs\security\IIS_DEPLOYMENT_SUMMARY.md
+		docs\security\IIS_SECURITY_HEADERS_DEPLOYMENT.md = docs\security\IIS_SECURITY_HEADERS_DEPLOYMENT.md
+		docs\security\QUICK_TEST_REFERENCE.md = docs\security\QUICK_TEST_REFERENCE.md
+		docs\security\README.md = docs\security\README.md
+		docs\security\SECURITY_FIXES_APPLIED.md = docs\security\SECURITY_FIXES_APPLIED.md
+		docs\security\SECURITY_HEADERS_README.md = docs\security\SECURITY_HEADERS_README.md
+		docs\security\SECURITY_TESTING_GUIDE.md = docs\security\SECURITY_TESTING_GUIDE.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C967CC84-C0C9-405C-BCC2-3316406D89E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C967CC84-C0C9-405C-BCC2-3316406D89E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C967CC84-C0C9-405C-BCC2-3316406D89E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C967CC84-C0C9-405C-BCC2-3316406D89E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A51CDD4-865E-4089-8C4A-EF02DD6EAC6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A51CDD4-865E-4089-8C4A-EF02DD6EAC6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A51CDD4-865E-4089-8C4A-EF02DD6EAC6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A51CDD4-865E-4089-8C4A-EF02DD6EAC6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20AEB0B1-D8F8-46B4-9522-04C9F03E0D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20AEB0B1-D8F8-46B4-9522-04C9F03E0D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20AEB0B1-D8F8-46B4-9522-04C9F03E0D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20AEB0B1-D8F8-46B4-9522-04C9F03E0D83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0D9E31C1-B14F-4545-AB6E-1B825C0E09D0} = {60012CF7-F416-463C-9235-D644D91A9D62}
+		{FA75744C-EDA5-4E1F-B9BD-B1F3F57B5372} = {0D9E31C1-B14F-4545-AB6E-1B825C0E09D0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {30BF0087-49E2-4EC3-8BA7-50EC031C6013}
+	EndGlobalSection
+EndGlobal

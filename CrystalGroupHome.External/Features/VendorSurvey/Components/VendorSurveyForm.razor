@@ -1,0 +1,737 @@
+﻿@using CrystalGroupHome.External.Features.VendorSurvey.Models
+@using CrystalGroupHome.External.Features.VendorSurvey.Data
+@using CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms
+@using static CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms.CMHub_VendorCommsSurveyDTOs
+@using static CrystalGroupHome.SharedRCL.Helpers.NavHelpers
+@inherits ComponentBase
+
+<div class="survey-container" @ref="surveyContainerRef">
+    <Card Class="survey-card">
+        <CardHeader Class="survey-header">
+            <CardTitle Size="3">
+                <i class="fa fa-file-lines" style="margin-right: 0.5rem;"></i>
+                Part Status Update Survey
+            </CardTitle>
+        </CardHeader>
+        <CardBody>
+            @if (SurveyBatch != null && Parts.Any() && Parts.First().Vendor != null)
+            {
+                <div class="vendor-info">
+                    <Paragraph>
+                        <Strong>Vendor:</Strong> @Parts.First().Vendor?.VendorName
+                    </Paragraph>
+                    @if (SurveyBatch.ResponseDueDate.HasValue)
+                    {
+                        <Paragraph Margin="Margin.Is0.FromBottom">
+                            <Strong>Response Due:</Strong> @SurveyBatch.ResponseDueDate.Value.ToString("MMMM dd, yyyy")
+                        </Paragraph>
+                    }
+                </div>
+
+                <!-- Survey Progress Summary -->
+                <div class="survey-progress mb-3">
+                    <Text>
+                        <Strong>Progress:</Strong> @GetSubmittedPartsCount() of @Parts.Count parts submitted
+                    </Text>
+                    @if (GetSubmittedPartsCount() == Parts.Count)
+                    {
+                        <Alert Color="Color.Success" Visible="true" Class="mt-2 mb-0">
+                            <AlertMessage>Survey Complete!</AlertMessage>
+                            <AlertDescription>All parts have been submitted. Thank you for your responses.</AlertDescription>
+                        </Alert>
+                    }
+                    else if (GetCompletedUnsubmittedPartsCount() > 1)
+                    {
+                        <Alert Color="Color.Info" Visible="true" Class="mt-2 mb-0">
+                            <AlertMessage>Multiple Parts Ready!</AlertMessage>
+                            <AlertDescription>@GetCompletedUnsubmittedPartsCount() parts have all required fields completed and are ready for submission.</AlertDescription>
+                        </Alert>
+                    }
+                </div>
+            }
+
+            @if (IsSubmitting)
+            {
+                <div class="submission-state text-center p-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Submitting responses...</span>
+                    </div>
+                    <Paragraph Margin="Margin.Is3.FromTop">
+                        @if (IsSubmittingMultipleParts)
+                        {
+                            <text>Submitting responses for @GetCompletedUnsubmittedPartsCount() parts...</text>
+                        }
+                        else
+                        {
+                            <text>Submitting responses for this part...</text>
+                        }
+                    </Paragraph>
+                </div>
+            }
+            else
+            {
+                <CascadingValue Value="@Responses">
+                    <Validations @ref="validations" Mode="ValidationMode.Manual">
+                        @if (Parts.Count > 1)
+                        {
+                            <!-- Part Selection Grid -->
+                            <div class="part-selector-section">
+                                <Heading Size="HeadingSize.Is5" Margin="Margin.Is3.FromBottom">Select Part</Heading>
+                                <div class="part-selector-grid">
+                                    @foreach (var part in Parts)
+                                    {
+                                        var isSelected = selectedPartId == part.Tracker.Id;
+                                        var hasCompleteResponses = HasPartResponses(part.Tracker.Id);
+                                        var isSubmitted = IsPartSubmitted(part.Tracker.Id);
+
+                                        <button type="button"
+                                                class="@GetPartButtonClass(isSelected, hasCompleteResponses, isSubmitted)"
+                                                @onclick="@(() => SelectPart(part.Tracker.Id))">
+                                            <!-- Status Indicator Segment -->
+                                            <div class="part-status-segment">
+                                                @if (isSubmitted)
+                                                {
+                                                    <i class="fas fa-check-circle part-status-icon submitted" title="Part submitted"></i>
+                                                }
+                                                else if (hasCompleteResponses)
+                                                {
+                                                    <i class="fas fa-check-circle part-status-icon complete" title="Ready to submit"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fas fa-circle part-status-icon incomplete" title="Required fields missing"></i>
+                                                }
+                                            </div>
+                                            <!-- Part Information Segment -->
+                                            <div class="part-content-segment">
+                                                <div class="part-button-content">
+                                                    <div class="part-button-text">
+                                                        @if (!string.IsNullOrWhiteSpace(part.PartEolt?.VendorPartNum))
+                                                        {
+                                                            <div class="vendor-part">@part.PartEolt.VendorPartNum</div>
+                                                            <div class="crystal-part">(Crystal #: @part.Tracker.PartNum)</div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="vendor-part">Crystal #: @part.Tracker.PartNum</div>
+                                                        }
+                                                        @if (isSubmitted)
+                                                        {
+                                                            <div class="submission-badge">✓ Submitted</div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    }
+                                </div>
+                                <Divider Margin="Margin.Is4.FromTop.Is4.FromBottom" />
+                            </div>
+                        }
+
+                        <!-- Questions Section -->
+                        @{
+                            var selectedPart = Parts.Count == 1 ? Parts.First() : Parts.FirstOrDefault(p => p.Tracker.Id == selectedPartId);
+                        }
+                        @if (selectedPart != null && Questions.Any())
+                        {
+                            var partIsSubmitted = IsPartSubmitted(selectedPart.Tracker.Id);
+
+                            <div class="part-questions-section">
+                                @if (partIsSubmitted)
+                                {
+                                    <Alert Color="Color.Info" Visible="true" Class="mb-3">
+                                        <AlertMessage>Part Already Submitted</AlertMessage>
+                                        <AlertDescription>
+                                            This part has already been submitted. You can view the responses below, but they cannot be modified.
+                                        </AlertDescription>
+                                    </Alert>
+                                }
+
+                                <PartQuestions Part="@selectedPart"
+                                               Questions="@Questions"
+                                               IsReadOnly="@partIsSubmitted"
+                                               OnResponseChanged="@StateHasChanged" />
+                            </div>
+                        }
+                        else if (selectedPart != null && !Questions.Any())
+                        {
+                            <Alert Color="Color.Warning" Visible="true">
+                                <AlertMessage>No Questions Available</AlertMessage>
+                                <AlertDescription>There are no survey questions configured for this survey.</AlertDescription>
+                            </Alert>
+                        }
+                        else if (Parts.Count > 1 && selectedPart == null)
+                        {
+                            <Alert Color="Color.Info" Visible="true">
+                                <AlertMessage>Select a Part</AlertMessage>
+                                <AlertDescription>Please select a part from the list above to view and answer the survey questions.</AlertDescription>
+                            </Alert>
+                        }
+                    </Validations>
+                </CascadingValue>
+
+                @if (!string.IsNullOrEmpty(ErrorMessage))
+                {
+                    <Alert Color="Color.Danger" Visible="true" Margin="Margin.Is3.FromTop">
+                        <AlertMessage>Error</AlertMessage>
+                        <AlertDescription>@ErrorMessage</AlertDescription>
+                    </Alert>
+                }
+            }
+        </CardBody>
+        @{
+            var selectedPart = Parts.Count == 1 ? Parts.First() : Parts.FirstOrDefault(p => p.Tracker.Id == selectedPartId);
+        }
+        @if (!IsSubmitting && selectedPart != null)
+        {
+            <CardFooter Class="survey-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="footer-part-info">
+                        <div class="required-info">
+                            <Text TextColor="TextColor.Muted">
+                                <i class="@InfoIcon" style="margin-right: 0.5rem;"></i>
+                                All fields marked with * are required for this part
+                            </Text>
+                        </div>
+                        <!-- Part Reference -->
+                        <div class="current-part-reference mt-2">
+                            <Text TextColor="TextColor.Primary">
+                                <Strong>Submitting for:</Strong> @GetPartDisplayText(selectedPart)
+                            </Text>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        @{
+                            var currentPartIsSubmitted = IsPartSubmitted(selectedPart.Tracker.Id);
+                            var currentPartHasCompleteResponses = HasPartResponses(selectedPart.Tracker.Id);
+                            var completedUnsubmittedCount = GetCompletedUnsubmittedPartsCount();
+                            var showSubmitAllButton = Parts.Count > 1 && completedUnsubmittedCount > 1;
+                        }
+
+                        @if (showSubmitAllButton)
+                        {
+                            <Button Color="Color.Success"
+                                    Class="btn-submit-all me-2"
+                                    Clicked="@SubmitAllCompletedParts">
+                                <i class="fas fa-check-double" style="margin-right: 0.5rem;"></i>
+                                Submit All Parts (@completedUnsubmittedCount)
+                            </Button>
+                        }
+
+                        @if (!currentPartIsSubmitted)
+                        {
+                            <Button Color="Color.Primary"
+                                    Class="btn-submit-part"
+                                    Clicked="@(() => SubmitPartResponses(selectedPart.Tracker.Id))"
+                                    Disabled="@(!currentPartHasCompleteResponses)">
+                                <i class="fa fa-paper-plane" style="margin-right: 0.5rem;"></i>
+                                Submit This Part
+                            </Button>
+                        }
+                        else
+                        {
+                            <Button Color="Color.Success" Class="btn-submitted" Disabled="true">
+                                <i class="fas fa-check" style="margin-right: 0.5rem;"></i>
+                                Part Submitted
+                            </Button>
+                        }
+                    </div>
+                </div>
+            </CardFooter>
+        }
+    </Card>
+</div>
+
+<!-- Next Part Modal - Simplified without custom positioning -->
+<Modal @ref="nextPartModal" Size="ModalSize.Default">
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>Part Submitted Successfully!</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <div class="text-center mb-3">
+                <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+            </div>
+            <Paragraph Class="text-center mb-3">
+                <Strong>@lastSubmittedPartText</Strong> has been submitted successfully.
+            </Paragraph>
+            @if (GetNextUnsubmittedPart() != null)
+            {
+                var nextPart = GetNextUnsubmittedPart()!;
+                <Paragraph Class="text-center">
+                    Would you like to continue with the next part: <Strong>@GetPartDisplayText(nextPart)</Strong>?
+                </Paragraph>
+            }
+            else
+            {
+                <Alert Color="Color.Success" Visible="true">
+                    <AlertMessage>Survey Complete!</AlertMessage>
+                    <AlertDescription>All parts have been submitted. Thank you for completing the survey!</AlertDescription>
+                </Alert>
+            }
+        </ModalBody>
+        <ModalFooter>
+            @if (GetNextUnsubmittedPart() != null)
+            {
+                <Button Color="Color.Secondary" Clicked="@CloseNextPartModal">
+                    Stay Here
+                </Button>
+                <Button Color="Color.Primary" Clicked="@ProceedToNextPart">
+                    <i class="fas fa-arrow-right" style="margin-right: 0.5rem;"></i>
+                    Continue to Next Part
+                </Button>
+            }
+            else
+            {
+                <Button Color="Color.Primary" Clicked="@CloseNextPartModal">
+                    Close
+                </Button>
+            }
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<!-- All Parts Submitted Modal -->
+<Modal @ref="allPartsSubmittedModal" Size="ModalSize.Default">
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>All Parts Submitted Successfully!</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <div class="text-center mb-3">
+                <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+            </div>
+            <Paragraph Class="text-center mb-3">
+                <Strong>@allPartsSubmittedCount parts</Strong> have been submitted successfully!
+            </Paragraph>
+            <Alert Color="Color.Success" Visible="true">
+                <AlertMessage>Survey Complete!</AlertMessage>
+                <AlertDescription>All parts have been submitted. Thank you for completing the survey!</AlertDescription>
+            </Alert>
+            @if (allPartsSubmittedList.Any())
+            {
+                <div class="submitted-parts-list mt-3">
+                    <Text><Strong>Submitted parts:</Strong></Text>
+                    <ul class="list-unstyled mt-2">
+                        @foreach (var partText in allPartsSubmittedList)
+                        {
+                            <li class="mb-1">
+                                <i class="fas fa-check text-success me-2"></i>@partText
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Primary" Clicked="@CloseAllPartsSubmittedModal">
+                Close
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter] public CMHub_SurveyBatchDTO SurveyBatch { get; set; } = default!;
+    [Parameter] public List<CMHub_SurveyQuestionDTO> Questions { get; set; } = new();
+    [Parameter] public List<CMHub_VendorCommsTrackerModel> Parts { get; set; } = new();
+    [Parameter] public EventCallback OnSurveySubmitted { get; set; }
+
+    [Inject] private INotificationService NotificationService { get; set; } = default!;
+    [Inject] private IVendorSurveyService VendorSurveyService { get; set; } = default!;
+    [Inject] private IJSRuntime JSRuntime { get; set; } = default!;
+
+    private Validations? validations;
+    private Modal? nextPartModal;
+    private Modal? allPartsSubmittedModal;
+    private ElementReference surveyContainerRef;
+    private int selectedPartId = 0;
+    private bool IsSubmitting = false;
+    private bool IsSubmittingMultipleParts = false;
+    private string? ErrorMessage;
+    private string lastSubmittedPartText = string.Empty;
+    private int allPartsSubmittedCount = 0;
+    private List<string> allPartsSubmittedList = new();
+
+    private Dictionary<string, CMHub_VendorCommsSurveyResponseModel> Responses = new();
+    private HashSet<int> SubmittedPartIds = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Parts.Any())
+        {
+            selectedPartId = Parts.First().Tracker.Id;
+        }
+
+        // Load existing responses and submission statuses
+        await LoadExistingData();
+    }
+
+    private async Task LoadExistingData()
+    {
+        if (SurveyBatch?.Id > 0)
+        {
+            // Load existing responses
+            var existingResponses = await VendorSurveyService.GetExistingResponsesAsync(SurveyBatch.Id);
+            foreach (var response in existingResponses)
+            {
+                var key = $"{response.PartTrackerId}_{response.QuestionId}";
+                Responses[key] = response;
+            }
+
+            // Load submitted part statuses
+            var submittedParts = await VendorSurveyService.GetSubmittedPartIdsAsync(SurveyBatch.Id);
+            SubmittedPartIds = submittedParts.ToHashSet();
+        }
+    }
+
+    private CMHub_VendorCommsTrackerModel? GetNextUnsubmittedPart()
+    {
+        return Parts.FirstOrDefault(p => !IsPartSubmitted(p.Tracker.Id));
+    }
+
+    private List<CMHub_VendorCommsTrackerModel> GetCompletedUnsubmittedParts()
+    {
+        return Parts.Where(p => !IsPartSubmitted(p.Tracker.Id) && HasPartResponses(p.Tracker.Id)).ToList();
+    }
+
+    private int GetCompletedUnsubmittedPartsCount()
+    {
+        return GetCompletedUnsubmittedParts().Count;
+    }
+
+    private async Task ScrollToTop()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToElement", surveyContainerRef);
+    }
+
+    private async Task ProceedToNextPart()
+    {
+        var nextPart = GetNextUnsubmittedPart();
+        if (nextPart != null)
+        {
+            await CloseNextPartModal();
+            SelectPart(nextPart.Tracker.Id);
+            await ScrollToTop();
+        }
+    }
+
+    private async Task CloseNextPartModal()
+    {
+        if (nextPartModal != null)
+        {
+            await nextPartModal.Hide();
+        }
+    }
+
+    private async Task ShowNextPartModal()
+    {
+        if (nextPartModal != null)
+        {
+            await nextPartModal.Show();
+        }
+    }
+
+    private async Task CloseAllPartsSubmittedModal()
+    {
+        if (allPartsSubmittedModal != null)
+        {
+            await allPartsSubmittedModal.Hide();
+        }
+    }
+
+    private async Task ShowAllPartsSubmittedModal()
+    {
+        if (allPartsSubmittedModal != null)
+        {
+            await allPartsSubmittedModal.Show();
+        }
+    }
+
+    private CMHub_VendorCommsSurveyResponseModel GetOrCreateResponse(int trackerId, int questionId)
+    {
+        var key = $"{trackerId}_{questionId}";
+        if (!Responses.ContainsKey(key))
+        {
+            Responses[key] = new CMHub_VendorCommsSurveyResponseModel
+            {
+                PartTrackerId = trackerId,
+                QuestionId = questionId,
+                ResponseValue = string.Empty
+            };
+        }
+        return Responses[key];
+    }
+
+    private bool HasPartResponses(int trackerId)
+    {
+        return Questions.All(q =>
+        {
+            var response = GetOrCreateResponse(trackerId, q.Id);
+            return !q.IsRequired || !string.IsNullOrWhiteSpace(response.ResponseValue);
+        });
+    }
+
+    private bool IsPartSubmitted(int trackerId)
+    {
+        return SubmittedPartIds.Contains(trackerId);
+    }
+
+    private int GetSubmittedPartsCount()
+    {
+        return SubmittedPartIds.Count;
+    }
+
+    private void SelectPart(int partId)
+    {
+        selectedPartId = partId;
+        StateHasChanged();
+    }
+
+    private string GetPartButtonClass(bool isSelected, bool hasCompleteResponses, bool isSubmitted)
+    {
+        var baseClass = "part-selector-button";
+
+        if (isSelected)
+        {
+            baseClass += " selected";
+        }
+
+        if (isSubmitted)
+        {
+            baseClass += " submitted";
+        }
+        else if (hasCompleteResponses)
+        {
+            baseClass += " complete";
+        }
+
+        return baseClass;
+    }
+
+    private string GetPartDisplayText(CMHub_VendorCommsTrackerModel part)
+    {
+        if (!string.IsNullOrWhiteSpace(part.PartEolt?.VendorPartNum))
+        {
+            return $"{part.PartEolt.VendorPartNum} (Crystal Group: {part.Tracker.PartNum})";
+        }
+        else
+        {
+            return $"{part.Tracker.PartNum} (Crystal Group Part)";
+        }
+    }
+
+    private async Task SubmitAllCompletedParts()
+    {
+        try
+        {
+            ErrorMessage = null;
+            var completedParts = GetCompletedUnsubmittedParts();
+            
+            if (!completedParts.Any())
+            {
+                await NotificationService.Warning("No completed parts found to submit");
+                return;
+            }
+
+            IsSubmitting = true;
+            IsSubmittingMultipleParts = true;
+            StateHasChanged();
+
+            var submittedParts = new List<string>();
+
+            // Submit each completed part
+            foreach (var part in completedParts)
+            {
+                var partResponses = Responses.Values
+                    .Where(r => r.PartTrackerId == part.Tracker.Id && !string.IsNullOrWhiteSpace(r.ResponseValue))
+                    .ToList();
+
+                await VendorSurveyService.SubmitPartResponsesAsync(SurveyBatch.Id, part.Tracker.Id, partResponses);
+
+                // Update local state
+                SubmittedPartIds.Add(part.Tracker.Id);
+                submittedParts.Add(GetPartDisplayText(part));
+            }
+
+            // Set modal data
+            allPartsSubmittedCount = submittedParts.Count;
+            allPartsSubmittedList = submittedParts;
+
+            // Show success notification
+            await NotificationService.Success($"{submittedParts.Count} parts submitted successfully!");
+
+            // Check if all parts are now submitted
+            if (SubmittedPartIds.Count == Parts.Count)
+            {
+                await NotificationService.Success("Survey complete! All parts have been submitted.");
+                if (OnSurveySubmitted.HasDelegate)
+                {
+                    await OnSurveySubmitted.InvokeAsync();
+                }
+            }
+
+            // Show the all parts submitted modal
+            await ShowAllPartsSubmittedModal();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Failed to submit all parts: {ex.Message}";
+            await NotificationService.Error("Failed to submit all parts. Please try again.");
+        }
+        finally
+        {
+            IsSubmitting = false;
+            IsSubmittingMultipleParts = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task SubmitPartResponses(int trackerId)
+    {
+        try
+        {
+            ErrorMessage = null;
+
+            // Validate required fields for this specific part
+            var missingRequired = new List<string>();
+            var selectedPartModel = Parts.First(p => p.Tracker.Id == trackerId);
+
+            foreach (var question in Questions.Where(q => q.IsRequired))
+            {
+                var response = GetOrCreateResponse(trackerId, question.Id);
+                if (string.IsNullOrWhiteSpace(response.ResponseValue))
+                {
+                    missingRequired.Add(question.QuestionText);
+                }
+            }
+
+            if (missingRequired.Any())
+            {
+                ErrorMessage = $"Please complete all required fields for {GetPartDisplayText(selectedPartModel)}:\n{string.Join("\n", missingRequired)}";
+                await NotificationService.Warning("Please complete all required fields for this part");
+                return;
+            }
+
+            IsSubmitting = true;
+            IsSubmittingMultipleParts = false;
+            StateHasChanged();
+
+            // Submit responses for this specific part
+            var partResponses = Responses.Values
+                .Where(r => r.PartTrackerId == trackerId && !string.IsNullOrWhiteSpace(r.ResponseValue))
+                .ToList();
+
+            await VendorSurveyService.SubmitPartResponsesAsync(SurveyBatch.Id, trackerId, partResponses);
+
+            // Update local state
+            SubmittedPartIds.Add(trackerId);
+            lastSubmittedPartText = GetPartDisplayText(selectedPartModel);
+
+            // Show success notification
+            await NotificationService.Success($"Part {GetPartDisplayText(selectedPartModel)} submitted successfully!");
+
+            // Check if all parts are now submitted
+            if (SubmittedPartIds.Count == Parts.Count)
+            {
+                await NotificationService.Success("Survey complete! All parts have been submitted.");
+                if (OnSurveySubmitted.HasDelegate)
+                {
+                    await OnSurveySubmitted.InvokeAsync();
+                }
+            }
+
+            // Show the next part modal if there are more parts or if survey is complete
+            if (Parts.Count > 1)
+            {
+                await ShowNextPartModal();
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Failed to submit part responses: {ex.Message}";
+            await NotificationService.Error("Failed to submit part responses. Please try again.");
+        }
+        finally
+        {
+            IsSubmitting = false;
+            IsSubmittingMultipleParts = false;
+            StateHasChanged();
+        }
+    }
+}
+
+<script>
+    window.scrollToElement = (element) => {
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+</script>
+
+<style>
+    .footer-part-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .current-part-reference {
+        font-size: 0.9rem;
+        padding: 0.25rem 0.5rem;
+        background-color: rgba(13, 110, 253, 0.1);
+        border-left: 3px solid #0d6efd;
+        border-radius: 0.25rem;
+    }
+
+    .button-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-submit-all {
+        white-space: nowrap;
+    }
+
+    .submitted-parts-list ul {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 0.25rem;
+        padding: 0.75rem;
+        background-color: rgba(25, 135, 84, 0.05);
+    }
+
+    @@media (max-width: 768px) {
+        .survey-footer .d-flex {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: stretch !important;
+        }
+        
+        .footer-part-info {
+            order: 2;
+        }
+        
+        .survey-footer > div > .button-group {
+            order: 1;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .button-group {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .btn-submit-all,
+        .btn-submit-part,
+        .btn-submitted {
+            width: 100%;
+        }
+    }
+</style>

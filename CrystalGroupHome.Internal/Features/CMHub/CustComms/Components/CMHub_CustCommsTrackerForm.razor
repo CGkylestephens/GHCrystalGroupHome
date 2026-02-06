@@ -1,0 +1,507 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.CustComms.Models
+@using CrystalGroupHome.Internal.Features.CMHub.CMDex.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.Internal.Features.CMHub.Pages
+@inherits CMHub_CustCommsTrackerFormBase
+
+<NavigationLock OnBeforeInternalNavigation="ConfirmNavigationAsync" />
+
+<Div style="max-width: 1200px;">
+    @if (!IsEditMode)
+    {
+        <h2>Add New Part Change Tracker</h2>
+    }
+    else
+    {
+        <h2>Part Change Tracker Details</h2>
+    }
+
+    @if (TrackerModel != null)
+    {
+        <Row Style="align-items: end;">
+
+            <Divider />
+
+            @if (!IsEditMode)
+            {
+                <Column Style="min-width: 14rem; flex-grow: 0;">
+                    <label for="jobNum">Search Part #</label>
+                    <CustomSearchInput @ref="PartNumSearchInput"
+                    OnTextValueChanged="OnPartNumTextValueChanged"
+                    OnSearch="OnSearchPartNum" />
+                </Column>
+            }
+            @if (IsEditMode || (PartNumSearchInput?.CurrentInputIsValid ?? false))
+            {
+                @* Part Info *@
+                <Column>
+                    <Div Style="display: flex; align-items: center; justify-items: center;">
+                        <Button ButtonStyle="ButtonStyle.Link"
+                            Class="action-icon-button me-2"
+                            Color="Color.Danger"
+                            Clicked="@(() => HardDeleteTracker())"
+                            hidden="@(!IsEditMode)">
+                                <span class="@NavHelpers.TrashIcon" aria-hidden="true"></span>
+                        </Button>
+                        <h3 style="margin: 0; margin-right: 1rem;">@TrackerModel.PartNum</h3>
+                        <h4 style="margin: 0; margin-right: 1rem; white-space: nowrap; color: var(--gray)">
+                            @(string.IsNullOrEmpty(TrackerModel.PartRev) ? " " : $"(Rev {TrackerModel.PartRev})")
+                        </h4>
+                    </Div>
+                    <Div>@TrackerModel.PartDesc</Div>
+                </Column>
+            }
+            @if (IsEditMode)
+            {
+                <Column Style="max-width: fit-content;">
+                    <Button Color="Color.Primary" Class="me-2" Clicked="() => ShowManualTaskModal()" hidden="@(!IsEditMode && (!PartNumSearchInput?.CurrentInputIsValid ?? true))" Disabled="@(!CMHub.HasCustCommsTrackerEditPermission(CurrentUser?.ADUser))">
+                        <span class="@($"{NavHelpers.AddIcon} me-1")" aria-hidden="true"></span> Add Task Manually
+                    </Button>
+                </Column>
+            }
+        </Row>
+    }
+
+    @if (IsLoading)
+    {
+        <Divider />
+    }
+    else if (TrackerModel != null)
+    {
+        <Divider />
+
+        @if (ShowValidationSummary)
+        {
+            <Alert Color="Color.Danger" Visible>
+                <AlertMessage>
+                    <strong>Cannot Save: Invalid Date</strong>
+                </AlertMessage>
+                <AlertDescription>
+                    One or more dates are invalid. All dates must be between 1/1/1900 and 12/31/9999.
+                </AlertDescription>
+            </Alert>
+        }
+
+        <Row Style="align-items: end;">
+            @if (IsEditMode || (PartNumSearchInput?.CurrentInputIsValid ?? false))
+            {
+                @* Last Time Buy *@
+                <Column Style="max-width: 14rem;">
+                    <label for="lastTimeBuyDate">Last Time Buy</label>
+                    <DateEdit TValue="DateTime?" 
+                              Date="@TrackerModel.LastTimeBuyDate" 
+                              id="lastTimeBuyDate" 
+                              DateChanged="@(value => OnChangeLastTimeBuyDate(value))" 
+                              Min="new DateTime(1900, 1, 1)"
+                              Max="new DateTime(9999, 12, 31)"
+                              Disabled="@(!CMHub.HasCustCommsTrackerEditPermission(CurrentUser?.ADUser) || IsSaving)" />
+                    @if (!string.IsNullOrEmpty(LastTimeBuyDateValidationMessage))
+                    {
+                        <Div Style="color: red; font-size: 0.875rem; margin-top: 0.25rem;">
+                            @LastTimeBuyDateValidationMessage
+                        </Div>
+                    }
+                    @if (ShowLastTimeBuySaveFailedWarning)
+                    {
+                        <Alert Color="Color.Warning" Visible Style="margin-top: 1rem;">
+                            <AlertDescription>
+                                <strong>Note:</strong> The Last Time Buy date you entered during tracker creation could not be saved to Epicor. This may be because the part doesn't exist in Epicor or there's a permission issue. Please enter the date again now, and it should save successfully.
+                            </AlertDescription>
+                            <CloseButton Clicked="@(() => ShowLastTimeBuySaveFailedWarning = false)" />
+                        </Alert>
+                    }
+                </Column>
+            }
+            @if (IsEditMode) {
+                <Column>
+                    <Div>
+                        Last Updated: <i>@TrackerModel.LastUpdated.ToLocalTime().ToString("g")</i>
+                    </Div>
+                    <Div Style="display: flex; flex-direction: row;">
+                        <Button Color="Color.Secondary" Class="me-2" Clicked="@(async () => await ShowAllLogsAsync())" Disabled="@IsSaving">
+                            <span class="@($"{NavHelpers.ClockIcon} me-1")" aria-hidden="true"></span> View All Logs
+                        </Button>
+                        <Button Color="Color.Primary" Class="me-2" Clicked="() => ShowAddLogModalForTracker()" Disabled="@IsSaving">
+                            <span class="@($"{NavHelpers.AddIcon} me-1")" aria-hidden="true"></span> Add Log
+                        </Button>
+                    </Div>
+                </Column>
+                <Column>
+                    <Div>
+                        Total Tasks: <i>@TrackerModel.TotalTasks</i> — Completed: <i>@TrackerModel.CompletedTasks</i>
+                    </Div>
+                    @{
+                        var percentage = TrackerModel.TotalTasks > 0 ? Math.Round((double)TrackerModel.CompletedTasks / TrackerModel.TotalTasks * 100) : 0;
+                        <div class="simple-progress-bar-container">
+                            <div class="simple-progress-bar-value bg-success" style="width: @(percentage)%"></div>
+                        </div>
+                    }
+                </Column>
+            }
+        </Row>
+    }
+
+    <!-- Task Lists -->
+    @if (IsLoading)
+    {
+        <div class="loading-gradient" style="width: 100%; height: 200px;"></div>
+    }
+    else if (TrackerModel != null)
+    {
+        @* Tech Services Section - displayed at the top before other task lists *@
+        @if (IsEditMode)
+        {
+            <Divider />
+
+            <CMHub_CustCommsTechServicesSection 
+                TechServicesTask="@TrackerModel.TechServicesTask"
+                LTBQuantity="@TrackerModel.TechServicesLTBQuantity"
+                IsEditMode="@IsEditMode"
+                CanEdit="@(CMHub.HasTechServicesEditPermission(CurrentUser?.ADUser) && !IsSaving)"
+                Statuses="@Statuses"
+                OnLTBQuantityChanged="@HandleTechServicesLTBQuantityChanged"
+                OnStatusChanged="@HandleTechServicesStatusChanged"
+                OnViewLogsClicked="@ShowTechServicesLogs"
+                OnAddLogClicked="@ShowAddLogModalForTechServices" />
+        }
+
+        // CM Part Tasks
+        @if (TrackerModel.CMPartTasks.Count > 0)
+        {
+            <Divider />
+
+            <Div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                <h4 style="margin: 0; margin-right: 1rem;">
+                    @(IsEditMode ? "CM Part Tasks" : $"Changes to {TrackerModel.PartNum} will impact the following CM Parts")
+                </h4>
+                <Button Class="btn-sm" Color="Color.Light" Clicked="@(() => showCMTasks = !showCMTasks)">
+                    @(showCMTasks ? "Hide" : "Show")
+                </Button>
+            </Div>
+
+            @if (showCMTasks)
+            {
+                @foreach (var task in TrackerModel.CMPartTasks)
+                {
+                    <Card Class="@(task.Completed ? "success-highlight cm-task-card" : "hover-highlight cm-task-card")" Style="margin-bottom: 1rem;">
+                        <CardHeader>
+                            <Div style="display: flex; align-items: center;">
+                                <Button Color="Color.Secondary" Class="me-2" Style="margin-left: -0.5rem;" Clicked="() => NavigateToTaskDetails(task)" title="Go To Task Details" hidden="@(!IsEditMode)" Disabled="@IsSaving">
+                                    <span class="@NavHelpers.ViewIcon" aria-hidden="true"></span>
+                                </Button>
+                                <strong style="margin-right: 1rem;">@task.ImpactedPartNum</strong>
+                                <strong style="margin-right: 1rem; color: var(--gray);">@(string.IsNullOrEmpty(task.ImpactedPartRev) ? " " : $"(Rev {task.ImpactedPartRev})")</strong>
+                                <PartIcons Part="@task.CMDexPart?.Part" />
+                                <Div Style="color: var(--gray); font-size: 0.8rem; margin-left: 0.5rem;"><i>@(task.QtyPer.ToString("G29"))x @PartNum</i></Div>
+                                <Div Style="flex-grow: 1;"></Div>
+                                <Button Color="@(string.IsNullOrEmpty(task.ECNNumber) ? Color.Primary : Color.Success)" Class="me-2" Clicked="() => ShowECNModal(task)" hidden="@(!IsEditMode)" Disabled="@(!CMHub.HasCustCommsTaskStatusEditPermission(CurrentUser?.ADUser) || IsSaving)">
+                                    <span class="@($"{NavHelpers.EditIcon} me-2")" aria-hidden="true"></span> @(string.IsNullOrEmpty(task.ECNNumber) ? "Enter ECN" : $"ECN: {task.ECNNumber}")
+                                </Button>
+                                <Select Style="max-width: 20rem; margin-right: -0.5rem;"
+                                        TValue="int?"
+                                        SelectedValue="task.StatusId"
+                                        id="taskStatusSelect"
+                                        SelectedValueChanged="@(value => HandleStatusChange(task, value))"
+                                        hidden="@(!IsEditMode)"
+                                        Disabled="@(!CMHub.HasCustCommsTaskStatusEditPermission(CurrentUser?.ADUser) || IsSaving)">
+                                    @foreach (var status in Statuses.Where(s => !s.Code.StartsWith("TS_", StringComparison.OrdinalIgnoreCase) && !s.Deleted && s.Sequence >= 0))
+                                    {
+                                        <SelectItem Value="@status.Id">@status.Description</SelectItem>
+                                    }
+                                </Select>
+                            </Div>
+                        </CardHeader>
+                        <CardBody>
+                            @if (task.CMDexPart != null && (task.CMDexPart.PartEmployees.Count > 0 || task.CMDexPart.PartCustomerContacts.Count > 0))
+                            {
+                                <Row>
+                                    <Column Style="flex-grow: 0; min-width: fit-content;">
+                                        <Button Color="Color.Secondary" Clicked="() => CMDexService.OpenCMDexPartInNewTabAsync(task.ImpactedPartNum)" title="Open in CM Dex" Disabled="@IsSaving">
+                                            <span class="@NavHelpers.CMHub_CMDexIcon" aria-hidden="true"></span>
+                                        </Button>
+                                    </Column>
+                                    <Column>
+                                        <Div>Primary PM: <i style="color: var(--gray)">@(task.CMDexPart.HasPrimary ? task.CMDexPart.PrimaryPMName : "None Selected")</i></Div>
+                                        @if (task.CMDexPart.HasOwner)
+                                        {
+                                            <Div>Owner Customer Contact: <i style="color: var(--gray)">@task.CMDexPart.OwnerCustName - @task.CMDexPart.OwnerConName</i></Div>
+                                        }
+                                        else
+                                        {
+                                            <Div>Owner Customer Contact: <i style="color: var(--gray)">None Selected</i></Div>
+                                        }
+                                    </Column>
+                                </Row>
+
+                                <Divider />
+                            }
+                            @{
+                                var sortFormat = task.Sort.Replace("\\", " > ");
+                                if (string.IsNullOrEmpty(sortFormat))
+                                {
+                                    sortFormat = "No relationship found";
+                                }
+                            }
+                            <Div><i style="color: var(--gray)">@task.ImpactedPartDesc</i></Div>
+                            <Div>Relationship: <i style="color: var(--gray)">@sortFormat</i></Div>
+                            @if (IsEditMode) {
+                                <Divider />
+                            }
+                            <Row>
+                                <Column Style="flex-grow: 0; min-width: fit-content;">
+                                    <Button Color="Color.Secondary" Class="me-2" Clicked="@(async () => await ShowTaskLogsAsync(task.Id))" hidden="@(task.Logs.Count <= 0 || !IsEditMode)" Disabled="@IsSaving">
+                                        <span class="@($"{NavHelpers.ClockIcon} me-1")" aria-hidden="true"></span> View Task Logs
+                                    </Button>
+                                </Column>
+                                <Column>
+                                @{
+                                    var recentLog = task.Logs.OrderByDescending(_ => _.LogDate).FirstOrDefault();
+                                    if (recentLog != null)
+                                    { 
+                                        <Div>
+                                            Most Recent Log (@recentLog.Employee?.DisplayName) [@recentLog.LogDate.ToLocalTime().ToString()]:
+                                        </Div>
+                                        <Div Style="white-space: pre-wrap;">
+                                            <i style="color: var(--gray)">@((MarkupString)HtmlHelpers.ConvertUrlsToLinks(recentLog.LogMessage))</i>
+                                        </Div>
+                                    }
+                                }
+                                </Column>
+                                <Column Style="flex-grow: 0; min-width: fit-content;">
+                                    <Button Color="Color.Primary" Clicked="() => ShowAddLogModalForTask(task)" hidden="@(!IsEditMode)" Disabled="@(!CMHub.HasCustCommsTaskStatusEditPermission(CurrentUser?.ADUser) || IsSaving)">
+                                        <span class="@($"{NavHelpers.AddIcon} me-1")" aria-hidden="true"></span> Add Task Log
+                                    </Button>
+                                </Column>
+                            </Row>
+                        </CardBody>
+                    </Card>
+                }
+            }
+        }
+
+        @if (TrackerModel.CMPartTasks.Count > 0 && TrackerModel.WhereUsedPartTasks.Count > 0)
+        {
+            <Divider/>
+        }
+
+        // Where Used Part Tasks
+        @if (TrackerModel.WhereUsedPartTasks.Count > 0)
+        {
+            <Div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                <h4 style="margin: 0; margin-right: 1rem;">
+                    @(IsEditMode ? "Where Used Part Tasks" : $"Changes to {TrackerModel.PartNum} will impact the following Where Used Parts")
+                </h4>
+                <Button Class="btn-sm" Color="Color.Light" Clicked="@(() => showWhereUsedTasks = !showWhereUsedTasks)">
+                    @(showWhereUsedTasks ? "Hide" : "Show")
+                </Button>
+            </Div>
+
+            @if (showWhereUsedTasks)
+            {
+                @foreach (var task in TrackerModel.WhereUsedPartTasks)
+                {
+                    var sortFormat = task.Sort.Replace("\\", " > ");
+                    if (string.IsNullOrEmpty(sortFormat))
+                    {
+                        sortFormat = "No relationship found";
+                    }
+                    <Card Class="@(task.Completed ? "success-highlight" : "hover-highlight")" Style="margin-bottom: 1rem;">
+                        <CardHeader>
+                            <Div style="display: flex; align-items: center;">
+                                @if (task.Lvl > 1) {
+                                    <Button ButtonStyle="ButtonStyle.Link"
+                                            Style="margin-left: -0.5rem; margin-right: 1rem !important;"
+                                            Class="action-icon-button me-2"
+                                            Clicked="@(() => SoftDeleteTask(task))"
+                                            Color="Color.Danger"
+                                            hidden="@(!IsEditMode)"
+                                            Disabled="@IsSaving">
+                                        <span class="@NavHelpers.TrashIcon" aria-hidden="true"></span>
+                                    </Button>
+                                }
+                                <Button Color="Color.Secondary" Class="me-2" Style="margin-left: -0.5rem;" Clicked="() => NavigateToTaskDetails(task)" title="Go To Task Details" hidden="@(!IsEditMode)" Disabled="@IsSaving">
+                                    <span class="@NavHelpers.ViewIcon" aria-hidden="true"></span>
+                                </Button>
+                                @if (!IsVisibleTaskStatus(task)) {
+                                    <span title="@sortFormat" style="cursor: help;">
+                                        <strong style="margin-right: 1rem;">@task.ImpactedPartNum</strong>
+                                    </span>
+                                } else {
+                                    <strong style="margin-right: 1rem;">@task.ImpactedPartNum</strong>
+                                }
+                                <strong style="margin-right: 1rem; color: var(--gray);">@(string.IsNullOrEmpty(task.ImpactedPartRev) ? " " : $"(Rev {task.ImpactedPartRev})")</strong>
+                                <Div Style="color: var(--gray); font-size: 0.8rem; margin-left: 0.5rem;"><i>@(task.QtyPer.ToString("G29"))x @PartNum</i></Div>
+                                <Div Style="flex-grow: 1;"></Div>
+                                @if (IsVisibleTaskStatus(task))
+                                {
+                                    <Button Color="@(string.IsNullOrEmpty(task.ECNNumber) ? Color.Primary : Color.Success)" Class="me-2" Clicked="() => ShowECNModal(task)" hidden="@(!IsEditMode)" Disabled="@(!CMHub.HasCustCommsTaskStatusEditPermission(CurrentUser?.ADUser) || IsSaving)">
+                                        <span class="@($"{NavHelpers.EditIcon} me-2")" aria-hidden="true"></span> @(string.IsNullOrEmpty(task.ECNNumber) ? "Enter ECN" : $"ECN: {task.ECNNumber}")
+                                    </Button>
+                                }
+                                <Select Style="max-width: 20rem; margin-right: -0.5rem;"
+                                        TValue="int?"
+                                        SelectedValue="task.StatusId"
+                                        id="taskStatusSelect"
+                                        SelectedValueChanged="@(value => HandleStatusChange(task, value))"
+                                        hidden="@(!IsEditMode)"
+                                        Disabled="@(!CMHub.HasCustCommsTaskStatusEditPermission(CurrentUser?.ADUser) || IsSaving)">
+                                    @foreach (var status in Statuses.Where(s => !s.Code.StartsWith("TS_", StringComparison.OrdinalIgnoreCase) && !s.Deleted && s.Sequence >= 0))
+                                    {
+                                        <SelectItem Value="@status.Id">@status.Description</SelectItem>
+                                    }
+                                </Select>
+                            </Div>
+                        </CardHeader>
+                        @if (IsVisibleTaskStatus(task))
+                        {
+                            <CardBody>
+
+                                <Div><i style="color: var(--gray)">@task.ImpactedPartDesc</i></Div>
+                                <Div>Relationship: <i style="color: var(--gray)">@sortFormat</i></Div>
+                                @if (IsEditMode)
+                                {
+                                    if (task.LinkedHigherLevelParts.Count > 0)
+                                    {
+                                        <Divider />
+
+                                        <Div>@task.ImpactedPartNum is found within:</Div>
+
+                                        <Div Style="display: flex; flex-wrap: wrap; row-gap: 4px;">
+                                        @foreach (var lhlp in task.LinkedHigherLevelParts)
+                                        {
+                                            var foundExistingTracker = TrackerModel.WhereUsedPartTasks.FirstOrDefault(_ => _.ImpactedPartNum == lhlp.PartNum);
+                                            if (foundExistingTracker != null)
+                                            {
+                                                <span title="A Task for @lhlp.PartNum has been added to this Tracker already" style="cursor: help; margin-right: 3px;">
+                                                    <strong>@lhlp.PartNum</strong>
+                                                </span>
+                                            }
+                                            else if (CMHub.HasCustCommsTrackerEditPermission(CurrentUser?.ADUser))
+                                            {
+                                                <Div class="text-chit interactive" title="Click to create a Task" onclick="@(() => ShowManualTaskModal(lhlp.PartNum))">
+                                                    <i>@lhlp.PartNum</i>
+                                                </Div>
+                                            }
+                                            else
+                                            {
+                                                <span style="margin-right: 3px;">
+                                                    <i>@lhlp.PartNum</i>
+                                                </span>
+                                            }
+                                        }
+                                        </Div>
+                                    }
+                            
+                                    <Divider />
+                                }
+                                <Row>
+                                    <Column Style="flex-grow: 0; min-width: fit-content;">
+                                        <Button Color="Color.Secondary" Class="me-2" Clicked="@(async () => await ShowTaskLogsAsync(task.Id))" hidden="@(task.Logs.Count <= 0 || !IsEditMode)" Disabled="@IsSaving">
+                                            <span class="@($"{NavHelpers.ClockIcon} me-1")" aria-hidden="true"></span> View Task Logs
+                                        </Button>
+                                    </Column>
+                                    <Column>
+                                    @{
+                                        var recentLog = task.Logs.OrderByDescending(_ => _.LogDate).FirstOrDefault();
+                                        if (recentLog != null)
+                                        {
+                                            <Div>
+                                                Most Recent Log (@recentLog.Employee?.DisplayName) [@recentLog.LogDate.ToLocalTime().ToString()]:
+                                            </Div>
+                                            <Div Style="white-space: pre-wrap;">
+                                                <i style="color: var(--gray)">@((MarkupString)HtmlHelpers.ConvertUrlsToLinks(recentLog.LogMessage))</i>
+                                            </Div>
+                                        }
+                                    }
+                                    </Column>
+                                    <Column Style="flex-grow: 0; min-width: fit-content;">
+                                        <Button Color="Color.Primary" Clicked="() => ShowAddLogModalForTask(task)" hidden="@(!IsEditMode)" Disabled="@(!CMHub.HasCustCommsTaskStatusEditPermission(CurrentUser?.ADUser) || IsSaving)">
+                                            <span class="@($"{NavHelpers.AddIcon} me-1")" aria-hidden="true"></span> Add Task Log
+                                        </Button>
+                                    </Column>
+                                </Row>
+                            </CardBody>
+                        }
+                    </Card>
+                }
+            }
+        }
+    }
+
+    <!-- Sticky Save/Undo Button for Edit Mode -->
+    @if (IsEditMode)
+    {
+        <div style="height:120px;"></div>
+        <div class="sticky-save-button @(HasUnsavedChanges ? "visible" : "hidden")">
+            <Button Color="Color.Success" 
+                    Size="Size.Large" 
+                    @onclick="HandleValidSubmit" 
+                    style="margin-right: 0.5rem;"
+                    Disabled="@(IsSaving || !CMHub.HasCustCommsTrackerEditPermission(CurrentUser?.ADUser))">
+                @if (IsSaving)
+                {
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    <span>Saving...</span>
+                }
+                else
+                {
+                    <span class="@($"{NavHelpers.SaveIcon} me-2")" aria-hidden="true"></span>
+                    <span>Save Changes</span>
+                }
+            </Button>
+            <Button Color="Color.Secondary" 
+                    Size="Size.Large" 
+                    @onclick="ReloadTracker"
+                    Disabled="@IsSaving">
+                <span class="@($"{NavHelpers.UndoIcon} me-2")" aria-hidden="true"></span>
+                Undo
+            </Button>
+        </div>
+    }
+    else
+    {
+        <!-- Sticky Save Button for Add Mode -->
+        <Div Style="height: 110px;"></Div> <!-- Spacer so it doesn't cover any page content -->
+        <div class="sticky-save-button @((!IsEditMode && HasUnsavedChanges) ? "visible" : "hidden")" @onclick="() => SaveTracker()">
+            <Button Color="Color.Success" Size="Size.Large">
+                <span class="@($"{NavHelpers.SaveIcon} me-2")" aria-hidden="true"></span> Save and Create @((TrackerModel?.CMPartTasks.Count ?? 0) + (TrackerModel?.WhereUsedPartTasks.Count ?? 0)) Tasks
+            </Button>
+        </div>
+    }
+</Div>
+
+<!-- Confirmation Modals -->
+<ConfirmationModal @ref="FoundExistingTrackerConfirmationModal" Title="Part Change Tracker Already Exists" Message="A Part Change Tracker for this Part # has already been created. Would you like to navigate to it?" OnClose="ConfirmNavigateToExistingTracker" />
+<ConfirmationModal @ref="ErrorModal" Title="Something Went Wrong" Message="@ErrorMessage"/>
+<ConfirmationModal @ref="DeletePartTrackerConfirmationModal" Title="Confirm Delete of Part Tracker" Message="@DeletePartTrackerConfirmationMessage" OnClose="ConfirmHardDeletePartTracker" />
+<ConfirmationModal @ref="DeleteTaskConfirmationModal" Title="Confirm Delete of Part Task" Message="@DeleteTaskConfirmationMessage" OnClose="ConfirmSoftDeleteTask" />
+
+<!-- Task Logs Modal -->
+<CMHub_CustCommsTaskLogsModal @ref="TaskLogsModal"
+                              OnClose="@(async () => { await InvokeAsync(StateHasChanged); })" />
+
+<!-- New Log Modal -->
+<CMHub_CustCommsNewLogModal @ref="NewLogModal"
+                               OnLogSubmitted="HandleNewLogSubmitted"
+                               OnClose="@(async () => { await InvokeAsync(StateHasChanged); })" />
+
+<!-- ECN Modal -->
+<CMHub_CustCommsECNModal @ref="ECNModal" OnECNSaved="HandleECNSaved" />
+
+<!-- Manual Task Modal -->
+<Modal @ref="ManualTaskModal">
+    <ModalContent Centered="true" style="position: relative;">
+    <ModalHeader>Manually Add Task</ModalHeader>
+    <ModalBody>
+        <TextEdit TValue="string" @bind-Text="ManualTaskPartNum" Placeholder="Enter Part #" />
+        @if (!string.IsNullOrEmpty(ManualTaskError))
+        {
+            <Div Style="color: red;">@ManualTaskError</Div>
+        }
+    </ModalBody>
+    <ModalFooter>
+        <Button Color="Color.Secondary" Clicked="HideManualTaskModal">Cancel</Button>
+        <Button Color="Color.Success" Clicked="AddManualTaskToTracker">Add Task</Button>
+    </ModalFooter>
+    </ModalContent>
+</Modal>

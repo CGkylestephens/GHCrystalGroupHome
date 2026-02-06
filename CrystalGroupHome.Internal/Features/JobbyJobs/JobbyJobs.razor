@@ -1,0 +1,49 @@
+﻿@page "/jobby-jobs"
+@using CrystalGroupHome.Internal.Common.Data.Jobs
+@inherits JobbyJobsBase
+
+<PageTitle>Jobby Jobs</PageTitle>
+
+<Div class="container mt-4">
+    <h3>Jobs</h3>
+
+    <DataGrid TItem="JobHeadDTO_Base"
+              Data="@jobHeads.Items"
+              TotalItems="@jobHeads.TotalRecords"
+              @bind-SelectedRow="@selectedJobHead"
+              Editable="false"
+              Responsive="true"
+              ReadData="LoadJobHeads"
+              PageSize="10"
+              ShowPager
+              Sortable="false">
+        <DataGridColumns>
+            <DataGridColumn Field="@nameof(JobHeadDTO_Base.JobNum)" Caption="Job #" />
+            <DataGridColumn Field="@nameof(JobHeadDTO_Base.PartNum)" Caption="Part #" />
+            <DataGridColumn Field="@nameof(JobHeadDTO_Base.ProdQty)" Caption="Prod Qty" />
+            <DataGridColumn Field="@nameof(JobHeadDTO_Base.CreateDate)" Caption="Created Date" DisplayFormat="{0:yyyy-MM-dd}" />
+        </DataGridColumns>
+    </DataGrid>
+
+    <DataGrid TItem="JobDTO_Extended"
+              Data="@jobHeadsExtended.Items"
+              TotalItems="@jobHeadsExtended.TotalRecords"
+              @bind-SelectedRow="@selectedJobHeadExtended"
+              Editable="false"
+              Responsive="true"
+              ReadData="LoadJobHeadsExtended"
+              PageSize="10"
+              ShowPager
+              Sortable="false">
+        <DataGridColumns>
+            <DataGridColumn Field="@nameof(JobDTO_Extended.JobNum)" Caption="Job #" />
+            <DataGridColumn Field="@nameof(JobDTO_Extended.PartNum)" Caption="Part #" />
+            <DataGridColumn Field="@nameof(JobDTO_Extended.ProdQty)" Caption="Prod Qty" />
+            <DataGridColumn Field="@nameof(JobDTO_Extended.CreateDate)" Caption="Created Date" DisplayFormat="{0:yyyy-MM-dd}" />
+            <DataGridColumn Field="@nameof(JobDTO_Extended.RevisionNum)" Caption="Revision #" />
+            <DataGridColumn Field="@nameof(JobDTO_Extended.DrawNum)" Caption="Draw #" />
+            <DataGridColumn Field="@nameof(JobDTO_Extended.PartDescription)" Caption="Part Description" />
+        </DataGridColumns>
+    </DataGrid>
+
+</Div>

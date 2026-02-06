@@ -1,0 +1,72 @@
+﻿@using System.Security.Principal
+@using CrystalGroupHome.Internal.Common.Data.Labor
+@using CrystalGroupHome.Internal.Common.Helpers
+@using CrystalGroupHome.Internal.Navigation
+@using CrystalGroupHome.SharedRCL.Data.Employees
+@using CrystalGroupHome.SharedRCL.Data.Labor
+@using CrystalGroupHome.SharedRCL.Helpers
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IADUserService ADUserService
+@inject DebugModeService DebugMode
+
+@code {
+    private ADUserModel CurrentUser { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HttpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true)
+        {
+            string? fullName = HttpContextAccessor.HttpContext?.User?.Identity?.Name;
+            if (string.IsNullOrEmpty(fullName)) return;
+            var userName = fullName.Contains('\\') ? fullName.Split('\\')[1].ToUpper() : fullName.ToUpper();
+
+            CurrentUser.DBUser = await ADUserService.GetADUserBySAMAccountNameAsync<ADUserDTO_Base>(userName) ?? new()
+                {
+                    EmployeeNumber = $"NO MATCH ({userName})",
+                    SAMAccountName = userName,
+                    DisplayName = $"NO MATCH ({userName})"
+                };
+
+            CurrentUser.ADUser = HttpContextAccessor.HttpContext?.User ?? new();
+        }
+    }
+}
+
+<CascadingAuthenticationState>
+    <CascadingValue Value="CurrentUser">
+        <Router AppAssembly="@typeof(App).Assembly">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                    <NotAuthorized>
+                        @if (context.User.Identity?.IsAuthenticated == true)
+                        {
+                            <div class="container-fluid mt-5">
+                                <div class="alert alert-danger" role="alert">
+                                    <h4 class="alert-heading"><i class="fas fa-lock me-2"></i>Access Denied</h4>
+                                    <p>You do not have permission to access this page.</p>
+                                    <hr>
+                                    <p class="mb-0">Please contact your administrator if you believe you should have access.</p>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>You must be logged in to access this page.</p>
+                        }
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            </Found>
+            <NotFound>
+                <PageTitle>Not found</PageTitle>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p role="alert">Sorry, there's nothing at this address.</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </CascadingValue>
+</CascadingAuthenticationState>
+
+<ModalProvider />

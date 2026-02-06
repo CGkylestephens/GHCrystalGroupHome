@@ -1,0 +1,176 @@
+@using CrystalGroupHome.Internal.Features.CMHub.VendorComms.Data
+@using CrystalGroupHome.Internal.Common.Data.Labor
+
+<Modal @ref="modalRef">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>
+                <i class="fas fa-times-circle me-2"></i>
+                Close Survey
+            </ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            @if (CloseEntireBatch)
+            {
+                <Alert Color="Color.Warning" Visible>
+                    <AlertMessage>Close Entire Survey Batch</AlertMessage>
+                    <AlertDescription>
+                        <p>You are about to <strong>manually close this entire survey batch</strong>.</p>
+                        <ul>
+                            <li>All parts in this batch will be marked as complete</li>
+                            <li>The batch status will be set to "Closed"</li>
+                            <li>This will allow you to send new surveys for these parts</li>
+                            <li>Use this when the vendor provided information through other means (phone, email, etc.)</li>
+                        </ul>
+                    </AlertDescription>
+                </Alert>
+            }
+            else
+            {
+                <Alert Color="Color.Info" Visible>
+                    <AlertMessage>Close Survey for This Part</AlertMessage>
+                    <AlertDescription>
+                        <p>You are about to <strong>manually mark this part's survey as complete</strong>.</p>
+                        <ul>
+                            <li>This part will be marked as "Submitted" in the survey</li>
+                            <li>This will allow you to include this part in future surveys</li>
+                            <li>Use this when the vendor provided information through other means (phone, email, etc.)</li>
+                        </ul>
+                    </AlertDescription>
+                </Alert>
+            }
+
+            <Field>
+                <FieldLabel>Reason for Manual Closure <span style="color: #dc3545;">*</span></FieldLabel>
+                <MemoEdit @bind-Text="Notes" 
+                          Rows="4" 
+                          Placeholder="Enter the reason for manually closing this survey (e.g., 'Vendor provided updates via phone call on 12/15/2024')">
+                </MemoEdit>
+                @if (ShowValidation && string.IsNullOrWhiteSpace(Notes))
+                {
+                    <FieldHelp Style="color: #dc3545;">
+                        <i class="fas fa-exclamation-circle me-1"></i>
+                        Please provide a reason for closing this survey.
+                    </FieldHelp>
+                }
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="Cancel">
+                Cancel
+            </Button>
+            <Button Color="Color.Warning" Clicked="ConfirmClose" Loading="IsProcessing">
+                <i class="fas fa-times-circle me-1"></i>
+                @if (IsProcessing)
+                {
+                    <span>Closing Survey...</span>
+                }
+                else
+                {
+                    <span>Close Survey</span>
+                }
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Inject] private ICMHub_VendorCommsSurveyService SurveyService { get; set; } = default!;
+    [Inject] private INotificationService NotificationService { get; set; } = default!;
+    [CascadingParameter] public ADUserModel? CurrentUser { get; set; }
+
+    [Parameter] public EventCallback OnSurveyClosed { get; set; }
+
+    private Modal? modalRef;
+    private int BatchId { get; set; }
+    private int TrackerId { get; set; }
+    private bool CloseEntireBatch { get; set; }
+    private string Notes { get; set; } = string.Empty;
+    private bool IsProcessing { get; set; }
+    private bool ShowValidation { get; set; }
+
+    public async Task OpenAsync(int batchId, int trackerId, bool closeEntireBatch = false)
+    {
+        BatchId = batchId;
+        TrackerId = trackerId;
+        CloseEntireBatch = closeEntireBatch;
+        Notes = string.Empty;
+        IsProcessing = false;
+        ShowValidation = false;
+
+        if (modalRef != null)
+        {
+            await modalRef.Show();
+        }
+    }
+
+    private async Task ConfirmClose()
+    {
+        // Validate notes
+        if (string.IsNullOrWhiteSpace(Notes))
+        {
+            ShowValidation = true;
+            StateHasChanged();
+            return;
+        }
+
+        if (CurrentUser?.DBUser == null)
+        {
+            await NotificationService.Error("User information not available");
+            return;
+        }
+
+        IsProcessing = true;
+        StateHasChanged();
+
+        try
+        {
+            if (CloseEntireBatch)
+            {
+                await SurveyService.CloseSurveyBatchAsync(BatchId, CurrentUser.DBUser.EmployeeNumber, Notes);
+                await NotificationService.Success("Survey batch closed successfully. All parts marked as complete.");
+            }
+            else
+            {
+                await SurveyService.CloseSurveyAsync(BatchId, TrackerId, CurrentUser.DBUser.EmployeeNumber, Notes);
+                await NotificationService.Success("Survey closed successfully for this part.");
+            }
+
+            if (OnSurveyClosed.HasDelegate)
+            {
+                await OnSurveyClosed.InvokeAsync();
+            }
+
+            await CloseModal();
+        }
+        catch (Exception ex)
+        {
+            await NotificationService.Error($"Failed to close survey: {ex.Message}");
+        }
+        finally
+        {
+            IsProcessing = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task Cancel()
+    {
+        await CloseModal();
+    }
+
+    private async Task CloseModal()
+    {
+        if (modalRef != null)
+        {
+            await modalRef.Hide();
+        }
+        
+        // Reset state
+        BatchId = 0;
+        TrackerId = 0;
+        Notes = string.Empty;
+        ShowValidation = false;
+    }
+}

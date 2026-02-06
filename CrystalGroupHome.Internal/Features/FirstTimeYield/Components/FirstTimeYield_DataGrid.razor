@@ -1,0 +1,259 @@
+﻿@using CrystalGroupHome.Internal.Features.FirstTimeYield.Models
+@using CrystalGroupHome.Internal.Features.FirstTimeYield.Pages
+@using CrystalGroupHome.SharedRCL.Components
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.SharedRCL.Data.Labor
+@inherits FirstTimeYield_DataGridBase
+
+<Div style="max-width: 1600px;">
+    @if (IsLoading)
+    {
+        <div class="loading-gradient" style="width: 100%; height: 400px;"></div>
+    }
+    else
+    {
+        <Row>
+            <Column Style="display: flex;">
+                <h2>Entry History @(FirstTimeYield.IsAdmin(CurrentUser?.ADUser) ? "for All Users" : "for " + CurrentUser?.DBUser.DisplayName ?? "Unknown User")</h2>
+                <InfoHoverIcon Style="margin-left: 0.5rem; margin-bottom: 0.5rem;"
+                    HoverText="Entries in this table are limited to those made in the previous 6 months. Reports or database queries can be written to access older entries." />
+            </Column>
+            <Column Style="display: flex; gap: 0.5rem; justify-content: end; flex-wrap: wrap-reverse;" Class="mb-2">
+
+                @* Clear Filters Button *@
+                <Button Color="Color.Secondary" Clicked="@ClearAllFilters" hidden="@NoFiltersApplied()">
+                    <span class="@($"{NavHelpers.CloseSquareIcon} me-2")" aria-hidden="true"></span> Clear Filters
+                </Button>
+
+                @* Toggle Filter Section Button *@
+                <Button Color="Color.Secondary" Clicked="@ToggleFilters">
+                    <span class="@($"{NavHelpers.FilterIcon} me-2")" aria-hidden="true"></span>
+                    @if (ShowFilterInputs)
+                    {
+                        <span>Hide Filters</span>
+                    }
+                    else
+                    {
+                        <span>Show Filters</span>
+                    }
+                </Button>
+
+                @* Add Entry Button *@
+                <Button Color="Color.Primary" Clicked="NavigateToAddEntry">
+                    <span class="@($"{NavHelpers.AddCircleIcon} me-2")" aria-hidden="true"></span> Add Entry
+                </Button>
+
+            </Column>
+        </Row>
+
+        @if (ShowFilterInputs)
+        {
+            <Div class="card mb-4">
+                <Div class="card-header">
+                    <strong>Filters</strong>
+                </Div>
+                <Div class="card-body">
+
+                    @if (FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))
+                    {
+                        <Row Class="mb-3">
+                            <Column Style="align-content: end;">
+                                <Label for="jobNum">Job #</Label>
+                                <TextEdit @bind-Text="JobNumFilter" id="jobNum" Style="text-transform: uppercase;" />
+                            </Column>
+                            <Column Style="align-content: end;">
+                                <Label for="opCode">Op Code</Label>
+                                <TextEdit @bind-Text="OpCodeFilter" id="opCode" Style="text-transform: uppercase;" />
+                            </Column>
+                            <Column Style="align-content: end;">
+                                <Label for="opCodeOperator">Operator</Label>
+                                <TextEdit @bind-Text="OpCodeOperatorFilter" id="opCodeOperator" />
+                            </Column>
+                        </Row>
+
+                        <Row Class="mb-3">
+                            <Column Style="align-content: end;">
+                                <Label for="area">Area</Label>
+                                <TextEdit @bind-Text="AreaFilter" id="area" />
+                            </Column>
+                            <Column Style="align-content: end;">
+                                <Label for="entryUser">Entered By User</Label>
+                                <TextEdit @bind-Text="EntryUserFilter" id="entryUser" />
+                            </Column>
+                            <Column Style="align-content: end;">
+                                <Label for="modifiedUser">Modified By User</Label>
+                                <TextEdit @bind-Text="ModifiedUserFilter" id="modifiedUser" />
+                            </Column>
+                        </Row>
+                    }
+                    else
+                    {
+                        <Row Class="mb-3">
+                            <Column Style="align-content: end;">
+                                <Label for="jobNum">Job #</Label>
+                                <TextEdit @bind-Text="JobNumFilter" id="jobNum" Style="text-transform: uppercase;" />
+                            </Column>
+                            <Column Style="align-content: end;">
+                                <Label for="opCode">Op Code</Label>
+                                <TextEdit @bind-Text="OpCodeFilter" id="opCode" Style="text-transform: uppercase;" />
+                            </Column>
+                            <Column Style="align-content: end;">
+                                <Label for="opCodeOperator">Operator</Label>
+                                <TextEdit @bind-Text="OpCodeOperatorFilter" id="opCodeOperator" />
+                            </Column>
+                            <Column Style="align-content: end;">
+                                <Label for="area">Area</Label>
+                                <TextEdit @bind-Text="AreaFilter" id="area" />
+                            </Column>
+                        </Row>
+                    }
+
+                    <Row Class="mb-3">
+                        <Column Style="align-content: end;">
+                            <Label For="dateEnteredOnOrAfter">Date Entered (on or after)</Label>
+                            <DateEdit TValue="DateTime?" @bind-Date="@DateEnteredOnOrAfterFilter" id="dateEnteredOnOrAfter" />
+                        </Column>
+                        <Column Style="align-content: end;">
+                            <Label For="dateEnteredOnOrBefore">Date Entered (on or before)</Label>
+                            <DateEdit TValue="DateTime?" @bind-Date="@DateEnteredOnOrBeforeFilter" id="dateEnteredOnOrBefore" />
+                        </Column>
+                        <Column Style="align-content: end;">
+                            <Label For="dateModifiedOnOrAfter">Date Modified (on or after)</Label>
+                            <DateEdit TValue="DateTime?" @bind-Date="@DateModifiedOnOrAfterFilter" id="dateModifiedOnOrAfter" />
+                        </Column>
+                        <Column Style="align-content: end;">
+                            <Label For="dateModifiedOnOrBefore">Date Modified (on or before)</Label>
+                            <DateEdit TValue="DateTime?" @bind-Date="@DateModifiedOnOrBeforeFilter" id="dateModifiedOnOrBefore" />
+                        </Column>
+                    </Row>
+
+                </Div>
+            </Div>
+        }
+
+        <Row>
+            <DataGrid TItem="FirstTimeYield_EntryModel"
+                      Data="@DisplayEntries"
+                      Editable="false"
+                      Hoverable="true"
+                      Responsive
+                      ResponsiveMode="@TableResponsiveMode.Mobile"
+                      ShowPager="true"
+                      PageSize="10"
+                      @ref="EntryGrid"
+                      DetailRowStartsVisible="false"
+                      RowSelectable="e => false"
+                      RowClicked="DetailRowToggle"
+                      RowStyling="@OnRowStyling"
+                      SortMode="DataGridSortMode.Single">
+                <DataGridColumns>
+                    <DataGridColumn>
+                        <DisplayTemplate Context="entry">
+                            <Span Class="inline-flex">
+                                <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-1" Color="Color.Primary">
+                                    <span class="@StyleHelpers.GetExpandableToggleIcon(entry.IsDetailExpanded)" aria-hidden="true"></span>
+                                </Button>
+                                <Span Class="@(entry.IsDetailExpanded ? "inline-flex" : "inline-flex visibility-hidden")">
+                                    <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-1" Color="Color.Primary" Clicked="@(() => NavigateToEditEntry(entry))">
+                                        <span class="@(FirstTimeYield.HasEditPermission(CurrentUser?.ADUser) ? NavHelpers.EditIcon : NavHelpers.ViewIcon)" aria-hidden="true"></span>
+                                    </Button>
+                                </Span>
+                            </Span>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn Field="@nameof(FirstTimeYield_EntryModel.Id)" Caption="ID" />
+                    <DataGridColumn Field="@nameof(FirstTimeYield_EntryModel.JobNum)" Caption="Job #" />
+                    <DataGridColumn Field="@nameof(FirstTimeYield_EntryModel.OpCode)" Caption="Op Code" />
+                    <DataGridColumn Caption="Operator">
+                        <DisplayTemplate Context="entry">
+                            @entry.OpCodeOperator?.DisplayName
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn Caption="Area">
+                        <DisplayTemplate Context="entry">
+                            @entry.Area?.AreaDescription
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn Caption="Entered By"
+                    CellClass="@(entry => "hide-when-medium")" HeaderCellClass="hide-when-medium">
+                        <DisplayTemplate Context="entry">
+                            @entry.EntryUser.DisplayName
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn Field="@nameof(FirstTimeYield_EntryModel.EntryDate)" Caption="Entered Date" DisplayFormat="{0:MM/dd/yyyy}"
+                    CellClass="@(entry => "hide-when-medium")" HeaderCellClass="hide-when-medium" />
+                    <DataGridColumn Field="@nameof(FirstTimeYield_EntryModel.QtyTested)" Caption="Tested" />
+                    <DataGridColumn Field="@nameof(FirstTimeYield_EntryModel.QtyPassed)" Caption="Passed" 
+                    CellClass="@(entry => "hide-when-narrow")" HeaderCellClass="hide-when-narrow" />
+                    <DataGridColumn Field="@nameof(FirstTimeYield_EntryModel.QtyFailed)" Caption="Failed" />
+                    @* TODO: Do we want to style the percentage so it's easier to see "bad" yields at a glance? *@
+                    <DataGridColumn Field="@nameof(FirstTimeYield_EntryModel.YieldPct)" Caption="Yield" DisplayFormat="{0:P0}" />
+                    @if (FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))
+                    {
+                        <DataGridColumn>
+                            <DisplayTemplate Context="entry">
+                                <Span Class="@(entry.IsDetailExpanded ? "inline-flex" : "inline-flex visibility-hidden")">
+                                    <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button" Color="Color.Danger" Clicked="@(() => DeleteEntry(entry))">
+                                        <span class="@NavHelpers.TrashIcon" aria-hidden="true"></span>
+                                    </Button>
+                                </Span>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    }
+                </DataGridColumns>
+
+                @* Detail Row Stuff *@
+                <DetailRowTemplate Context="entry">
+                    <Row>
+                        <Column Class="detail-row-highlight"></Column>
+                        <Column>
+                            <Card Class="active-row mb-2">
+                                <CardHeader>
+                                    <strong>Notes</strong>
+                                </CardHeader>
+                                <CardBody>
+                                    @entry.Notes
+                                </CardBody>
+                            </Card>
+                            <Card Class="active-row">
+                                <CardHeader>
+                                    <strong>Failure Reasons</strong>
+                                </CardHeader>
+                                <CardBody>
+                                    <DataGrid TItem="FirstTimeYield_FailureModel" Data="@entry.Failures" Editable="false" ShowPager="false" Responsive="true">
+                                        <DataGridColumns>
+                                            <DataGridColumn Caption="Failure Reason">
+                                                <DisplayTemplate Context="failure">
+                                                    @if (failure.FailureReason != null) {
+                                                        <div>@failure.FailureReason.FailureDescription</div>
+                                                    }
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+                                            <DataGridColumn Field="@nameof(FirstTimeYield_FailureModel.Qty)" Caption="Quantity" />
+                                            <DataGridColumn Caption="Area of Origin">
+                                                <DisplayTemplate Context="failure">
+                                                    @failure.AreaToBlame?.AreaDescription
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+                                            <DataGridColumn Field="@nameof(FirstTimeYield_FailureModel.JobNumToBlame)" Caption="Original Job #" />
+                                            <DataGridColumn Field="@nameof(FirstTimeYield_FailureModel.OpCodeToBlame)" Caption="Original Op Code" />
+                                            <DataGridColumn Caption="Operator On Job">
+                                                <DisplayTemplate Context="failure">
+                                                    @failure.OperatorToBlame?.Name
+                                                </DisplayTemplate>
+                                            </DataGridColumn>
+                                        </DataGridColumns>
+                                    </DataGrid>
+                                </CardBody>
+                            </Card>
+                        </Column>
+                    </Row>
+                </DetailRowTemplate>
+
+            </DataGrid>
+        </Row>
+    }
+</Div>
+
+<!-- Confirmation Modal -->
+<ConfirmationModal @ref="ConfirmationModal" Title="Confirm Deletion" Message="Are you sure you want to delete this entry?" OnClose="ConfirmDeletion" />

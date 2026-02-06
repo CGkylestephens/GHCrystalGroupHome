@@ -1,0 +1,187 @@
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using Blazorise
+@inherits EditMetadataModalBase
+
+@if (IsVisible)
+{
+    <Modal Visible="@IsVisible" Closing="@OnModalClosing">
+        <ModalContent Centered="true" Size="ModalSize.Large">
+            <ModalHeader>
+                <ModalTitle>
+                    <span class="fas fa-edit me-2"></span>
+                    Edit File Metadata
+                </ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                @if (FilesToEdit.Any())
+                {
+                    <div class="alert alert-info mb-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        You are about to edit metadata for <strong>@FilesToEdit.Count</strong> file(s):
+                        @if (FilesToEdit.Count > 1)
+                        {
+                            <br><small class="text-muted">Leave fields blank to keep existing values for that field.</small>
+                        }
+                    </div>
+
+                    <!-- File List -->
+                    <div class="mb-4" style="max-height: 200px; overflow-y: auto;">
+                        <div class="border rounded p-2">
+                            @foreach (var file in FilesToEdit.Take(10))
+                            {
+                                <div class="d-flex justify-content-between align-items-center py-1 @(FilesToEdit.IndexOf(file) < FilesToEdit.Count - 1 ? "border-bottom" : "")">
+                                    <div>
+                                        <strong>@file.FileName</strong>
+                                        <span class="badge bg-secondary ms-2">@file.GetFileExtension()</span>
+                                        <br>
+                                        <small class="text-muted">
+                                            RMA: @file.RMANumber
+                                            @if (file.RMALineNumber.HasValue)
+                                            {
+                                                <text>, Line: @file.RMALineNumber</text>
+                                            }
+                                            else
+                                            {
+                                                <text>, Header Level</text>
+                                            }
+                                            @if (!string.IsNullOrEmpty(file.SerialNumber))
+                                            {
+                                                <text>, Serial: @file.SerialNumber</text>
+                                            }
+                                            <br>Current Category: <span class="badge bg-info">@(file.Category?.DisplayValue ?? "Unknown")</span>
+                                        </small>
+                                    </div>
+                                </div>
+                            }
+                            @if (FilesToEdit.Count > 10)
+                            {
+                                <div class="text-center pt-2 text-muted">
+                                    <small>... and @(FilesToEdit.Count - 10) more files</small>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Metadata Fields -->
+                    <Row>
+                        <Column md="6">
+                            <div class="mb-3">
+                                <label class="form-label"><strong>RMA Number:</strong></label>
+                                <NumericEdit TValue="int?" Value="@NewRMANumber" 
+                                             ValueChanged="@OnRMANumberChanged"
+                                             Placeholder="Enter RMA number..." />
+                                <small class="text-muted">All selected files belong to this RMA</small>
+                            </div>
+                        </Column>
+                        <Column md="6">
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Line Assignment:</strong></label>
+                                <Select TValue="string"
+                                        SelectedValue="@LineChangeAction"
+                                        SelectedValueChanged="@OnLineActionChanged">
+                                    <SelectItem TValue="string" Value="@("no-change")">No Change</SelectItem>
+                                    <SelectItem TValue="string" Value="@("move-to-header")">Move to Header Level</SelectItem>
+                                    <SelectItem TValue="string" Value="@("change-line")">Change/Move to Line</SelectItem>
+                                </Select>
+                                <small class="text-muted">
+                                    Current action: <strong>@GetLineActionDisplayText()</strong>
+                                </small>
+                            </div>
+                        </Column>
+                    </Row>
+                    
+                    @if (ShowLineNumberInput)
+                    {
+                        <Row>
+                            <Column md="6">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Line Number:</strong></label>
+                                    <NumericEdit TValue="int?" Value="@NewRMALineNumber" 
+                                                 ValueChanged="@OnRMALineNumberChanged"
+                                                 Placeholder="Enter line number..." />
+                                    <small class="text-muted">Enter the line number to move files to</small>
+                                </div>
+                            </Column>
+                            <Column md="6">
+                                <!-- Empty column for alignment -->
+                            </Column>
+                        </Row>
+                    }
+                    
+                    <Row>
+                        <Column md="12">
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Category:</strong></label>
+                                <Select TValue="int?"
+                                        SelectedValue="@NewCategoryId"
+                                        SelectedValueChanged="@OnCategoryChanged">
+                                    <SelectItem TValue="int?" Value="@((int?)null)">-- Keep current category --</SelectItem>
+                                    @foreach (var category in AvailableCategories.Where(c => c.IsActive))
+                                    {
+                                        <SelectItem TValue="int?" Value="@category.Id">@category.DisplayValue</SelectItem>
+                                    }
+                                </Select>
+                            </div>
+                        </Column>
+                    </Row>
+
+                    @if (!string.IsNullOrEmpty(ValidationMessage))
+                    {
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <div style="white-space: pre-line;">@ValidationMessage</div>
+                        </div>
+                    }
+
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Warning:</strong> Changing RMA number or line assignment will move files to new directory locations. 
+                        This action cannot be undone automatically.
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                        <p>No files selected for metadata editing.</p>
+                    </div>
+                }
+            </ModalBody>
+            <ModalFooter>
+                <div class="d-flex justify-content-between w-100">
+                    <div>
+                        @if (IsUpdateInProgress)
+                        {
+                            <small class="text-info">
+                                <i class="fas fa-spinner fa-spin me-1"></i>
+                                Updating metadata...
+                            </small>
+                        }
+                        else if (!_hasUserMadeChanges)
+                        {
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Make a change to enable the update button
+                            </small>
+                        }
+                    </div>
+                    <div>
+                        <Button Color="Color.Secondary" 
+                                Clicked="CloseModal"
+                                Disabled="@IsUpdateInProgress">
+                            Cancel
+                        </Button>
+                        <Button Color="Color.Primary" 
+                                Clicked="ConfirmUpdate" 
+                                Disabled="@(!CanConfirmUpdate())"
+                                Class="ms-2">
+                            <span class="fas fa-save me-1"></span>
+                            Update @(FilesToEdit.Count > 1 ? $"({FilesToEdit.Count} files)" : "Metadata")
+                        </Button>
+                    </div>
+                </div>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+}

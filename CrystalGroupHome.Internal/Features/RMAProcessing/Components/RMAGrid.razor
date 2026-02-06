@@ -1,0 +1,660 @@
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Components
+@using Blazorise
+@using Blazorise.DataGrid
+@using Blazorise.Components
+@inherits RMAGridBase
+
+<Card>
+    <CardBody>
+        <!-- RMA Type (legacy or not) Filter -->
+        <div class="mb-3">
+            <RMATypeSegmentedButton SelectedValue="@CurrentRMATypeFilter" 
+                                    SelectedValueChanged="@OnRMATypeFilterChanged"
+                                    EpicorCount="@TypeCounts?.EpicorCount"
+                                    LegacyCount="@TypeCounts?.LegacyCount"
+                                    TotalCount="@TypeCounts?.TotalCount" />
+        </div>
+
+        <!-- CardTitle and Controls -->
+        <CardTitle Class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <i class="fas fa-list me-2"></i>
+                RMA Management
+            </div>
+            <div>
+                <Button Color="Color.Info" Size="Size.Small" Clicked="@ToggleFilters">
+                    <span class="@(ShowFilters ? "fas fa-eye-slash" : "fas fa-filter") me-1"></span>
+                    @(ShowFilters ? "Hide Filters" : "Show Filters")
+                </Button>
+                @if (!IsDefaultSort())
+                {
+                    <Button Color="Color.Warning" Size="Size.Small" Clicked="@ResetSortToDefault" Class="ms-2" 
+                            title="Reset sort to default (RMA Number descending)">
+                        <span class="fas fa-undo me-1"></span>
+                        Reset Sort
+                    </Button>
+                }
+                <Button Color="Color.Secondary" Size="Size.Small" Clicked="@RefreshData" Class="ms-2">
+                    <span class="fas fa-sync me-1"></span>
+                    Refresh
+                </Button>
+            </div>
+        </CardTitle>
+
+        <!-- Filter Panel -->
+        @if (ShowFilters)
+        {
+            <Card Class="mb-3">
+                <CardBody>
+                    <Row>
+                        <Column md="3">
+                            <Field>
+                                <FieldLabel>RMA Number</FieldLabel>
+                                <TextEdit @bind-Text="@Query.RMANumberFilter" 
+                                          Placeholder="Search RMA..." />
+                                <FieldHelp>Use Apply Filters button to search</FieldHelp>
+                            </Field>
+                        </Column>
+                        <Column md="3">
+                            <Field>
+                                <FieldLabel>Status</FieldLabel>
+                                <Select TValue="string" 
+                                        SelectedValue="@GetStatusFilterString()"
+                                        SelectedValueChanged="@OnStatusFilterStringChanged">
+                                    <SelectItem TValue="string" Value="@("all")">All RMAs</SelectItem>
+                                    <SelectItem TValue="string" Value="@("open")">Open Only</SelectItem>
+                                    <SelectItem TValue="string" Value="@("closed")">Closed Only</SelectItem>
+                                </Select>
+                                <FieldHelp>Default: Open Only. Changes instantly.</FieldHelp>
+                            </Field>
+                        </Column>
+                        <Column md="3">
+                            <Field>
+                                <FieldLabel>HD Case Number</FieldLabel>
+                                <NumericEdit TValue="int?" 
+                                             Value="@Query.HDCaseNumFilter"
+                                             ValueChanged="@OnHDCaseFilterChanged"
+                                             Placeholder="Case number..." />
+                                <FieldHelp>Changes instantly when entered</FieldHelp>
+                            </Field>
+                        </Column>
+                        <Column md="3">
+                            <Field>
+                                <FieldLabel>Has Files</FieldLabel>
+                                <Select TValue="string" 
+                                        SelectedValue="@GetHasFilesFilterString()"
+                                        SelectedValueChanged="@OnHasFilesFilterStringChanged">
+                                    <SelectItem TValue="string" Value="@("all")">All RMAs</SelectItem>
+                                    <SelectItem TValue="string" Value="@("with")">With Files</SelectItem>
+                                    <SelectItem TValue="string" Value="@("without")">Without Files</SelectItem>
+                                </Select>
+                                <FieldHelp>Changes instantly</FieldHelp>
+                            </Field>
+                        </Column>
+                    </Row>
+                    <Row>
+                        <Column md="3">
+                            <Field>
+                                <FieldLabel>RMA Date From</FieldLabel>
+                                <DateEdit TValue="DateTime?" 
+                                          Date="@Query.RMADateFrom"
+                                          DateChanged="@(async (DateTime? date) => { Query.RMADateFrom = date; Query.Page = 1; await LoadData(); })" />
+                                <FieldHelp>Changes instantly when date selected</FieldHelp>
+                            </Field>
+                        </Column>
+                        <Column md="3">
+                            <Field>
+                                <FieldLabel>RMA Date To</FieldLabel>
+                                <DateEdit TValue="DateTime?" 
+                                          Date="@Query.RMADateTo"
+                                          DateChanged="@(async (DateTime? date) => { Query.RMADateTo = date; Query.Page = 1; await LoadData(); })" />
+                                <FieldHelp>Changes instantly when date selected</FieldHelp>
+                            </Field>
+                        </Column>
+                        <Column md="3">
+                            <Field>
+                                <FieldLabel>Serial Number</FieldLabel>
+                                <TextEdit @bind-Text="@Query.SerialNumberFilter" 
+                                          Placeholder="Search serial..." />
+                                <FieldHelp>Use Apply Filters button to search</FieldHelp>
+                            </Field>
+                        </Column>
+                        <Column md="3">
+                            <Field>
+                                <FieldLabel>Notes</FieldLabel>
+                                <TextEdit @bind-Text="@Query.NotesFilter" 
+                                          Placeholder="Search notes..." />
+                                <FieldHelp>Use Apply Filters button to search</FieldHelp>
+                            </Field>
+                        </Column>
+                    </Row>
+                    <Row>
+                        <Column>
+                            <div class="d-flex justify-content-end gap-2">
+                                <Button Color="Color.Primary" Clicked="@ApplyFilters">
+                                    <span class="fas fa-search me-1"></span>
+                                    Apply All Filters
+                                </Button>
+                                <Button Color="Color.Secondary" Clicked="@ClearFilters">
+                                    <span class="fas fa-times me-1"></span>
+                                    Clear All Filters
+                                </Button>
+                            </div>
+                        </Column>
+                    </Row>
+                </CardBody>
+            </Card>
+        }
+
+        <!-- Summary Information -->
+        @if (RMAResponse != null)
+        {
+            <div class="alert alert-info py-2 mb-3">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>@RMAResponse.RMAs.Count</strong> of <strong>@RMAResponse.TotalCount</strong> RMAs shown
+                @if (RMAResponse.TotalPages > 1)
+                {
+                    <text> (Page @RMAResponse.Page of @RMAResponse.TotalPages)</text>
+                }
+                @if (Query.OpenRMAFilter == true)
+                {
+                    <text> - <span class="badge bg-success">Open RMAs Only</span></text>
+                }
+                else if (Query.OpenRMAFilter == false)
+                {
+                    <text> - <span class="badge bg-secondary">Closed RMAs Only</span></text>
+                }
+                else
+                {
+                    <text> - <span class="badge bg-primary">All RMAs</span></text>
+                }
+                @if (HasActiveFilters())
+                {
+                    <text> - Additional filters active</text>
+                }
+                @if (!IsDefaultSort())
+                {
+                    var sortDisplayName = Query.SortBy switch
+                    {
+                        "RMANum" => "RMA Number",
+                        "RMADate" => "RMA Date", 
+                        "RMAStatus" => "Status",
+                        "HDCaseNum" => "HD Case",
+                        "FileCount" => "Files",
+                        "SerialNumbers" => "Serial Numbers",
+                        _ => Query.SortBy
+                    };
+                    var sortDirection = Query.SortDirection == "asc" ? "ascending" : "descending";
+                    <text> - Sorted by @sortDisplayName (@sortDirection)</text>
+                }
+                <!-- NEW: Show current RMA system type -->
+                <text> - </text>
+                @if (CurrentRMATypeFilter == RMATypeSegmentedButton.RMATypeFilter.Legacy)
+                {
+                    <span class="badge bg-warning">Legacy RMAs</span>
+                }
+                else if (CurrentRMATypeFilter == RMATypeSegmentedButton.RMATypeFilter.All)
+                {
+                    <span class="badge bg-secondary">All Systems</span>
+                }
+                else
+                {
+                    <span class="badge bg-primary">Epicor RMAs</span>
+                }
+            </div>
+        }
+
+        <!-- Loading and Table -->
+        @if (IsLoading)
+        {
+            <div class="text-center py-5">
+                <Spinner Color="SpinnerColor.Primary" />
+                <p class="mt-2">
+                    @if (CurrentRMATypeFilter == RMATypeSegmentedButton.RMATypeFilter.Legacy)
+                    {
+                        <text>Loading legacy RMAs... This may take a moment.</text>
+                    }
+                    else
+                    {
+                        <text>Loading RMAs...</text>
+                    }
+                </p>
+            </div>
+        }
+        else if (RMAResponse?.RMAs.Any() == true)
+        {
+            <Table Size="TableSize.Small" Striped="true" Hoverable="true" Responsive="true">
+                <TableHeader>
+                    <TableRow>
+                        <TableHeaderCell Style="width: 100px; cursor: pointer; user-select: none;" 
+                                         @onclick="@(async () => await OnColumnHeaderClicked("RMANum"))"
+                                         title="@GetSortTitle("RMA Number")">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>RMA #</span>
+                                <i class="@GetSortIcon("RMANum")"></i>
+                            </div>
+                        </TableHeaderCell>
+                        
+                        <TableHeaderCell Style="width: 80px; cursor: pointer; user-select: none;" 
+                                         @onclick="@(async () => await OnColumnHeaderClicked("RMAStatus"))"
+                                         title="@GetSortTitle("Status")">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Status</span>
+                                <i class="@GetSortIcon("RMAStatus")"></i>
+                            </div>
+                        </TableHeaderCell>
+                        
+                        <TableHeaderCell Style="width: 120px; cursor: pointer; user-select: none;" 
+                                         @onclick="@(async () => await OnColumnHeaderClicked("RMADate"))"
+                                         title="@GetSortTitle("RMA Date")">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>RMA Date</span>
+                                <i class="@GetSortIcon("RMADate")"></i>
+                            </div>
+                        </TableHeaderCell>
+                        
+                        <TableHeaderCell Style="width: 100px; cursor: pointer; user-select: none;" 
+                                         @onclick="@(async () => await OnColumnHeaderClicked("HDCaseNum"))"
+                                         title="@GetSortTitle("HD Case")">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>HD Case</span>
+                                <i class="@GetSortIcon("HDCaseNum")"></i>
+                            </div>
+                        </TableHeaderCell>
+                        
+                        <TableHeaderCell Style="width: 70px; cursor: pointer; user-select: none;" 
+                                         @onclick="@(async () => await OnColumnHeaderClicked("FileCount"))"
+                                         title="@GetSortTitle("Files")">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Files</span>
+                                <i class="@GetSortIcon("FileCount")"></i>
+                            </div>
+                        </TableHeaderCell>
+                        
+                        <TableHeaderCell Style="cursor: pointer; user-select: none;" 
+                                         @onclick="@(async () => await OnColumnHeaderClicked("SerialNumbers"))"
+                                         title="@GetSortTitle("Serial Numbers")">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Serial Numbers</span>
+                                <i class="@GetSortIcon("SerialNumbers")"></i>
+                            </div>
+                        </TableHeaderCell>
+                        
+                        <TableHeaderCell>Notes</TableHeaderCell>
+
+                        <TableHeaderCell Style="width: 120px;">Actions</TableHeaderCell>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    @foreach (var rma in RMAResponse.RMAs)
+                    {
+                        <TableRow>
+                            <TableRowCell>
+                                <!-- System type indicator -->
+                                <div class="d-flex align-items-center">
+                                    @if (rma.IsLegacyRMA)
+                                    {
+                                        <i class="fas fa-archive text-warning me-1" title="Legacy RMA"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-database text-primary me-1" title="Epicor RMA"></i>
+                                    }
+                                    
+                                    @if (rma.HasFiles)
+                                    {
+                                        <Button Color="Color.Link" Style="padding: 0; text-decoration: none;" 
+                                                Clicked="@(() => NavigateToFiles(rma.RMANum))"
+                                                title="@($"Click to view files for RMA {rma.RMANum}")">
+                                            <strong>@rma.RMANum</strong>
+                                            <i class="fas fa-folder ms-1 text-success" title="@($"{rma.FileCount} file(s)")"></i>
+                                        </Button>
+                                    }
+                                    else
+                                    {
+                                        <strong>@rma.RMANum</strong>
+                                    }
+                                </div>
+                            </TableRowCell>
+                            
+                            <TableRowCell>
+                                <span class="badge @(rma.OpenRMA ? "bg-success" : "bg-secondary")">
+                                    @rma.RMAStatus
+                                </span>
+                            </TableRowCell>
+                            
+                            <TableRowCell>
+                                @rma.RMADate.ToString("MM/dd/yyyy")
+                            </TableRowCell>
+                            
+                            <TableRowCell>
+                                @if (rma.HDCaseNum.HasValue)
+                                {
+                                    <span title="@rma.CaseDescription">@rma.HDCaseNum</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </TableRowCell>
+                            
+                            <TableRowCell>
+                                @if (rma.FileCount > 0)
+                                {
+                                    <span class="badge bg-primary" title="@($"{rma.FileCount} file(s) attached")">
+                                        @rma.FileCount
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">0</span>
+                                }
+                            </TableRowCell>
+                            
+                            <TableRowCell>
+                                @if (!string.IsNullOrEmpty(rma.SerialNumbers))
+                                {
+                                    <span title="@rma.SerialNumbers">
+                                        @(rma.SerialNumbers.Length > 50 ? 
+                                          rma.SerialNumbers.Substring(0, 50) + "..." : 
+                                          rma.SerialNumbers)
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No serials</span>
+                                }
+                            </TableRowCell>
+                            
+                            <TableRowCell>
+                                @if (!string.IsNullOrEmpty(rma.InternalNotes_c))
+                                {
+                                    <span title="@rma.InternalNotes_c">
+                                        @rma.NotesPreview
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No notes</span>
+                                }
+                            </TableRowCell>
+
+                            <TableRowCell>
+                                <div class="btn-group btn-group-sm">
+                                    @if (rma.HasFiles)
+                                    {
+                                        <Button Color="Color.Primary" Size="Size.Small"
+                                                Clicked="@(() => NavigateToFiles(rma.RMANum))"
+                                                title="@($"View files for RMA {rma.RMANum}")">
+                                            <i class="fas fa-folder-open"></i>
+                                        </Button>
+                                    }
+                                    else
+                                    {
+                                        <Button Color="Color.Secondary" Size="Size.Small"
+                                                Clicked="@(() => NavigateToUpload(rma.RMANum))"
+                                                title="@($"Upload files for RMA {rma.RMANum}")">
+                                            <i class="fas fa-upload"></i>
+                                        </Button>
+                                    }
+                                    
+                                    <Button Color="Color.Info" Size="Size.Small"
+                                            Clicked="@(() => ShowRMADetails(rma))"
+                                            title="View RMA details">
+                                        <i class="fas fa-info-circle"></i>
+                                    </Button>
+                                </div>
+                            </TableRowCell>
+                        </TableRow>
+                    }
+                </TableBody>
+            </Table>
+
+            <!-- Pagination -->
+            @if (RMAResponse.TotalPages > 1)
+            {
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                        <small class="text-muted">
+                            Showing @((RMAResponse.Page - 1) * RMAResponse.PageSize + 1) to 
+                            @Math.Min(RMAResponse.Page * RMAResponse.PageSize, RMAResponse.TotalCount) 
+                            of @RMAResponse.TotalCount entries
+                        </small>
+                    </div>
+                    <div>
+                        <Pagination>
+                            <PaginationItem Disabled="@(!RMAResponse.HasPreviousPage)">
+                                <PaginationLink Clicked="@(() => ChangePage(RMAResponse.Page - 1))">
+                                    <i class="fas fa-chevron-left"></i>
+                                </PaginationLink>
+                            </PaginationItem>
+                            
+                            @foreach (var pageNum in GetVisiblePages())
+                            {
+                                <PaginationItem Active="@(pageNum == RMAResponse.Page)">
+                                    <PaginationLink Clicked="@(() => ChangePage(pageNum))">
+                                        @pageNum
+                                    </PaginationLink>
+                                </PaginationItem>
+                            }
+                            
+                            <PaginationItem Disabled="@(!RMAResponse.HasNextPage)">
+                                <PaginationLink Clicked="@(() => ChangePage(RMAResponse.Page + 1))">
+                                    <i class="fas fa-chevron-right"></i>
+                                </PaginationLink>
+                            </PaginationItem>
+                        </Pagination>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h5>No RMAs Found</h5>
+                <p class="text-muted">
+                    @if (HasActiveFilters() || Query.OpenRMAFilter.HasValue)
+                    {
+                        <text>No RMAs match your current filter criteria. Try adjusting your filters or clearing them to see more results.</text>
+                    }
+                    else
+                    {
+                        <text>No RMAs are currently available in the system.</text>
+                    }
+                </p>
+                @if (HasActiveFilters() || Query.OpenRMAFilter.HasValue)
+                {
+                    <Button Color="Color.Primary" Clicked="@ClearFilters">
+                        <i class="fas fa-times me-1"></i>
+                        Clear All Filters
+                    </Button>
+                }
+            </div>
+        }
+    </CardBody>
+</Card>
+
+<!-- RMA Details Modal (with Legacy support) -->
+@if (ShowDetailsModal && SelectedRMA != null)
+{
+    <Modal @bind-Visible="ShowDetailsModal">
+        <ModalContent Size="ModalSize.ExtraLarge">
+            <ModalHeader>
+                <ModalTitle>
+                    <i class="fas fa-info-circle me-2"></i>
+                    RMA @SelectedRMA.RMANum Details
+                    @if (SelectedRMA.IsLegacyRMA)
+                    {
+                        <Badge Color="Color.Warning" Class="ms-2">Legacy</Badge>
+                    }
+                    else
+                    {
+                        <Badge Color="Color.Primary" Class="ms-2">Epicor</Badge>
+                    }
+                </ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                <Row>
+                    <Column md="6">
+                        <Card>
+                            <CardBody>
+                                <h6 class="card-title">Basic Information</h6>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>RMA Number:</strong></td>
+                                        <td>@SelectedRMA.RMANum</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Status:</strong></td>
+                                        <td>
+                                            <span class="badge @(SelectedRMA.OpenRMA ? "bg-success" : "bg-secondary")">
+                                                @SelectedRMA.RMAStatus
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>RMA Date:</strong></td>
+                                        <td>@SelectedRMA.RMADate.ToString("MM/dd/yyyy")</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>System Type:</strong></td>
+                                        <td>
+                                            @if (SelectedRMA.IsLegacyRMA)
+                                            {
+                                                <span class="badge bg-warning">Legacy RMA</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-primary">Epicor RMA</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>File Count:</strong></td>
+                                        <td>
+                                            @if (SelectedRMA.FileCount > 0)
+                                            {
+                                                <span class="badge bg-primary">@SelectedRMA.FileCount</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">No files</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </CardBody>
+                        </Card>
+                    </Column>
+                    <Column md="6">
+                        <Card>
+                            <CardBody>
+                                <h6 class="card-title">Case Information</h6>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td style="white-space: nowrap; width: 1%;"><strong>Case Number:</strong></td>
+                                        <td>
+                                            @if (SelectedRMA.HDCaseNum.HasValue)
+                                            {
+                                                <span>@SelectedRMA.HDCaseNum</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">No case</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="white-space: nowrap; width: 1%;"><strong>Case Description:</strong></td>
+                                        <td style="word-break: break-word;">
+                                            @if (!string.IsNullOrEmpty(SelectedRMA.CaseDescription))
+                                            {
+                                                <span>@SelectedRMA.CaseDescription</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">No description</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </CardBody>
+                        </Card>
+                    </Column>
+                </Row>
+                <Row>
+                    <Column>
+                        <Card>
+                            <CardBody>
+                                <h6 class="card-title">Serial Numbers</h6>
+                                @if (!string.IsNullOrEmpty(SelectedRMA.SerialNumbers))
+                                {
+                                    <div class="border p-2 rounded bg-light">
+                                        @SelectedRMA.SerialNumbers
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="text-muted">No serial numbers associated with this RMA.</p>
+                                }
+                            </CardBody>
+                        </Card>
+                    </Column>
+                </Row>
+                @if (!string.IsNullOrEmpty(SelectedRMA.InternalNotes_c))
+                {
+                    <Row>
+                        <Column>
+                            <Card>
+                                <CardBody>
+                                    <h6 class="card-title">Internal Notes</h6>
+                                    <div class="border p-2 rounded bg-light">
+                                        @SelectedRMA.InternalNotes_c
+                                    </div>
+                                </CardBody>
+                            </Card>
+                        </Column>
+                    </Row>
+                }
+            </ModalBody>
+            <ModalFooter>
+                <div class="d-flex justify-content-between w-100">
+                    <div>
+                        @if (SelectedRMA.HasFiles)
+                        {
+                            <Button Color="Color.Primary" 
+                                    Clicked="@(() => { ShowDetailsModal = false; NavigateToFiles(SelectedRMA.RMANum); })">
+                                <i class="fas fa-folder-open me-1"></i>
+                                View Files (@SelectedRMA.FileCount)
+                            </Button>
+                        }
+                        else
+                        {
+                            <Button Color="Color.Success" 
+                                    Clicked="@(() => { ShowDetailsModal = false; NavigateToUpload(SelectedRMA.RMANum); })">
+                                <i class="fas fa-upload me-1"></i>
+                                Upload Files
+                            </Button>
+                        }
+                    </div>
+                    <div>
+                        <Button Color="Color.Secondary" Clicked="@(() => ShowDetailsModal = false)">
+                            Close
+                        </Button>
+                    </div>
+                </div>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+}
+
+@code {
+    protected async Task OnPageChanged(DataGridPageChangedEventArgs args)
+    {
+        Query.Page = args.Page;
+        await LoadData();
+    }
+}

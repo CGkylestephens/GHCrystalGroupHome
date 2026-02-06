@@ -1,0 +1,246 @@
+@inherits LayoutComponentBase
+
+@using CrystalGroupHome.Internal.Common.Components
+@using CrystalGroupHome.Internal.Components
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.SharedRCL.Services
+@using CrystalGroupHome.SharedRCL.Data
+@using System.Reflection
+@using Microsoft.Extensions.Configuration
+
+@inject IWebHostEnvironment Environment
+@inject IJSRuntime JSRuntime
+@inject DebugModeService DebugService
+@inject NavigationManager Navigation
+@inject IConfiguration Configuration
+
+@{
+    // CRITICAL: Set the ImpersonationService reference at the START of each render cycle.
+    // This ensures all child components that check permissions during this render
+    // will use the correct scoped ImpersonationService instance.
+    AccessOverrides.ImpersonationService = DebugService.Impersonation;
+}
+
+<PageTitle>CrystalGroupHome</PageTitle>
+
+<CascadingValue Value="@_impersonationVersion" Name="ImpersonationVersion">
+    <div class="page">
+        <NavMenu />
+
+        <main class="main">
+            <Column Style="@("display: flex; flex-direction: column; " + (!IsAtSiteRoot ? "height: fit-content;" : ""))">
+                @if (Environment.IsDevelopment() || Environment.IsStaging())
+                {
+                    <div class="banner @(Environment.IsDevelopment() ? "test" : "staging")">
+                        <div class="banner-content">
+                            <span class="banner-left">
+                                @if (Environment.IsDevelopment())
+                                {
+                                    <text>TEST ENVIRONMENT</text>
+                                }
+                                else
+                                {
+                                    <text>STAGING ENVIRONMENT</text>
+                                }
+                                @if (DebugService.IsDebugMode)
+                                {
+                                    <span class="banner-separator">|</span>
+                                    <span>DEBUG MODE</span>
+                                }
+                            </span>
+                            
+                            @* Impersonation controls in banner (non-production only) *@
+                            @if (DebugService.IsDebugMode && !Environment.IsProduction())
+                            {
+                                <div class="impersonation-controls">
+                                    @if (DebugService.Impersonation.IsImpersonating)
+                                    {
+                                        <span class="impersonation-status">
+                                            <span class="impersonation-icon">👤</span>
+                                            <span class="impersonation-name">@DebugService.Impersonation.ActivePersona?.Name</span>
+                                        </span>
+                                        <button class="btn btn-sm btn-warning btn-impersonate" @onclick="StopImpersonation">
+                                            Stop
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-light btn-impersonate" @onclick="OpenImpersonationModal">
+                                            Change
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-sm btn-outline-light btn-impersonate" @onclick="OpenImpersonationModal">
+                                            <span class="impersonation-icon">🔧</span> Impersonate
+                                        </button>
+                                    }
+                                </div>
+                            }
+                            
+                            <div class="version-info">
+                                @AppVersion
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (DebugService.IsDebugMode)
+                {
+                    <div class="banner">
+                        <div class="banner-content">
+                            <span>DEBUG MODE</span>
+                            @* Impersonation is intentionally NOT available in production *@
+                            <div class="version-info">
+                                @AppVersion
+                            </div>
+                        </div>
+                    </div>
+                }
+                <SimpleBreadcrumb />
+                <article class="@(IsAtSiteRoot ? string.Empty : "content px-4")" style="@(IsAtSiteRoot ? "height: 100%;" : string.Empty)">
+                    @Body
+                </article>
+            </Column>
+        </main>
+    </div>
+</CascadingValue>
+
+@* Impersonation Modal - only in non-production *@
+@if (!Environment.IsProduction())
+{
+    <ImpersonationModal @ref="_impersonationModal" />
+}
+
+<style>
+    .banner-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .banner-left {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .banner-separator {
+        opacity: 0.6;
+    }
+
+    .version-info {
+        font-size: 0.85em;
+        opacity: 0.8;
+        font-weight: normal;
+    }
+
+    .impersonation-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-left: auto;
+        margin-right: 1rem;
+    }
+
+    .impersonation-status {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 0.25rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+    }
+
+    .impersonation-icon {
+        font-size: 0.9rem;
+    }
+
+    .impersonation-name {
+        font-weight: 500;
+    }
+
+    .btn-impersonate {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+</style>
+
+@code {
+    private DotNetObjectReference<MainLayout>? _dotNetRef;
+    private ImpersonationModal? _impersonationModal;
+    
+    /// <summary>
+    /// Version counter that increments each time impersonation changes.
+    /// Used as a cascading value to trigger re-renders in child components
+    /// that need to update their permission-based UI.
+    /// </summary>
+    private int _impersonationVersion = 0;
+
+    // Check if we're at the site root
+    private bool IsAtSiteRoot => Navigation.Uri.Equals(Navigation.BaseUri, StringComparison.OrdinalIgnoreCase);
+
+    // Get application version
+    private string AppVersion
+    {
+        get
+        {
+            return Configuration["ApplicationVersion"] ?? "1.0.0.0";
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        // Configure impersonation service to know if we're in production
+        // This ensures impersonation is completely disabled in production
+        DebugService.Impersonation.SetProductionMode(Environment.IsProduction());
+        
+        DebugService.OnChange += OnDebugModeChanged;
+    }
+
+    private async void OnDebugModeChanged()
+    {
+        // Increment the version to trigger re-renders in all child components
+        // that consume the ImpersonationVersion cascading parameter
+        _impersonationVersion++;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task OpenImpersonationModal()
+    {
+        if (_impersonationModal != null)
+        {
+            await _impersonationModal.ShowAsync();
+        }
+    }
+
+    private void StopImpersonation()
+    {
+        DebugService.StopImpersonation();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("setToggleDebugMode", _dotNetRef);
+        }
+    }
+
+    [JSInvokable]
+    public bool ToggleDebugMode()
+    {
+        DebugService.Toggle();
+        return DebugService.IsDebugMode;
+    }
+
+    public void Dispose()
+    {
+        _dotNetRef?.Dispose();
+        DebugService.OnChange -= OnDebugModeChanged;
+        GC.SuppressFinalize(this);
+    }
+}

@@ -1,0 +1,589 @@
+﻿@using CrystalGroupHome.Internal.Common.Data.Labor
+@using CrystalGroupHome.Internal.Features.CMHub.VendorComms.Data
+@using CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms
+@using static CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms.CMHub_VendorCommsSurveyDTOs
+@using static CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms.CMHub_VendorCommsSurveyModels
+@inherits ComponentBase
+
+<Modal @ref="modalRef" Size="ModalSize.ExtraLarge">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>
+                <i class="fas fa-paper-plane me-2"></i>
+                Create Vendor Survey@(vendorBatches.Count > 1 ? "s" : "")
+            </ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            @if (isLoading)
+            {
+                <div class="text-center p-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">@loadingMessage</p>
+                    @if (processedVendorCount > 0)
+                    {
+                        <div class="progress mt-3" style="height: 25px;">
+                            <div class="progress-bar" role="progressbar"
+                                 style="width: @((processedVendorCount * 100 / vendorBatches.Count))%"
+                                 aria-valuenow="@processedVendorCount"
+                                 aria-valuemin="0"
+                                 aria-valuemax="@vendorBatches.Count">
+                                @processedVendorCount / @vendorBatches.Count vendors processed
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="survey-form">
+                    @if (creationResults.Count > 0)
+                    {
+                        // Show creation results at the top after surveys are sent
+                        <div class="mt-2">
+                            <Alert Visible="true">
+                                <AlertMessage>
+                                    <i class="fas @(creationResults.All(r => r.Success) ? "fa-check-circle" : "fa-exclamation-triangle") me-2"></i>
+                                    Survey Creation Results
+                                </AlertMessage>
+                                <AlertDescription>
+                                    <div class="list-group list-group-flush">
+                                        @foreach (var result in creationResults)
+                                        {
+                                            <div class="list-group-item px-0">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <strong>@result.VendorName</strong>
+                                                        @if (result.BatchId.HasValue)
+                                                        {
+                                                            <small class="text-muted ms-2">(Batch #@result.BatchId)</small>
+                                                        }
+                                                    </div>
+                                                    @if (result.Success)
+                                                    {
+                                                        <span class="badge bg-success">
+                                                            <i class="fas fa-check me-1"></i>
+                                                            Survey Sent
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-danger">
+                                                            <i class="fas fa-times me-1"></i>
+                                                            Failed
+                                                        </span>
+                                                    }
+                                                </div>
+                                                @if (!string.IsNullOrEmpty(result.ErrorMessage))
+                                                {
+                                                    <small class="text-danger mt-1 d-block">
+                                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                                        @result.ErrorMessage
+                                                    </small>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </AlertDescription>
+                            </Alert>
+                        </div>
+                    }
+                    else
+                    {
+                        // Only show the survey details before sending
+                        var vendorGroupsContainsBypassVendor = vendorBatches.Count == 1 && vendorBatches.Any(b => b.VendorNum == SurveyService.GetAllowedVendorExceptionNum());
+
+                        @if (!SurveyService.IsSurveySendingEnabled(vendorGroupsContainsBypassVendor ? SurveyService.GetAllowedVendorExceptionNum() : null))
+                        {
+                            <Alert Color="Color.Warning" Visible="true">
+                                <AlertMessage>
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Survey Sending Disabled
+                                </AlertMessage>
+                                <AlertDescription>
+                                    @{
+                                        var disabledMessage = SurveyService.GetSurveyDisabledMessage();
+                                    }
+                                    @(disabledMessage ?? "Vendor survey sending is currently disabled in this environment.")
+                                </AlertDescription>
+                            </Alert>
+                        }
+
+                        @if (vendorBatches.Count > 1)
+                        {
+                            <Alert Color="Color.Info" Visible="true">
+                                <AlertMessage>
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Multiple Vendor Surveys
+                                </AlertMessage>
+                                <AlertDescription>
+                                    <strong>@vendorBatches.Count separate surveys</strong> will be created and sent:
+                                    <ul class="mb-0 mt-2">
+                                        @foreach (var batch in vendorBatches.OrderBy(b => b.VendorName))
+                                        {
+                                            <li>
+                                                <strong>@batch.VendorName</strong> - @batch.SelectedTrackerIds.Count part@(batch.SelectedTrackerIds.Count == 1 ? "" : "s")
+                                            </li>
+                                        }
+                                    </ul>
+                                </AlertDescription>
+                            </Alert>
+                        }
+                        else if (vendorBatches.Count == 1)
+                        {
+                            <Alert Color="Color.Info" Visible="true">
+                                <AlertMessage>
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Survey Details
+                                </AlertMessage>
+                                <AlertDescription>
+                                    This survey will be sent to <strong>@vendorBatches.First().VendorName</strong>
+                                    and will include <strong>@vendorBatches.First().SelectedTrackerIds.Count</strong>
+                                    part@(vendorBatches.First().SelectedTrackerIds.Count == 1 ? "" : "s").
+                                </AlertDescription>
+                            </Alert>
+                        }
+
+                        <Field>
+                            <FieldLabel>Survey Template</FieldLabel>
+                            <Select TValue="int?" @bind-SelectedValue="selectedTemplateId" Disabled="@(templates.Count == 0)">
+                                <SelectItem Value="(int?)null">Select a template...</SelectItem>
+                                @foreach (var template in templates)
+                                {
+                                    <SelectItem Value="template.Id">@template.Name</SelectItem>
+                                }
+                            </Select>
+                            @if (!selectedTemplateId.HasValue && !string.IsNullOrEmpty(validationMessage))
+                            {
+                                <FieldHelp>@validationMessage</FieldHelp>
+                            }
+                            @if (selectedTemplate != null && !string.IsNullOrEmpty(selectedTemplate.Description))
+                            {
+                                <FieldHelp>@selectedTemplate.Description</FieldHelp>
+                            }
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>Response Due Date</FieldLabel>
+                            <DateEdit TValue="DateTime?" @bind-Date="responseDueDate" />
+                            <FieldHelp>Leave blank for no specific due date (applies to all surveys)</FieldHelp>
+                        </Field>
+
+                        @if (selectedTemplateVersion != null && templateQuestions.Count > 0)
+                        {
+                            <div class="mt-4">
+                                <h6>Survey Questions Preview</h6>
+                                <div class="border rounded p-3 bg-light">
+                                    <small class="text-muted">Each vendor will receive these questions for their respective parts:</small>
+                                    <ol class="mt-2 mb-0">
+                                        @foreach (var question in templateQuestions.OrderBy(q => q.DisplayOrder))
+                                        {
+                                            <li class="mb-2">
+                                                @question.QuestionText
+                                                @if (question.IsRequired)
+                                                {
+                                                    <span class="text-danger">*</span>
+                                                }
+                                                <span class="badge bg-secondary ms-2">@question.QuestionType</span>
+                                            </li>
+                                        }
+                                    </ol>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <Alert Color="Color.Danger" Visible="true" Class="mt-3">
+                            <AlertMessage>Error</AlertMessage>
+                            <AlertDescription>@errorMessage</AlertDescription>
+                        </Alert>
+                    }
+                </div>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CloseModal">
+                @(creationResults.Count > 0 ? "Close" : "Cancel")
+            </Button>
+            @if (creationResults.Count == 0)
+            {
+                var vendorGroupsContainsBypassVendor = vendorBatches.Count == 1 && vendorBatches.Any(b => b.VendorNum == SurveyService.GetAllowedVendorExceptionNum());
+
+                <Button Color="Color.Primary" Clicked="CreateSurveys" Disabled="@(!CanCreateSurveys() || !SurveyService.IsSurveySendingEnabled(vendorGroupsContainsBypassVendor ? SurveyService.GetAllowedVendorExceptionNum() : null))">
+                    <i class="fas fa-paper-plane me-1"></i>
+                    @if (vendorBatches.Count > 1)
+                    {
+                        <text>Create & Send @vendorBatches.Count Surveys</text>
+                    }
+                    else if (vendorBatches.Count == 1)
+                    {
+                        <text>Create & Send Survey</text>
+                    }
+                    else
+                    {
+                        <text>Create & Send</text>
+                    }
+                </Button>
+            }
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<style>
+    .survey-form {
+        max-width: 100%;
+    }
+
+    /* Custom styling for accordion headers */
+    :deep(.accordion-button) {
+        padding: 0.75rem 1rem;
+    }
+
+    :deep(.accordion-button::after) {
+        margin-left: auto;
+    }
+</style>
+
+@code {
+    [Inject] private ICMHub_VendorCommsSurveyService SurveyService { get; set; } = default!;
+    [Inject] private ICMHub_VendorCommsService VendorCommsService { get; set; } = default!;  // Add this injection
+    [Inject] private INotificationService NotificationService { get; set; } = default!;
+    [Inject] private ILogger<CMHub_VendorCommsSurveyDialog> Logger { get; set; } = default!;
+    [CascadingParameter] public ADUserModel? CurrentUser { get; set; }
+
+    [Parameter] public EventCallback<List<int>> OnSurveysCreated { get; set; }
+
+    private Modal? modalRef;
+    private bool isLoading = false;
+    private string loadingMessage = "Loading...";
+    private string? errorMessage;
+    private string? validationMessage;
+    private int processedVendorCount = 0;
+
+    private List<CMHub_VendorCommsTrackerModel> selectedTrackers = new();
+    private List<CMHub_SurveyBatchCreateModel> vendorBatches = new();
+    private DateTime? responseDueDate;
+
+    private List<CMHub_SurveyTemplateDTO> templates = new();
+    private int? selectedTemplateId;
+    private CMHub_SurveyTemplateDTO? selectedTemplate =>
+        selectedTemplateId.HasValue ? templates.FirstOrDefault(t => t.Id == selectedTemplateId.Value) : null;
+    private CMHub_SurveyTemplateVersionDTO? selectedTemplateVersion;
+    private List<CMHub_SurveyQuestionDTO> templateQuestions = new();
+
+    private class SurveyCreationResult
+    {
+        public string VendorName { get; set; } = "";
+        public int? BatchId { get; set; }
+        public bool Success { get; set; }
+        public string? ErrorMessage { get; set; }
+    }
+    private List<SurveyCreationResult> creationResults = new();
+
+    private string GetAccordionTitle(CMHub_SurveyBatchCreateModel batch, int index)
+    {
+        var title = $"{batch.VendorName}";
+        if (vendorBatches.Count > 1)
+        {
+            title += $" (Survey #{index + 1})";
+        }
+        title += $" - {batch.SelectedTrackerIds.Count} part{(batch.SelectedTrackerIds.Count == 1 ? "" : "s")}";
+        return title;
+    }
+
+    public async Task OpenAsync(List<CMHub_VendorCommsTrackerModel> trackers)
+    {
+        if (trackers == null || trackers.Count == 0)
+        {
+            await NotificationService.Error("No parts selected for survey.");
+            return;
+        }
+
+        // First, create trackers for any parts that don't have them yet
+        isLoading = true;
+        loadingMessage = "Preparing parts for survey...";
+        StateHasChanged();
+
+        try
+        {
+            var trackersNeedingCreation = trackers.Where(t => t.Tracker.Id == 0 && t.Vendor != null).ToList();
+
+            if (trackersNeedingCreation.Any())
+            {
+                Logger.LogInformation("Creating {Count} new trackers before survey creation", trackersNeedingCreation.Count);
+
+                foreach (var tracker in trackersNeedingCreation)
+                {
+                    try
+                    {
+                        // Create the tracker in the database
+                        var newTrackerId = await VendorCommsService.CreateOrUpdateTrackerAsync(tracker);
+                        tracker.Tracker.Id = newTrackerId;
+                        tracker.IsNew = false; // Mark as no longer new
+
+                        Logger.LogInformation("Created tracker ID {TrackerId} for part {PartNum}", newTrackerId, tracker.Tracker.PartNum);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(ex, "Failed to create tracker for part {PartNum}", tracker.Tracker.PartNum);
+                        await NotificationService.Warning($"Failed to prepare part {tracker.Tracker.PartNum}. It will be excluded from the survey.");
+                        // Mark this tracker as invalid by keeping ID as 0
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error preparing parts for survey");
+            await NotificationService.Error("Failed to prepare parts for survey. Please try again.");
+            isLoading = false;
+            return;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+
+        selectedTrackers = trackers;
+
+        // Group trackers by vendor NUMBER, excluding any that still have ID = 0
+        vendorBatches = trackers
+            .Where(t => t.Vendor != null && t.Tracker.Id > 0) // Only include trackers with valid IDs
+            .GroupBy(t => t.Vendor!.VendorNum)
+            .Select(g =>
+            {
+                var firstVendor = g.First().Vendor!;
+                return new CMHub_SurveyBatchCreateModel
+                {
+                    VendorNum = g.Key,
+                    VendorName = firstVendor.VendorName,
+                    SelectedTrackerIds = g.Select(t => t.Tracker.Id).ToList(),
+                    ResponseDueDate = DateTime.Today.AddDays(14)
+                };
+            })
+            .OrderBy(b => b.VendorName)
+            .ToList();
+
+        // Handle parts without vendor or without valid tracker
+        var trackersWithoutVendor = trackers.Where(t => t.Vendor == null).ToList();
+        var trackersStillWithoutId = trackers.Where(t => t.Tracker.Id == 0).ToList();
+
+        var warningMessages = new List<string>();
+        if (trackersWithoutVendor.Any())
+        {
+            warningMessages.Add($"{trackersWithoutVendor.Count} part(s) have no vendor assigned");
+        }
+        if (trackersStillWithoutId.Any())
+        {
+            warningMessages.Add($"{trackersStillWithoutId.Count} part(s) could not be prepared");
+        }
+
+        if (warningMessages.Any())
+        {
+            errorMessage = $"Warning: {string.Join(" and ", warningMessages)} and will be skipped.";
+        }
+
+        if (vendorBatches.Count == 0)
+        {
+            await NotificationService.Error("No valid parts available for survey after preparation.");
+            return;
+        }
+
+        // Set default due date
+        responseDueDate = DateTime.Today.AddDays(14);
+
+        // Load templates
+        await LoadTemplates();
+
+        // Reset state
+        creationResults.Clear();
+        processedVendorCount = 0;
+        validationMessage = null;
+
+        if (modalRef != null)
+        {
+            await modalRef.Show();
+        }
+    }
+
+    private async Task LoadTemplates()
+    {
+        isLoading = true;
+        loadingMessage = "Loading survey templates...";
+
+        try
+        {
+            templates = await SurveyService.GetSurveyTemplatesAsync();
+
+            // Auto-select if only one template
+            if (templates.Count == 1)
+            {
+                selectedTemplateId = templates[0].Id;
+                await OnTemplateSelected();
+            }
+            else if (templates.Count == 0)
+            {
+                validationMessage = "No survey templates available. Please contact an administrator to create a template.";
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading survey templates");
+            errorMessage = "Failed to load survey templates. Please try again.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task OnTemplateSelected()
+    {
+        if (!selectedTemplateId.HasValue)
+            return;
+
+        isLoading = true;
+        loadingMessage = "Loading template details...";
+
+        try
+        {
+            // Get the active version for this template
+            selectedTemplateVersion = await SurveyService.GetActiveTemplateVersionAsync(selectedTemplateId.Value);
+
+            if (selectedTemplateVersion != null)
+            {
+                // Update all batches with the template version
+                foreach (var batch in vendorBatches)
+                {
+                    batch.TemplateVersionId = selectedTemplateVersion.Id;
+                    batch.ResponseDueDate = responseDueDate;
+                }
+
+                // Load questions for preview
+                templateQuestions = await SurveyService.GetSurveyQuestionsAsync(selectedTemplateVersion.Id);
+            }
+            else
+            {
+                validationMessage = "Selected template has no active version. Please select a different template.";
+                foreach (var batch in vendorBatches)
+                {
+                    batch.TemplateVersionId = null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading template version for template {TemplateId}", selectedTemplateId.Value);
+            errorMessage = "Failed to load template details. Please try again.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private bool CanCreateSurveys()
+    {
+        return vendorBatches.Count > 0 &&
+               vendorBatches.All(b => b.TemplateVersionId.HasValue) &&
+               !isLoading;
+    }
+
+    private async Task CreateSurveys()
+    {
+        if (!CanCreateSurveys() || CurrentUser?.DBUser == null)
+            return;
+
+        isLoading = true;
+        creationResults.Clear();
+        processedVendorCount = 0;
+        var successfulBatchIds = new List<int>();
+
+        foreach (var batch in vendorBatches)
+        {
+            loadingMessage = $"Creating survey for {batch.VendorName}...";
+            StateHasChanged();
+
+            var result = new SurveyCreationResult { VendorName = batch.VendorName };
+
+            try
+            {
+                // Ensure the template version and due date are set
+                batch.TemplateVersionId = selectedTemplateVersion?.Id;
+                batch.ResponseDueDate = responseDueDate;
+
+                // Create the survey batch
+                var batchId = await SurveyService.CreateSurveyBatchAsync(batch, CurrentUser.DBUser.EmployeeNumber);
+                result.BatchId = batchId;
+
+                // Send the survey email
+                loadingMessage = $"Sending survey email to {batch.VendorName}...";
+                StateHasChanged();
+
+                await SurveyService.SendSurveyEmailAsync(batchId, CurrentUser.DBUser.EmployeeNumber);
+
+                result.Success = true;
+                successfulBatchIds.Add(batchId);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error creating survey batch for vendor {VendorName}", batch.VendorName);
+                result.Success = false;
+                result.ErrorMessage = ex.Message;
+            }
+
+            creationResults.Add(result);
+            processedVendorCount++;
+            StateHasChanged();
+        }
+
+        isLoading = false;
+
+        // Show summary notification
+        var successCount = creationResults.Count(r => r.Success);
+        var failCount = creationResults.Count(r => !r.Success);
+
+        if (successCount > 0 && failCount == 0)
+        {
+            await NotificationService.Success($"Successfully created and sent {successCount} survey{(successCount > 1 ? "s" : "")}");
+        }
+        else if (successCount > 0 && failCount > 0)
+        {
+            await NotificationService.Warning($"Created {successCount} survey{(successCount > 1 ? "s" : "")}, but {failCount} failed");
+        }
+        else
+        {
+            await NotificationService.Error("Failed to create surveys. Please check the error details.");
+        }
+
+        // Notify parent component of successful creations
+        if (successfulBatchIds.Count > 0 && OnSurveysCreated.HasDelegate)
+        {
+            await OnSurveysCreated.InvokeAsync(successfulBatchIds);
+        }
+    }
+
+    private async Task CloseModal()
+    {
+        if (modalRef != null)
+        {
+            await modalRef.Hide();
+        }
+
+        // Reset state
+        selectedTrackers.Clear();
+        vendorBatches.Clear();
+        creationResults.Clear();
+        selectedTemplateId = null;
+        selectedTemplateVersion = null;
+        templateQuestions.Clear();
+        errorMessage = null;
+        validationMessage = null;
+        responseDueDate = null;
+        processedVendorCount = 0;
+    }
+}

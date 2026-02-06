@@ -1,0 +1,154 @@
+.navbar {
+    padding: 0 !important;
+    flex-wrap: nowrap !important;
+    justify-content: end;
+}
+
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.container-fluid {
+    padding: 0.5rem;
+}
+
+.navbar-hide {
+    background-color: #112d5d;
+    color: white;
+    border: 0;
+    height: 56px;
+    font-size: 1.5rem;
+    display: none;
+}
+
+.navbar-hide:hover {
+    background-color: var(--crystal-blue);
+}
+
+.navbar-hide.close {
+    width: 44px;
+}
+
+.navbar-hide.open {
+    width: 24px;
+}
+
+.sidebar {
+    background-color: var(--deep-blue);
+}
+
+.sidebar.hidden {
+    min-width: unset !important;
+    max-width: 24px;
+}
+
+    .sidebar .top-row {
+        background-size: cover;
+    }
+
+    .sidebar .collapse.hidden,
+    .sidebar .not-collapsed.hidden {
+        display: none;
+    }
+
+@media (min-width: 641px) {
+
+    .sidebar {
+        min-width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+        .sidebar .top-row {
+            background-size: 600px !important;
+        }
+
+    .navbar-hide {
+        display: block;
+    }
+}
+
+.top-row {
+    background-color: var(--deep-blue);
+    background-image: url('_content/CrystalGroupHome.SharedRCL/images/backgrounds/halftone.png');
+    background-blend-mode: multiply;
+    background-position: center;
+    background-size: 600px;
+    background-repeat: no-repeat;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-bottom: 1px solid black;
+    padding-left: 1rem;
+}
+
+.navbar-brand {
+    font-size: 1.1rem;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.oi {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    top: -2px;
+}
+
+.navbar-toggler {
+    background-color: var(--crystal-blue);
+    border: none;
+}
+
+.nav-header {
+    color: white;
+    margin-top: 1rem;
+    padding-left: 1rem;
+    border-bottom: 1px solid white;
+    display: flex;
+}
+
+.nav-item {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+}
+
+    .nav-item:first-of-type {
+        padding-top: 1rem;
+    }
+
+    .nav-item:last-of-type {
+        padding-bottom: 1rem;
+    }
+
+    .nav-item ::deep a {
+        color: var(--aluminum);
+        font-weight: 500;
+        font-size: 16px;
+        border-radius: 4px;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+    }
+
+.nav-item ::deep a.active {
+    background-color: rgba(255,255,255,0.25);
+    color: white;
+}
+
+.nav-item ::deep a:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler {
+        display: none;
+    }
+
+    .collapse {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+    }
+}

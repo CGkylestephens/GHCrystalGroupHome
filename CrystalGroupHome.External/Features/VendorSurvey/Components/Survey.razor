@@ -1,0 +1,196 @@
+﻿@page "/survey/{BatchId:int}/{Token}"
+@using CrystalGroupHome.External.Features.VendorSurvey.Components
+@using CrystalGroupHome.External.Features.VendorSurvey.Data
+@using CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms
+@using static CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms.CMHub_VendorCommsSurveyDTOs
+@using static CrystalGroupHome.SharedRCL.Helpers.NavHelpers
+@inherits ComponentBase
+
+<PageTitle>Vendor Part Status Survey</PageTitle>
+
+<div class="survey-page">
+    <Container Fluid Class="survey-wrapper">
+        <Row Style="justify-content: center;">
+            <Column ColumnSize="ColumnSize.Is12.OnMobile.Is10.OnDesktop.Is8.OnWidescreen" Offset="Offset.Is0.OnMobile.Is1.OnDesktop.Is2.OnWidescreen">
+                @if (IsLoading)
+                {
+                    <Card Margin="Margin.Is4.FromTop" Class="loading-card">
+                        <CardBody Class="loading-content">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary loading-spinner" role="status">
+                                    <span class="visually-hidden">Loading survey...</span>
+                                </div>
+                                <Paragraph Margin="Margin.Is3.FromTop" Style="color: #6b7280; font-size: 1.1rem;">Loading survey...</Paragraph>
+                            </div>
+                        </CardBody>
+                    </Card>
+                }
+                else if (IsInvalid)
+                {
+                    <Alert Color="Color.Danger" Visible="true" Margin="Margin.Is4.FromTop" Class="survey-alert">
+                        <AlertMessage Class="alert-title">
+                            <i class="@WarningIcon" style="margin-right: 0.5rem;"></i>
+                            Invalid Survey Link
+                        </AlertMessage>
+                        <AlertDescription Class="alert-description">
+                            The survey link is invalid or has expired. Please contact Crystal Group if you believe this is an error.
+                        </AlertDescription>
+                    </Alert>
+                }
+                else if (IsCompleted)
+                {
+                    <Alert Color="Color.Success" Visible="true" Margin="Margin.Is4.FromTop" Class="survey-alert">
+                        <AlertMessage Class="alert-title">
+                            <i class="@CheckIcon" style="margin-right: 0.5rem;"></i>
+                            Survey Completed
+                        </AlertMessage>
+                        <AlertDescription Class="alert-description">
+                            This survey has already been completed. Thank you for your response.
+                        </AlertDescription>
+                    </Alert>
+                }
+                else if (RequiresConfirmationCode && !IsCodeVerified)
+                {
+                    <!-- Show confirmation code entry before allowing access to survey -->
+                    <div class="confirmation-code-section" style="margin-top: 2rem;">
+                        <ConfirmationCodeEntry BatchId="@BatchId" 
+                                               OnCodeVerified="@OnConfirmationCodeVerified" />
+                    </div>
+                }
+                else if (SurveyBatch != null)
+                {
+                    <div class="survey-form-container">
+                        <VendorSurveyForm SurveyBatch="@SurveyBatch" 
+                                          Questions="@Questions"
+                                          Parts="@Parts"
+                                          OnSurveySubmitted="@OnSurveySubmitted" />
+                    </div>
+                }
+            </Column>
+        </Row>
+    </Container>
+</div>
+
+@code {
+    [Parameter] public int BatchId { get; set; }
+    [Parameter] public string Token { get; set; } = string.Empty;
+
+    [Inject] private IVendorSurveyService VendorSurveyService { get; set; } = default!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+
+    private bool IsLoading = true;
+    private bool IsInvalid = false;
+    private bool IsCompleted = false;
+    private bool IsCodeVerified = false;
+    private bool RequiresConfirmationCode = true; // Default to true for security
+
+    private CMHub_SurveyBatchDTO? SurveyBatch;
+    private List<CMHub_SurveyQuestionDTO> Questions = new();
+    private List<CMHub_VendorCommsTrackerModel> Parts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ValidateTokenAndCheckConfirmationCode();
+    }
+
+    private async Task ValidateTokenAndCheckConfirmationCode()
+    {
+        IsLoading = true;
+        try
+        {
+            // First, validate the token (URL validity)
+            var isValid = await VendorSurveyService.ValidateSurveyTokenAsync(BatchId, Token);
+            if (!isValid)
+            {
+                IsInvalid = true;
+                return;
+            }
+
+            // Check if survey is already completed
+            if (await VendorSurveyService.IsSurveyCompletedAsync(BatchId))
+            {
+                IsCompleted = true;
+                return;
+            }
+
+            // Check if confirmation code is required (backwards compatibility)
+            RequiresConfirmationCode = await VendorSurveyService.IsConfirmationCodeRequiredAsync(BatchId);
+            
+            if (!RequiresConfirmationCode)
+            {
+                // No confirmation code required - load survey data immediately
+                IsCodeVerified = true; // Mark as verified since no code is needed
+                await LoadSurveyData();
+            }
+            // Otherwise, wait for user to enter confirmation code
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error validating survey: {ex.Message}");
+            IsInvalid = true;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task OnConfirmationCodeVerified()
+    {
+        IsCodeVerified = true;
+        IsLoading = true;
+        StateHasChanged();
+
+        try
+        {
+            // Now load the full survey data
+            await LoadSurveyData();
+        }
+        finally
+        {
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadSurveyData()
+    {
+        try
+        {
+            // Load survey batch
+            var surveyViewModel = await VendorSurveyService.GetSurveyBatchForResponseAsync(BatchId);
+            if (surveyViewModel == null)
+            {
+                IsInvalid = true;
+                return;
+            }
+
+            SurveyBatch = surveyViewModel.Batch;
+            Parts = surveyViewModel.Parts;
+
+            // Check if already completed
+            if (SurveyBatch.Status == "Completed" || await VendorSurveyService.IsSurveyCompletedAsync(BatchId))
+            {
+                IsCompleted = true;
+                return;
+            }
+
+            // Load questions
+            if (surveyViewModel.TemplateVersion != null)
+            {
+                Questions = await VendorSurveyService.GetSurveyQuestionsAsync(surveyViewModel.TemplateVersion.Id);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error loading survey: {ex.Message}");
+            IsInvalid = true;
+        }
+    }
+
+    private async Task OnSurveySubmitted()
+    {
+        IsCompleted = true;
+        StateHasChanged();
+    }
+}

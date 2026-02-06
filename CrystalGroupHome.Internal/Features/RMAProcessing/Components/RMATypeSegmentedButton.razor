@@ -1,0 +1,130 @@
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@namespace CrystalGroupHome.Internal.Features.RMAProcessing.Components
+
+<div class="rma-type-segmented-button">
+    <div class="btn-group" role="group" aria-label="RMA Type Selection">
+        <input type="radio" class="btn-check" 
+               name="rmaTypeFilter" 
+               id="rmaType_epicor" 
+               value="epicor" 
+               checked="@(SelectedValue == RMATypeFilter.Epicor)"
+               @onchange="@(() => OnValueChanged(RMATypeFilter.Epicor))" />
+        <label class="btn btn-outline-primary" for="rmaType_epicor">
+            <i class="fas fa-database me-1"></i>
+            Epicor RMAs
+            @if (EpicorCount.HasValue)
+            {
+                <span class="badge bg-primary ms-2">@EpicorCount.Value</span>
+            }
+        </label>
+
+        <input type="radio" class="btn-check" 
+               name="rmaTypeFilter" 
+               id="rmaType_legacy" 
+               value="legacy" 
+               checked="@(SelectedValue == RMATypeFilter.Legacy)"
+               @onchange="@(() => OnValueChanged(RMATypeFilter.Legacy))" />
+        <label class="btn btn-outline-warning" for="rmaType_legacy">
+            <i class="fas fa-archive me-1"></i>
+            Legacy RMAs
+            @if (LegacyCount.HasValue)
+            {
+                <span class="badge bg-warning ms-2">@LegacyCount.Value</span>
+            }
+        </label>
+
+        <input type="radio" class="btn-check" 
+               name="rmaTypeFilter" 
+               id="rmaType_all" 
+               value="all" 
+               checked="@(SelectedValue == RMATypeFilter.All)"
+               @onchange="@(() => OnValueChanged(RMATypeFilter.All))" />
+        <label class="btn btn-outline-secondary" for="rmaType_all">
+            <i class="fas fa-globe me-1"></i>
+            All RMAs
+            @if (TotalCount.HasValue)
+            {
+                <span class="badge bg-secondary ms-2">@TotalCount.Value</span>
+            }
+        </label>
+    </div>
+    
+    @if (SelectedValue == RMATypeFilter.Legacy)
+    {
+        <small class="text-muted d-block mt-1">
+            <i class="fas fa-info-circle me-1"></i>
+            Legacy RMAs may take longer to load (~21,000 records)
+        </small>
+    }
+</div>
+
+<style>
+    .rma-type-segmented-button {
+        margin-bottom: 1rem;
+    }
+    
+    .rma-type-segmented-button .btn-group .btn {
+        border-radius: 0;
+        font-weight: 500;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .rma-type-segmented-button .btn-group .btn:first-child {
+        border-top-left-radius: 0.375rem;
+        border-bottom-left-radius: 0.375rem;
+    }
+    
+    .rma-type-segmented-button .btn-group .btn:last-child {
+        border-top-right-radius: 0.375rem;
+        border-bottom-right-radius: 0.375rem;
+    }
+    
+    .rma-type-segmented-button .btn-check:checked + .btn {
+        background-color: var(--bs-primary);
+        border-color: var(--bs-primary);
+        color: white;
+        z-index: 2;
+    }
+    
+    .rma-type-segmented-button .btn-check:checked + .btn-outline-warning {
+        background-color: var(--bs-warning);
+        border-color: var(--bs-warning);
+        color: var(--bs-dark);
+    }
+    
+    .rma-type-segmented-button .btn-check:checked + .btn-outline-secondary {
+        background-color: var(--bs-secondary);
+        border-color: var(--bs-secondary);
+        color: white;
+    }
+    
+    .rma-type-segmented-button .badge {
+        font-size: 0.7em;
+        font-weight: normal;
+    }
+</style>
+
+@code {
+    public enum RMATypeFilter
+    {
+        Epicor,
+        Legacy,
+        All
+    }
+    
+    [Parameter] public RMATypeFilter SelectedValue { get; set; } = RMATypeFilter.Epicor;
+    [Parameter] public EventCallback<RMATypeFilter> SelectedValueChanged { get; set; }
+    [Parameter] public int? EpicorCount { get; set; }
+    [Parameter] public int? LegacyCount { get; set; }
+    [Parameter] public int? TotalCount { get; set; }
+
+    protected async Task OnValueChanged(RMATypeFilter newValue)
+    {
+        if (SelectedValue != newValue)
+        {
+            SelectedValue = newValue;
+            await SelectedValueChanged.InvokeAsync(newValue);
+        }
+    }
+}

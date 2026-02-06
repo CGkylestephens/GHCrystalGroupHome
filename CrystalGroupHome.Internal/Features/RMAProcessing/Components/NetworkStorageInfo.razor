@@ -1,0 +1,82 @@
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using Blazorise
+@inherits NetworkStorageInfoBase
+
+@if (StorageInfo != null)
+{
+    <div class="@CssClass">
+        <!-- Compact Header - Always Visible -->
+        <div class="d-flex align-items-center justify-content-between bg-light border p-2 @(IsExpanded ? "rounded-top" : "rounded")" 
+             style="cursor: pointer;" @onclick="ToggleExpanded">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-network-wired text-info me-2"></i>
+                <small class="fw-bold text-muted">Network Storage Location Info:</small>
+                <code class="ms-2 text-dark" style="font-size: 0.8em;">@GetShortPath()</code>
+            </div>
+            <div class="d-flex align-items-center">
+                <Button Color="Color.Light" Size="Size.ExtraSmall" 
+                        Clicked="@(() => CopyToClipboard(GetSafePath()))"
+                        @onclick:stopPropagation="true"
+                        title="Copy accessible path to clipboard"
+                        Class="me-2">
+                    <i class="fas fa-copy"></i>
+                </Button>
+                <i class="fas @(IsExpanded ? "fa-chevron-up" : "fa-chevron-down") text-muted"></i>
+            </div>
+        </div>
+
+        <!-- Expanded Details - Seamlessly Connected -->
+        @if (IsExpanded)
+        {
+            <div class="border border-top-0 rounded-bottom p-3 bg-white">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6 class="mb-2 text-info">
+                            <i class="fas fa-folder-open me-1"></i>
+                            @StorageInfo.StorageDescription
+                        </h6>
+                        <div class="mb-3">
+                            <small class="text-muted fw-bold">Accessible Network Path:</small>
+                            <div class="bg-light border rounded p-2 mt-1">
+                                <code class="text-dark" style="font-size: 0.85em; word-break: break-all;">
+                                    @GetSafePath()
+                                </code>
+                            </div>
+                            <small class="text-success">
+                                <i class="fas fa-check-circle me-1"></i>
+                                This path is guaranteed to exist and be accessible
+                            </small>
+                        </div>
+                        @if (!string.Equals(GetSafePath(), GetSpecificPath(), StringComparison.OrdinalIgnoreCase))
+                        {
+                            <div class="mb-2">
+                                <small class="text-muted fw-bold">Specific File Location:</small>
+                                <div class="bg-light border rounded p-2 mt-1">
+                                    <code class="text-dark" style="font-size: 0.85em; word-break: break-all;">
+                                        @GetSpecificPath()
+                                    </code>
+                                </div>
+                                <small class="text-warning">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    This specific path may not exist until files are uploaded
+                                </small>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-info-circle text-info mb-2" style="font-size: 2em;"></i>
+                            <div>
+                                <small class="text-muted">
+                                    <strong>Read-only access</strong><br>
+                                    Use Windows Explorer to browse<br>
+                                    Navigate to subfolders as needed
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

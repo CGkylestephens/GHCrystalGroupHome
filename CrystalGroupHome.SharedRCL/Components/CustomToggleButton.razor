@@ -1,0 +1,59 @@
+﻿@using Blazorise
+@using CrystalGroupHome.SharedRCL.Helpers
+
+<Button Class="@GetButtonClass()"
+        Size="@Size"
+        Clicked="HandleClicked"
+        title="@GetTooltipText()"
+        Style="@CustomStyle"
+        Disabled="@Disabled">
+    <span class="@GetCheckboxIcon() me-1" aria-hidden="true"></span>
+    @Text
+</Button>
+
+@code {
+    [Parameter] public string Text { get; set; } = string.Empty;
+    [Parameter] public bool IsChecked { get; set; }
+    [Parameter] public EventCallback<bool> IsCheckedChanged { get; set; }
+    [Parameter] public EventCallback<bool> OnToggle { get; set; }
+    [Parameter] public Size Size { get; set; } = Size.Default;
+    [Parameter] public string CustomStyle { get; set; } = string.Empty;
+    [Parameter] public string CheckedTooltip { get; set; } = string.Empty;
+    [Parameter] public string UncheckedTooltip { get; set; } = string.Empty;
+    [Parameter] public string CustomCssClass { get; set; } = "custom-toggle-button";
+    [Parameter] public bool Disabled { get; set; } = false;
+
+    private string GetButtonClass()
+    {
+        var baseClass = CustomCssClass;
+        var activeClass = IsChecked ? "active" : "";
+        var disabledClass = Disabled ? "disabled" : "";
+
+        return $"{baseClass} {activeClass} {disabledClass}".Trim();
+    }
+
+    private string GetCheckboxIcon()
+    {
+        return IsChecked ? "fa fa-check-square" : "fa fa-square";
+    }
+
+    private string GetTooltipText()
+    {
+        if (!string.IsNullOrEmpty(CheckedTooltip) && IsChecked)
+            return CheckedTooltip;
+        if (!string.IsNullOrEmpty(UncheckedTooltip) && !IsChecked)
+            return UncheckedTooltip;
+
+        return IsChecked ? $"Disable {Text}" : $"Enable {Text}";
+    }
+
+    private async Task HandleClicked()
+    {
+        if (Disabled) return;
+
+        IsChecked = !IsChecked;
+
+        await IsCheckedChanged.InvokeAsync(IsChecked);
+        await OnToggle.InvokeAsync(IsChecked);
+    }
+}

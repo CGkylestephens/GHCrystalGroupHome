@@ -1,0 +1,69 @@
+﻿@using Blazorise
+@inject IModalService Modal
+@using CrystalGroupHome.Internal.Features.CMHub.CustComms.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+
+<Modal @bind-Visible="IsVisible" Centered>
+    <ModalContent Size="ModalSize.Large">
+        <ModalHeader>
+            @Title
+        </ModalHeader>
+        <ModalBody Style="max-height: 80%; overflow-y: auto;">
+            @if (TaskLogs == null || !TaskLogs.Any())
+            {
+                <p>No logs found for this task.</p>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var log in TaskLogs)
+                    {
+                        <li>
+                            <Div Style="display: flex; flex-direction: row; align-items: center; margin-top: 0.5rem;">
+                                <strong>@log.LogDate.ToLocalTime()</strong>
+                                @if (!string.IsNullOrEmpty(log.ImpactedPartNum))
+                                {
+                                    <div style="font-size: 0.85rem; color: var(--gray); margin-left: 0.5rem;">
+                                        @log.Employee?.DisplayName | @log.ImpactedPartNum@(string.IsNullOrEmpty(log.ImpactedPartRev) ? "" : $" (Rev {log.ImpactedPartRev})")
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="font-size: 0.85rem; color: var(--gray); margin-left: 0.5rem;">
+                                        @log.Employee?.DisplayName | Tracker-Level Log
+                                    </div>
+                                }
+
+                            </Div>
+                            <div style="white-space: pre-wrap;">@((MarkupString)HtmlHelpers.ConvertUrlsToLinks(log.LogMessage))</div>
+                        </li>
+                    }
+                </ul>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="Close">Close</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public List<CMHub_CustCommsPartChangeTaskLogModel> TaskLogs { get; set; } = [];
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public string Title { get; set; } = string.Empty;
+
+    private async Task Close()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync();
+    }
+
+    public void Show(string title, List<CMHub_CustCommsPartChangeTaskLogModel> taskLogs)
+    {
+        Title = title;
+        TaskLogs = taskLogs;
+        IsVisible = true;
+        StateHasChanged();
+    }
+}

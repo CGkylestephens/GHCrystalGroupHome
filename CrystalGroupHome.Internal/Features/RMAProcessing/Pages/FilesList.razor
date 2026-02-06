@@ -1,0 +1,20 @@
+@page "/rma-processing/files/list"
+@attribute [Authorize(Policy = AuthorizationPolicies.RMAProcessingAccess)]
+@using CrystalGroupHome.Internal.Authorization
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Components
+@using Blazorise
+@using Blazorise.Components
+@inherits FilesListPageBase
+
+<PageTitle>RMA Files - List</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>RMA Files</h1>
+</div>
+
+<RMAFileList RmaNumber="@RmaNumber"
+             RmaLineNumber="@RmaLineNumber" 
+             SerialNumber="@SerialNumber"
+             ShowAllFiles="@ShowAllFiles" />

@@ -1,0 +1,53 @@
+﻿@inherits LayoutComponentBase
+@using CrystalGroupHome.External.Helpers
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var nonce = SecurityHelper.GetCspNonce(HttpContextAccessor.HttpContext);
+}
+
+<PageTitle>CrystalGroupHome.External</PageTitle>
+
+<div class="page">
+    <header class="crystal-header">
+        <div class="crystal-header-content">
+            <div class="crystal-logo">
+                <img src="_content/CrystalGroupHome.SharedRCL/images/logos/CrystalGroup_logo_horiz_light.png" alt="Crystal Group Logo" height="40" />
+            </div>
+            
+            <nav class="crystal-nav">
+                <a href="https://www.crystalrugged.com" target="_blank" class="nav-link corporate-link">
+                    <span class="oi oi-external-link" aria-hidden="true"></span> Corporate Site
+                </a>
+            </nav>
+
+            <!-- Mobile menu toggle -->
+            <button class="navbar-toggler d-md-none" type="button" @onclick="ToggleNavMenu" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <!-- Mobile navigation menu -->
+        <div class="crystal-mobile-nav @NavMenuCssClass">
+            <a href="https://www.crystalrugged.com" target="_blank" class="mobile-nav-link" @onclick="ToggleNavMenu">
+                <span class="oi oi-external-link" aria-hidden="true"></span> Corporate Site
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : "show";
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

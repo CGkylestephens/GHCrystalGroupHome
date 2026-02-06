@@ -1,0 +1,136 @@
+﻿@using Blazorise
+@using CrystalGroupHome.SharedRCL.Helpers
+@using Microsoft.AspNetCore.Components.Web
+
+<Div Style="@($"display: flex; flex: 1; {CustomStyle}")" Class="mb-2">
+    <TextEdit @bind-Text="TextValue"
+              Style="border-radius: 4px 0 0 4px;"
+              Disabled="@(_textInputDisabled || Disabled)"
+              id="textInput"
+              @onblur="HandleBlur"
+              @onkeydown="HandleKeyDown"
+    />
+    <Button ButtonStyle="ButtonStyle.Link"
+            Disabled="@(_buttonDisabled || Disabled)"
+            Style="width: 3rem; border-radius: 0 4px 4px 0;"
+            Color="@StyleHelpers.GetSearchButtonColor(_currentInputHasBeenSearched, _currentInputIsValid)"
+            Clicked="@(async () => await OnSearch.InvokeAsync(TextValue))">
+        <span class="@StyleHelpers.GetSearchButtonIcon(_currentInputHasBeenSearched, _currentInputIsValid)" aria-hidden="true"></span>
+    </Button>
+</Div>
+
+@code {
+    [Parameter]
+    public string CustomStyle { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private string _textValue = string.Empty;
+
+    [Parameter]
+    public string TextValue
+    {
+        get => _textValue;
+        set
+        {
+            if (_textValue != value)
+            {
+                _textValue = value;
+                _currentInputHasBeenSearched = false;
+                _currentInputIsValid = false;
+                _buttonDisabled = false;
+                // Automatically trigger the callback when the value changes via binding.
+                OnTextValueChanged.InvokeAsync(_textValue);
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<string> OnTextValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnBlur { get; set; } // Callback for when input loses focus
+
+    private bool _textInputDisabled = false;
+    public void SetTextInputDisabled(bool disabled) {
+        _textInputDisabled = disabled;
+        InvokeAsync(StateHasChanged); // Ensure UI updates
+    }
+
+    private bool _buttonDisabled = false;
+    public void SetButtonDisabled(bool disabled) {
+        _buttonDisabled = disabled;
+        InvokeAsync(StateHasChanged); // Ensure UI updates
+    }
+
+    private bool _currentInputHasBeenSearched = false;
+    public void SetCurrentInputHasBeenSearched(bool searched) {
+        _currentInputHasBeenSearched = searched;
+        if (!_currentInputHasBeenSearched) {
+            _buttonDisabled = false;
+        }
+        InvokeAsync(StateHasChanged); // Ensure UI updates
+    }
+    public bool CurrentInputHasBeenSearched => _currentInputHasBeenSearched;
+
+    private bool _currentInputIsValid = false;
+    public void SetCurrentInputIsValid(bool valid) {
+        _currentInputIsValid = valid;
+        if (_currentInputHasBeenSearched) {
+            _buttonDisabled = true;
+        }
+        InvokeAsync(StateHasChanged); // Ensure UI updates
+    }
+    public bool CurrentInputIsValid => _currentInputIsValid;
+
+    public void ClearText()
+    {
+        TextValue = string.Empty; // Use the property setter to reset state
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void SetText(string newText)
+    {
+        TextValue = newText; // Use the property setter to reset state
+        InvokeAsync(StateHasChanged);
+    }
+
+    /// <summary>
+    /// Sets the text *without* telling anyone it changed.
+    /// </summary>
+    public void SetTextSilently(string newText, bool validSearch = true)
+    {
+        _textValue = newText;
+        _currentInputHasBeenSearched = true;
+        _currentInputIsValid = validSearch;
+        _buttonDisabled = true;
+        InvokeAsync(StateHasChanged);
+    }
+
+    /// <summary>
+    /// Handles the blur event on the TextEdit component.
+    /// </summary>
+    private async Task HandleBlur()
+    {
+        if (string.IsNullOrEmpty(TextValue) || Disabled) return;
+        await OnSearch.InvokeAsync(TextValue); // Treat the same as hitting the search button
+    }
+
+    /// <summary>
+    /// Handles the keydown event on the TextEdit component.
+    /// Checks if the Enter key was pressed.
+    /// </summary>
+    /// <param name="e">Keyboard event arguments.</param>
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (string.IsNullOrEmpty(TextValue) || Disabled) return;
+        if (e.Key == "Enter")
+        {
+            await OnSearch.InvokeAsync(TextValue); // Treat the same as hitting the search button
+        }
+    }
+}

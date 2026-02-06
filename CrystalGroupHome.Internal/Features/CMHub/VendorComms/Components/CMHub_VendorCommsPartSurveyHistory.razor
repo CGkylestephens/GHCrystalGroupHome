@@ -1,0 +1,450 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.VendorComms.Data
+@using CrystalGroupHome.SharedRCL.Helpers
+
+<div class="survey-history-section">
+    @if (SurveyHistory != null && SurveyHistory.Any())
+    {
+        @foreach (var survey in SurveyHistory)
+        {
+            <Card Margin="Margin.Is2.FromBottom">
+                <CardHeader>
+                    <Collapse @bind-Visible="@collapseStates[survey.BatchId]">
+                        <CollapseHeader>
+                            <Heading Size="HeadingSize.Is6" Margin="Margin.Is0">
+                                <Button Clicked="@(() => ToggleCollapse(survey.BatchId))" 
+                                        Color="Color.Light" 
+                                        Block="true"
+                                        Class="text-start survey-header-button">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <i class="@(collapseStates[survey.BatchId] ? NavHelpers.ExpandedIcon : NavHelpers.CollapsedIcon)" style="color: #495057;"></i>
+                                            @if (survey.IsPartSubmitted)
+                                            {
+                                                <Badge Color="Color.Success" Class="survey-badge-success">
+                                                    <i class="@NavHelpers.CheckIcon me-1"></i>
+                                                    Submitted
+                                                </Badge>
+                                            }
+                                            else
+                                            {
+                                                <Badge Color="Color.Warning" Class="survey-badge-warning">Pending</Badge>
+                                            }
+                                            <strong style="color: #212529;">@survey.TemplateName</strong>
+                                            <span style="color: #495057;">- @survey.VendorName</span>
+                                        </div>
+                                        <div style="display: flex; gap: 1rem; align-items: center;">
+                                            <small style="color: #6c757d;">Created @survey.CreatedDate.ToLocalTime().ToString("MM/dd/yyyy")</small>
+                                        </div>
+                                    </div>
+                                </Button>
+                            </Heading>
+                        </CollapseHeader>
+                        <CollapseBody>
+                            <CardBody>
+                                <Row>
+                                    <Column ColumnSize="ColumnSize.Is4">
+                                        <Field>
+                                            <FieldLabel>Survey Status</FieldLabel>
+                                            <Text>@survey.BatchStatus</Text>
+                                        </Field>
+                                    </Column>
+                                    <Column ColumnSize="ColumnSize.Is4">
+                                        <Field>
+                                            <FieldLabel>Sent Date</FieldLabel>
+                                            <Text>@(survey.SentDate?.ToLocalTime().ToString("MM/dd/yyyy") ?? "Not sent")</Text>
+                                        </Field>
+                                    </Column>
+                                    <Column ColumnSize="ColumnSize.Is4">
+                                        <Field>
+                                            <FieldLabel>Due Date</FieldLabel>
+                                            <Text>@(survey.ResponseDueDate?.ToString("MM/dd/yyyy") ?? "No due date")</Text>
+                                        </Field>
+                                    </Column>
+                                </Row>
+                                
+                                <!-- Survey Link Section -->
+                                <Row>
+                                    <Column>
+                                        <Field>
+                                            <FieldLabel>Survey Link</FieldLabel>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <TextEdit ReadOnly="true" 
+                                                         Text="@GetSurveyLink(survey.BatchId)" 
+                                                         Class="survey-link-input" 
+                                                         Style="flex: 1; font-family: monospace; font-size: 0.875rem;" />
+                                                <Button Color="Color.Secondary" 
+                                                        Size="Size.Small" 
+                                                        Clicked="@(() => CopySurveyLink(survey.BatchId))"
+                                                        Title="Copy survey link to clipboard">
+                                                    <i class="@NavHelpers.CopyIcon"></i>
+                                                </Button>
+                                                <Button Color="Color.Primary" 
+                                                        Size="Size.Small" 
+                                                        Clicked="@(() => OpenSurveyLink(survey.BatchId))"
+                                                        Title="Open survey link in new tab">
+                                                    <i class="@NavHelpers.OpenInNewTabIcon"></i>
+                                                </Button>
+                                            </div>
+                                        </Field>
+                                    </Column>
+                                </Row>
+
+                                @* Close Survey Section - Only show if survey is sent but not submitted *@
+                                @if (survey.BatchStatus == "Sent" && !survey.IsPartSubmitted)
+                                {
+                                    <Divider />
+                                    <Alert Color="Color.Info" Visible>
+                                        <AlertMessage>
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            Survey Pending Response
+                                        </AlertMessage>
+                                        <AlertDescription>
+                                            <p>This survey has been sent but the vendor has not completed it yet. If you've received the information through other means (phone, email, etc.), you can manually close this survey to allow sending new surveys for this part.</p>
+                                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                                <Button Color="Color.Warning" 
+                                                        Size="Size.Small"
+                                                        Clicked="@(() => ShowCloseSurveyModal(survey.BatchId, false))"
+                                                        Title="Close this survey for this part only">
+                                                    <i class="fas fa-times-circle me-1"></i>
+                                                    Close This Part's Survey
+                                                </Button>
+                                                <Button Color="Color.Danger" 
+                                                        Size="Size.Small"
+                                                        Clicked="@(() => ShowCloseSurveyModal(survey.BatchId, true))"
+                                                        Title="Close the entire survey batch for all parts">
+                                                    <i class="fas fa-ban me-1"></i>
+                                                    Close Entire Batch
+                                                </Button>
+                                            </div>
+                                        </AlertDescription>
+                                    </Alert>
+                                }
+                                
+                                @if (survey.IsPartSubmitted)
+                                {
+                                    <Divider />
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                        <Heading Size="HeadingSize.Is6" Margin="Margin.Is0">Survey Responses</Heading>
+                                        
+                                        @if (responsesCache.ContainsKey(survey.BatchId) && responsesCache[survey.BatchId].Any() && processableResponsesCache.GetValueOrDefault(survey.BatchId, false))
+                                        {
+                                            @if (processingResponses.Contains(survey.BatchId))
+                                            {
+                                                <Button Color="Color.Success" Size="Size.Small" Loading="true" Disabled>
+                                                    Processing Responses...
+                                                </Button>
+                                            }
+                                            else if (processedSurveys.Contains(survey.BatchId))
+                                            {
+                                                <Badge Color="Color.Success">
+                                                    <i class="@NavHelpers.CheckIcon me-1"></i>
+                                                    Responses Processed
+                                                </Badge>
+                                            }
+                                            else
+                                            {
+                                                <Button Color="Color.Success" Size="Size.Small"
+                                                        Clicked="@(() => ProcessSurveyResponses(survey.BatchId))"
+                                                        Title="Process responses and update part data via Epicor API">
+                                                    <i class="@NavHelpers.CogIcon me-1"></i>
+                                                    Process Responses
+                                                </Button>
+                                            }
+                                        }
+                                    </div>
+                                    
+                                    @if (!responsesCache.ContainsKey(survey.BatchId))
+                                    {
+                                        <Button Color="Color.Primary" Size="Size.Small" 
+                                                Clicked="@(() => LoadResponses(survey))">
+                                            <i class="@NavHelpers.ViewIcon me-1"></i>
+                                            View Responses
+                                        </Button>
+                                    }
+                                    else if (loadingResponses.Contains(survey.BatchId))
+                                    {
+                                        <div class="text-center p-3">
+                                            <Spinner Size="SpinnerSize.Small" />
+                                            <Text>Loading responses...</Text>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        var responses = responsesCache[survey.BatchId];
+                                        if (responses.Any())
+                                        {
+                                            <Table Striped Bordered Margin="Margin.Is2.FromTop">
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHeaderCell>Question</TableHeaderCell>
+                                                        <TableHeaderCell>Response</TableHeaderCell>
+                                                        <TableHeaderCell Width="Width.Px(180)">Response Date</TableHeaderCell>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody>
+                                                    @foreach (var response in responses.OrderBy(r => r.DisplayOrder))
+                                                    {
+                                                        <TableRow>
+                                                            <TableRowCell>@response.QuestionText</TableRowCell>
+                                                            <TableRowCell>
+                                                                @if (response.QuestionType == "Date" && DateTime.TryParse(response.ResponseValue, out var dateValue))
+                                                                {
+                                                                    @dateValue.ToString("MM/dd/yyyy")
+                                                                }
+                                                                else if (response.QuestionType == "Boolean")
+                                                                {
+                                                                    @(response.ResponseValue == "True" ? "Yes" : "No")
+                                                                }
+                                                                else
+                                                                {
+                                                                    @(response.ResponseValue ?? "N/A")
+                                                                }
+                                                            </TableRowCell>
+                                                            <TableRowCell>
+                                                                @(response.ResponseDate?.ToLocalTime().ToString("MM/dd/yyyy HH:mm") ?? "")
+                                                            </TableRowCell>
+                                                        </TableRow>
+                                                    }
+                                                </TableBody>
+                                            </Table>
+                                        }
+                                        else
+                                        {
+                                            <Alert Color="Color.Info" Visible Margin="Margin.Is2.FromTop">
+                                                No responses recorded for this part in this survey.
+                                            </Alert>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <Alert Color="Color.Info" Visible Margin="Margin.Is3.FromTop.Is0.FromBottom">
+                                        This part has not been submitted yet in this survey.
+                                    </Alert>
+                                }
+                            </CardBody>
+                        </CollapseBody>
+                    </Collapse>
+                </CardHeader>
+            </Card>
+        }
+    }
+    else if (IsLoading)
+    {
+        <div class="text-center p-3">
+            <Spinner />
+            <Text>Loading survey history...</Text>
+        </div>
+    }
+    else
+    {
+        <Alert Color="Color.Info" Visible>
+            This part has not been included in any surveys yet.
+        </Alert>
+    }
+</div>
+
+<CMHub_CloseSurveyModal @ref="CloseSurveyModal" OnSurveyClosed="HandleSurveyClosed" />
+
+<style>
+    .survey-header-button {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .survey-header-button:hover {
+        background: rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .survey-header-button:focus {
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+    /* Fix badge text colors to be visible on light backgrounds */
+    .survey-badge-success {
+        color: #155724 !important; /* Dark green text for success badge */
+    }
+
+    .survey-badge-warning {
+        color: #856404 !important; /* Dark yellow/brown text for warning badge */
+    }
+
+    .survey-link-input input {
+        background-color: #f8f9fa !important;
+        border: 1px solid #dee2e6 !important;
+        cursor: text !important;
+    }
+</style>
+
+@code {
+    [Parameter] public int TrackerId { get; set; }
+    [Inject] private ICMHub_VendorCommsSurveyService SurveyService { get; set; } = default!;
+    [Inject] private INotificationService NotificationService { get; set; } = default!;
+    [Inject] private IJSRuntime JSRuntime { get; set; } = default!;
+
+    private CMHub_CloseSurveyModal? CloseSurveyModal;
+    private List<CMHub_PartSurveyHistoryModel>? SurveyHistory;
+    private Dictionary<int, List<CMHub_SurveyResponseViewModel>> responsesCache = new();
+    private Dictionary<int, bool> collapseStates = new();
+    private Dictionary<int, bool> processableResponsesCache = new();
+    private HashSet<int> loadingResponses = new();
+    private HashSet<int> processingResponses = new();
+    private HashSet<int> processedSurveys = new();
+    private bool IsLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadSurveyHistory();
+    }
+
+    private async Task LoadSurveyHistory()
+    {
+        try
+        {
+            IsLoading = true;
+            SurveyHistory = await SurveyService.GetPartSurveyHistoryAsync(TrackerId);
+            
+            // Initialize collapse states - all collapsed by default
+            if (SurveyHistory != null)
+            {
+                foreach (var survey in SurveyHistory)
+                {
+                    collapseStates[survey.BatchId] = false;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await NotificationService.Error($"Failed to load survey history: {ex.Message}");
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private void ToggleCollapse(int batchId)
+    {
+        if (collapseStates.ContainsKey(batchId))
+        {
+            collapseStates[batchId] = !collapseStates[batchId];
+        }
+    }
+
+    private async Task ShowCloseSurveyModal(int batchId, bool closeEntireBatch)
+    {
+        if (CloseSurveyModal != null)
+        {
+            await CloseSurveyModal.OpenAsync(batchId, TrackerId, closeEntireBatch);
+        }
+    }
+
+    private async Task HandleSurveyClosed()
+    {
+        // Reload survey history after closing
+        await LoadSurveyHistory();
+        StateHasChanged();
+    }
+
+    private async Task LoadResponses(CMHub_PartSurveyHistoryModel survey)
+    {
+        if (loadingResponses.Contains(survey.BatchId) || responsesCache.ContainsKey(survey.BatchId))
+            return;
+
+        try
+        {
+            loadingResponses.Add(survey.BatchId);
+            StateHasChanged();
+            
+            var responses = await SurveyService.GetPartSurveyResponsesAsync(TrackerId, survey.BatchId);
+            responsesCache[survey.BatchId] = responses;
+
+            // Check if there are processable responses for this batch
+            var hasProcessableResponses = await SurveyService.HasProcessableResponsesAsync(survey.BatchId, TrackerId);
+            processableResponsesCache[survey.BatchId] = hasProcessableResponses;
+        }
+        catch (Exception ex)
+        {
+            await NotificationService.Error($"Failed to load responses: {ex.Message}");
+        }
+        finally
+        {
+            loadingResponses.Remove(survey.BatchId);
+            StateHasChanged();
+        }
+    }
+
+    private async Task ProcessSurveyResponses(int batchId)
+    {
+        if (processingResponses.Contains(batchId))
+            return;
+
+        try
+        {
+            processingResponses.Add(batchId);
+            StateHasChanged();
+
+            var result = await SurveyService.ProcessSurveyResponsesAsync(batchId, TrackerId);
+            
+            if (result.Success)
+            {
+                processedSurveys.Add(batchId);
+                if (result.UpdatedFieldsCount > 0)
+                {
+                    await NotificationService.Success($"Survey responses processed successfully! Updated {result.UpdatedFieldsCount} field(s) for part.");
+                }
+                else
+                {
+                    await NotificationService.Info(result.Message);
+                }
+            }
+            else
+            {
+                await NotificationService.Warning($"Survey responses processed with warnings: {result.Message}");
+            }
+        }
+        catch (Exception ex)
+        {
+            await NotificationService.Error($"Failed to process survey responses: {ex.Message}");
+        }
+        finally
+        {
+            processingResponses.Remove(batchId);
+            StateHasChanged();
+        }
+    }
+
+    private string GetSurveyLink(int batchId)
+    {
+        return SurveyService.GenerateSurveyLink(batchId);
+    }
+
+    private async Task CopySurveyLink(int batchId)
+    {
+        try
+        {
+            var surveyLink = GetSurveyLink(batchId);
+            await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", surveyLink);
+            await NotificationService.Success("Survey link copied to clipboard!");
+        }
+        catch (Exception ex)
+        {
+            await NotificationService.Error($"Failed to copy survey link: {ex.Message}");
+        }
+    }
+
+    private async Task OpenSurveyLink(int batchId)
+    {
+        try
+        {
+            var surveyLink = GetSurveyLink(batchId);
+            await JSRuntime.InvokeVoidAsync("window.open", surveyLink, "_blank");
+        }
+        catch (Exception ex)
+        {
+            await NotificationService.Error($"Failed to open survey link: {ex.Message}");
+        }
+    }
+}

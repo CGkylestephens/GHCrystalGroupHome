@@ -1,0 +1,110 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.CMNotif.Data
+@using CrystalGroupHome.Internal.Features.CMHub.CMNotif.Models
+@inject IModalService Modal
+
+<Modal @bind-Visible="IsVisible" Centered>
+    <ModalContent Size="ModalSize.Large">
+        <ModalHeader>
+            Add Notification Log
+        </ModalHeader>
+        <ModalBody>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+                @ContextLabel
+            </p>
+
+            <MemoEdit Rows="5" @bind-Text="LogMessage" Placeholder="Enter your log message..." Style="width: 100%;" />
+
+            @if (ShowValidationMessage)
+            {
+                <div style="color: red; margin-top: 0.5rem;">Log message cannot be empty.</div>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="Close">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="SubmitLog">Save Log</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Inject] public ICMHub_CMNotifService CMNotifService { get; set; } = default!;
+
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public int RecordId { get; set; }
+    [Parameter] public string? AssociatedPartNum { get; set; }
+    [Parameter] public string ContextLabel { get; set; } = string.Empty;
+    [Parameter] public EventCallback<CMHub_CMNotifRecordLogModel> OnLogSubmitted { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    private string LogMessage = string.Empty;
+    private bool ShowValidationMessage = false;
+
+    private async Task Close()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync();
+        LogMessage = string.Empty;
+        ShowValidationMessage = false;
+    }
+
+    private async Task SubmitLog()
+    {
+        if (string.IsNullOrWhiteSpace(LogMessage))
+        {
+            ShowValidationMessage = true;
+            return;
+        }
+
+        var log = new CMHub_CMNotifRecordLogModel
+        {
+            RecordId = RecordId,
+            LogAssociatedWithPartNum = AssociatedPartNum,
+            LogMessage = LogMessage,
+            IsManualLogEntry = true,
+            Deleted = false,
+            LogDate = DateTime.UtcNow
+        };
+
+        await OnLogSubmitted.InvokeAsync(log);
+        await Close();
+    }
+
+    public async Task Show(int? recordId, string? ecnNum, string? partNum = null, string? context = null)
+    {
+        if (recordId == null && ecnNum != null)
+        {
+            // No records exist yet for this ECN so let's create one.
+            var newRecord = await CMNotifService.CreateRecordByECNNumberAsync(ecnNum);
+            recordId = newRecord.Id;
+        }
+
+        if (recordId == null || ecnNum == null) return;
+
+        // If we are attempting to make a log for a specific part num then we need to ensure that part record exists also.
+        if (!string.IsNullOrEmpty(partNum))
+        {
+            var partRecords = await CMNotifService.GetPartsByRecordIdAsync((int)recordId);
+            var partRecordFound = partRecords.Any(_ => _.PartNum == partNum);
+
+            if (!partRecordFound)
+            {
+                // Create Part Record
+                var newPart = new CMHub_CMNotifRecordPartModel
+                {
+                    RecordId = (int)recordId,
+                    PartNum = partNum,
+                    DateCreated = DateTime.UtcNow
+                };
+                var newPartRecordId = await CMNotifService.CreatePartAssociatedWithRecordAsync(newPart);
+            }
+        }
+
+        RecordId = (int)recordId;
+        AssociatedPartNum = partNum;
+        ContextLabel = context ?? "Record-Level Log";
+        IsVisible = true;
+        LogMessage = string.Empty;
+        ShowValidationMessage = false;
+        StateHasChanged();
+    }
+}

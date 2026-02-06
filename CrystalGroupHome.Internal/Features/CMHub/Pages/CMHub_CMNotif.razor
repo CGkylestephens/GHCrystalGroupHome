@@ -1,0 +1,41 @@
+﻿@attribute [Route(NavHelpers.CMHub_CMNotifMainPage)]
+@attribute [Route(NavHelpers.CMHub_CMNotifRecordDetails)]
+@attribute [Route(NavHelpers.CMHub_CMNotifRecordDetailsWithECNNum)]
+@attribute [Authorize]
+@using CrystalGroupHome.Internal.Authorization
+@using CrystalGroupHome.Internal.Features.CMHub.CMNotif.Components
+@using CrystalGroupHome.Internal.Features.CMHub.Pages
+@using CrystalGroupHome.SharedRCL.Helpers
+@using Microsoft.AspNetCore.Authorization
+@inherits CMHub_CMNotifBase
+
+<PageTitle>CM Notification System</PageTitle>
+
+<Div Style="display: flex; margin-bottom: 0.5rem;">
+    <h1>CM Notification System</h1>
+    <AuthorizeView Policy="@AuthorizationPolicies.CMHubAdmin" Context="adminAuth">
+        <Authorized>
+            <div class="role-tag">ADMIN</div>
+        </Authorized>
+    </AuthorizeView>
+    <InfoHoverIcon Style="margin-left: 0.5rem; margin-bottom: 0.75rem;"
+                   HoverText="@($"Members of \"{CMHubBase.CMHubAdminRole}\" are granted ADMIN permissions here.")" />
+
+    <div style="flex-grow: 1;"></div>
+    @if (CurrentView == "RecordDetails" && ECNNumber != null)
+    {
+        <Button Color="Color.Secondary" Clicked="NavigateToCMNotifications">
+            <span class="@($"{NavHelpers.BackCircleIcon} me-2")" aria-hidden="true"></span> Back to All CM Notifications
+        </Button>
+    }
+</Div>
+<Div>
+    @if (CurrentView == "RecordGrid")
+    {
+        <CMHub_CMNotifRecordGrid />
+    }
+    else if (CurrentView == "RecordDetails" && ECNNumber != null)
+    {
+        <CMHub_CMNotifRecordForm ECNNumber="@ECNNumber" />
+    }
+</Div>

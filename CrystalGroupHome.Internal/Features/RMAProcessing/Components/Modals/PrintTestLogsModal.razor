@@ -1,0 +1,210 @@
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using Blazorise
+@inherits PrintTestLogsModalBase
+
+@if (IsVisible)
+{
+    <Modal Visible="@IsVisible" Closing="@OnModalClosing">
+        <ModalContent Centered="true" Size="ModalSize.Large">
+            <ModalHeader>
+                <ModalTitle>
+                    <span class="fas fa-print me-2"></span>
+                    Print Test Logs - RMA @RmaNumber
+                    @* UPDATED: Dynamic title based on scope *@
+                    @if (!string.IsNullOrEmpty(RmaLineNumber))
+                    {
+                        <text> - Line @RmaLineNumber</text>
+                        @if (!string.IsNullOrEmpty(SerialNumber))
+                        {
+                            <text> : SN @SerialNumber</text>
+                        }
+                    }
+                    else if (AvailableTestLogFiles.Any() && AvailableTestLogFiles.All(f => !f.RMALineNumber.HasValue))
+                    {
+                        <text> - Header Files</text>
+                    }
+                    else if (AvailableTestLogFiles.Any())
+                    {
+                        <text> - All Files</text>
+                    }
+                </ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                @if (AvailableTestLogFiles.Any())
+                {
+                    <Row class="mb-3">
+                        <Column>
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>@AvailableTestLogFiles.Count</strong> test/burn-in log file(s) available for printing
+                                @* UPDATED: Show scope context *@
+                                @if (!string.IsNullOrEmpty(RmaLineNumber))
+                                {
+                                    <text> for Line @RmaLineNumber</text>
+                                }
+                                else if (AvailableTestLogFiles.All(f => !f.RMALineNumber.HasValue))
+                                {
+                                    <text> from header level</text>
+                                }
+                                else
+                                {
+                                    <text> across entire RMA</text>
+                                }
+                                .
+                                <br>
+                                Select the files you want to include in the print job.
+                            </div>
+                        </Column>
+                    </Row>
+
+                    <!-- File Selection -->
+                    <Row class="mb-4">
+                        <Column>
+                            <h6 class="mb-3">Select Files to Print:</h6>
+                            <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                <!-- Select All/None controls -->
+                                <div class="mb-3 border-bottom pb-2">
+                                    <Button Color="Color.Secondary" Size="Size.Small"
+                                            Clicked="SelectAllTestLogs" Class="me-2">
+                                        <span class="fas fa-check-square me-1"></span>
+                                        Select All
+                                    </Button>
+                                    <Button Color="Color.Secondary" Size="Size.Small"
+                                            Clicked="DeselectAllTestLogs">
+                                        <span class="far fa-square me-1"></span>
+                                        Select None
+                                    </Button>
+                                </div>
+
+                                @foreach (var file in AvailableTestLogFiles)
+                                {
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox"
+                                               id="testlog_@file.Id"
+                                               checked="@IsTestLogFileSelected(file.Id)"
+                                               @onchange="@((ChangeEventArgs e) => OnTestLogFileSelectionChanged(file.Id, (bool)(e.Value ?? false)))" />
+                                        <label class="form-check-label d-flex justify-content-between align-items-center w-100"
+                                               for="testlog_@file.Id">
+                                            <div>
+                                                <strong>@file.FileName</strong>
+                                                @* UPDATED: Show file location context when viewing all files *@
+                                                @if (string.IsNullOrEmpty(RmaLineNumber) && AvailableTestLogFiles.Any(f => f.RMALineNumber.HasValue))
+                                                {
+                                                    @if (file.RMALineNumber.HasValue)
+                                                    {
+                                                        <span class="badge bg-info ms-2">Line @file.RMALineNumber</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-secondary ms-2">Header</span>
+                                                    }
+                                                }
+                                                <br>
+                                                <small class="text-muted">
+                                                    <span class="badge bg-secondary me-1">@(file.Category?.DisplayValue ?? "Unknown")</span>
+                                                    @FormatFileSize(file.FileSize) •
+                                                    Uploaded @file.UploadedDate.ToString("MM/dd/yyyy hh:mm tt")
+                                                </small>
+                                            </div>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </Column>
+                    </Row>
+
+                    <!-- Print Options -->
+                    <Row class="mb-4">
+                        <Column>
+                            <h6 class="mb-3">Print Options:</h6>
+                            <div class="border rounded p-3">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox"
+                                           id="printPageNumbers"
+                                           @bind="PrintOptions.IncludePageNumbers" />
+                                    <label class="form-check-label" for="printPageNumbers">
+                                        <strong>Print Page Numbers</strong>
+                                        <br>
+                                        <small class="text-muted">Add page numbers and file names to each page footer</small>
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox"
+                                           id="insertBlankPages"
+                                           @bind="PrintOptions.InsertBlankPagesForDuplex" />
+                                    <label class="form-check-label" for="insertBlankPages">
+                                        <strong>Insert Blank Pages for Duplex Printing</strong>
+                                        <br>
+                                        <small class="text-muted">Ensure each log file starts on an odd page for duplex printing</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </Column>
+                    </Row>
+
+                    <!-- Summary -->
+                    <Row class="mb-3">
+                        <Column>
+                            <div class="alert alert-secondary">
+                                <h6 class="mb-2">Print Summary:</h6>
+                                <ul class="mb-0">
+                                    <li><strong>@SelectedTestLogFiles.Count</strong> of @AvailableTestLogFiles.Count files selected</li>
+                                    <li>Page numbers: <strong>@(PrintOptions.IncludePageNumbers ? "Enabled" : "Disabled")</strong></li>
+                                    <li>Duplex blank pages: <strong>@(PrintOptions.InsertBlankPagesForDuplex ? "Enabled" : "Disabled")</strong></li>
+                                </ul>
+                            </div>
+                        </Column>
+                    </Row>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <h5>No Test/Burn-in Log Files Found</h5>
+                        <p class="text-muted">
+                            @* UPDATED: Dynamic message based on scope *@
+                            @if (!string.IsNullOrEmpty(RmaLineNumber))
+                            {
+                                <text>There are no test or burn-in log files available for printing for Line @RmaLineNumber.</text>
+                            }
+                            else if (AvailableTestLogFiles.Any() == false)
+                            {
+                                <text>There are no test or burn-in log files available for printing in the current scope.</text>
+                            }
+                        </p>
+                    </div>
+                }
+            </ModalBody>
+            <ModalFooter>
+                <div class="d-flex justify-content-between w-100">
+                    <div>
+                        @if (AvailableTestLogFiles.Any() && !SelectedTestLogFiles.Any())
+                        {
+                            <small class="text-warning">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                Please select at least one file to print.
+                            </small>
+                        }
+                    </div>
+                    <div>
+                        <Button Color="Color.Secondary" Clicked="CloseModal">
+                            Cancel
+                        </Button>
+                        @if (AvailableTestLogFiles.Any())
+                        {
+                            <Button Color="Color.Success"
+                                    Clicked="PrintSelectedTestLogs"
+                                    Disabled="@(!SelectedTestLogFiles.Any())"
+                                    Class="ms-2">
+                                <span class="fas fa-print me-1"></span>
+                                Print Logs (@SelectedTestLogFiles.Count selected)
+                            </Button>
+                        }
+                    </div>
+                </div>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+}

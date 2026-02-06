@@ -1,0 +1,46 @@
+@inherits LayoutComponentBase
+@inject IWebHostEnvironment Environment
+@inject SharedRCL.Helpers.DebugModeService DebugService
+
+<PageTitle>CrystalGroupHome</PageTitle>
+
+<div class="page iframe-page">
+    <main class="main iframe-main">
+        <Column Style="display: flex; flex-direction: column; height: fit-content;">
+            @* Minimal environment banner for iframe *@
+            @if (Environment.IsDevelopment())
+            {
+                <div class="banner test iframe-banner">TEST @(DebugService.IsDebugMode ? " | DEBUG" : "")</div>
+            }
+            else if (Environment.IsStaging())
+            {
+                <div class="banner staging iframe-banner">STAGING @(DebugService.IsDebugMode ? " | DEBUG" : "")</div>
+            }
+            else if (DebugService.IsDebugMode)
+            {
+                <div class="banner iframe-banner">DEBUG MODE</div>
+            }
+            
+            <article class="content px-2 iframe-content">
+                @Body
+            </article>
+        </Column>
+    </main>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        DebugService.OnChange += OnDebugModeChanged;
+    }
+
+    private async void OnDebugModeChanged()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        DebugService.OnChange -= StateHasChanged;
+    }
+}

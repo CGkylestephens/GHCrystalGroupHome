@@ -1,0 +1,74 @@
+﻿@page "/product-failures"
+@inherits ProductFailuresBase
+
+<PageTitle>Product Failures</PageTitle>
+
+<Div class="container mt-4">
+    <h3>Product Failures</h3>
+    <Button Color="Color.Primary" class="mb-3" @onclick="ShowAddModal">Add New Entry</Button>
+    
+    <DataGrid TItem="ProductFailureDTO"
+              Data="@entries"
+              @bind-SelectedRow="@selectedEntry"
+              Editable="false"
+              Filterable="true"
+              Responsive="true">
+        <DataGridColumns>
+            <DataGridColumn Field="@nameof(ProductFailureDTO.Id)" Caption="ID" />
+            <DataGridColumn Field="@nameof(ProductFailureDTO.ProductId)" Caption="Product ID" />
+            <DataGridColumn Field="@nameof(ProductFailureDTO.Failures)" Caption="Failures" />
+            <DataGridColumn Field="@nameof(ProductFailureDTO.TotalTested)" Caption="Total Tested" />
+            <DataGridColumn Field="@nameof(ProductFailureDTO.EnteredBy)" Caption="Entered By" />
+            <DataGridColumn Field="@nameof(ProductFailureDTO.EnteredDate)" Caption="Entered Date" DisplayFormat="{0:yyyy-MM-dd}" />
+            <DataGridColumn>
+                <DisplayTemplate>
+                    <Button Color="Color.Warning" Size="Size.Small" Clicked="() => ShowEditModal(context)">Edit</Button>
+                    <Button Color="Color.Danger" Size="Size.Small" Class="ms-1" Clicked="() => ConfirmDelete(context.Id)">Delete</Button>
+                </DisplayTemplate>
+            </DataGridColumn>
+        </DataGridColumns>
+    </DataGrid>
+</Div>
+
+<!-- Add/Edit Modal -->
+<Modal @bind-Visible="@isAddEditVisible">
+    <ModalContent Centered>
+        <ModalHeader>
+            <Heading Size="HeadingSize.Is5">@modalTitle</Heading>
+        </ModalHeader>
+        <ModalBody>
+            <Div class="mb-3">
+                <TextEdit @bind-Text="@currentEntry.ProductId" Placeholder="Product ID" />
+            </Div>
+            <Div class="mb-3">
+                <NumericEdit @bind-Value="@currentEntry.Failures" Placeholder="Number of Failures" />
+            </Div>
+            <Div class="mb-3">
+                <NumericEdit @bind-Value="@currentEntry.TotalTested" Placeholder="Total Tested" />
+            </Div>
+            <Div class="mb-3">
+                <TextEdit @bind-Text="@currentEntry.EnteredBy" Placeholder="Entered By" />
+            </Div>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Primary" @onclick="SaveEntry">Save</Button>
+            <Button Color="Color.Secondary" @onclick="CloseModal">Cancel</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<!-- Confirm Delete Modal -->
+<Modal @bind-Visible="@isConfirmDeleteVisible">
+    <ModalContent Centered>
+        <ModalHeader>
+            <Heading Size="HeadingSize.Is5">Confirm Deletion</Heading>
+        </ModalHeader>
+        <ModalBody>
+            <p>Are you sure you want to delete this entry?</p>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Danger" @onclick="DeleteConfirmed">Delete</Button>
+            <Button Color="Color.Secondary" @onclick="CloseConfirmModal">Cancel</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

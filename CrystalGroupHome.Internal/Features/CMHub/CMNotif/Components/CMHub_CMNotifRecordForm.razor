@@ -1,0 +1,366 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.CMDex.Models
+@using CrystalGroupHome.Internal.Features.CMHub.CMNotif.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.SharedRCL.Components
+@using CrystalGroupHome.Internal.Features.CMHub.Pages
+@inherits CMHub_CMNotifRecordFormBase
+
+<Div style="max-width: 1100px;">
+    <Div style="display: flex; margin-bottom: 0.5rem;">
+        <h2 style="flex-grow: 1; margin: 0;">Notification Record Details</h2>
+    </Div>
+
+    @if (!IsNotificationSendingEnabled())
+    {
+        <Alert Color="Color.Info" Visible="true">
+            <AlertMessage>
+                <i class="fas fa-info-circle me-2"></i>
+                CM Notification Email Redirection Active
+            </AlertMessage>
+            <AlertDescription>
+                @(GetNotificationDisabledMessage() ?? "CM Notification emails are being redirected to the test inbox. Real customer notifications are disabled in this environment.")
+            </AlertDescription>
+        </Alert>
+    }
+
+    @if (IsLoading)
+    {
+        <div class="loading-gradient" style="height: 200px;"></div>
+    }
+    else if (ECNRecord == null)
+    {
+        <p>No record found for the specified ECN number.</p>
+    }
+    else
+    {
+        <Divider />
+
+        <Column>
+            <Div style="display: flex; align-items: center;">
+                <h3 style="margin: 0; margin-right: 1rem;">@ECNRecord.ECNNumber</h3>
+                <Button Color="Color.Secondary" Clicked="() => ECNHelpers.OpenECXForECNNumInNewTabAsync(ECNRecord.ECNId, Environment.IsDevelopment() || Environment.IsStaging())" title="Open in ECx">
+                    <span class="@NavHelpers.OpenInNewTabIcon" aria-hidden="true"></span>
+                </Button>
+                <h4 style="margin: 0; margin-left: 1rem; color: var(--gray); flex-grow: 1;">@ECNRecord.TrueStatus</h4>
+                
+            </Div>
+
+            <Row>
+                <Div style="margin-top: 0.5rem;">
+                    REASON FOR CHANGE (From ECN): <br/>
+                    <i>@ECNRecord.ReasonForChangeAsHtml</i>
+                </Div>
+            </Row>
+
+            <Divider />
+
+            <Row>
+                <Column Style="max-width: 22rem;">
+                    <Div>
+                        Last Updated: <i>@ECNRecord.Record?.LastUpdated?.ToLocalTime().ToString("g")</i>
+                    </Div>
+                    <Div Style="display: flex; flex-direction: row;">
+                        <Button Color="Color.Secondary" Class="me-2" Clicked="@(async () => await ShowPartLogsAsync())">
+                            <span class="@($"{NavHelpers.ClockIcon} me-1")" aria-hidden="true"></span> View All Logs
+                        </Button>
+                        @if (CMHub.HasCMNotifCreateLogPermission(CurrentUser?.ADUser))
+                        {
+                            <Button Color="Color.Primary" Clicked="@(() => LogFormModal!.Show(ECNRecord?.Record?.Id, ECNRecord?.ECNNumber, null, $"Log for {ECNRecord?.ECNNumber}"))">
+                                <span class="@($"{NavHelpers.AddIcon} me-1")" aria-hidden="true"></span> Add Log
+                            </Button>
+                        }
+                    </Div>
+                </Column>
+                <Column>
+                    <center>
+                        <span class="color-box" style="background-color: var(--crystal-blue);"></span>Notifications Sent: <i><strong>@(ECNRecord.NotificationsSentPartsCount)/@(@ECNRecord.TotalPartsCount)</strong></i> | 
+                        <span class="color-box" style="background-color: var(--bs-warning);"></span>Customers Accepted: <i><strong>@(ECNRecord.AcceptedPartsCount)/@(@ECNRecord.TotalPartsCount)</strong></i> | 
+                        <span class="color-box" style="background-color: var(--bs-success);"></span>Confirmations Sent: <i><strong>@(ECNRecord.ConfirmationsSentPartsCount)/@(@ECNRecord.TotalPartsCount)</strong></i>
+                    </center>
+                    @{
+                        var notifPercentage = ECNRecord.PartsNotificationsSentCompletion > 0 ? Math.Round((double)ECNRecord.PartsNotificationsSentCompletion * 100) : 0;
+                        var acceptedPercentage = ECNRecord.PartsCustAcceptedCompletion > 0 ? Math.Round((double)ECNRecord.PartsCustAcceptedCompletion * 100) : 0;
+                        var confirmedPercentage = ECNRecord.PartsConfirmationsSentCompletion > 0 ? Math.Round((double)ECNRecord.PartsConfirmationsSentCompletion * 100) : 0;
+                        <div class="simple-progress-bar-container">
+                            <div class="simple-progress-bar-value bg-success" style="width: @(confirmedPercentage)%; z-index: 2; position: absolute;"></div>
+                            <div class="simple-progress-bar-value bg-warning" style="width: @(acceptedPercentage)%; z-index: 1; position: absolute;"></div>
+                            <div class="simple-progress-bar-value" style="width: @(notifPercentage)%;"></div>
+                        </div>
+                    }
+                    <center>Overall Progress: <i><strong>@($"{ECNRecord.TotalCompletion:P0}")</strong></i></center>
+                </Column>
+            </Row>
+        </Column>
+
+        <Divider />
+
+        <Column>
+            <h4>Associated CM Parts</h4>
+
+            @foreach (var (partNum, cmdex, recordPart) in GetUnifiedParts())
+            {
+                var cmdexObject = cmdex != null ? (CMHub_CMDexPartModel)cmdex : null;
+                var partDTO = cmdexObject?.Part;
+                var hasPrimary = cmdexObject?.HasPrimary ?? false;
+                var pmName = cmdexObject?.PrimaryPMName;
+                var pmEmail = cmdexObject?.PrimaryPMEmployee?.Mail;
+                var hasOwner = cmdexObject?.HasOwner ?? false;
+                var custName = cmdexObject?.OwnerCustName;
+                var conName = cmdexObject?.OwnerConName;
+                var conEmail = cmdexObject?.OwnerConEmail;
+
+                CMHub_CMNotifStatus status = recordPart switch
+                {
+                    null => CMHub_CMNotifStatus.NoNotificationRecord, // No notifications created or sent yet
+                    { MatchedToECNPart: false } => CMHub_CMNotifStatus.PartNoLongerAssociated, // Notification info exists, but the part is no longer associated with the ECN
+                    { IsNotifSent: false } => CMHub_CMNotifStatus.NotSent, // Notification details entered/saved, but nothing sent to the customer yet
+                    { HasCustAcceptance: false, HasCustAcceptanceOverride: false, DateNotifSent: not null } rp when (DateTime.Now - rp.DateNotifSent.Value).TotalDays > 14 => CMHub_CMNotifStatus.SentOverdue, // Notification sent over 14 days ago, but not accepted
+                    { HasCustAcceptance: false, HasCustAcceptanceOverride: false } => CMHub_CMNotifStatus.SentNotAccepted, // Sent notification, but not yet accepted
+                    { HasCustAcceptance: true, IsConfirmSent: false } => CMHub_CMNotifStatus.Accepted, // Sent and accepted
+                    { HasCustAcceptance: false, HasCustAcceptanceOverride: true, IsConfirmSent: false } => CMHub_CMNotifStatus.AcceptedViaOverride, // Sent and acceptance overridden
+                    { IsConfirmSent: true } => CMHub_CMNotifStatus.ConfirmationSent, // Confirmation of implementation sent
+                };
+
+                <Card Class=@($"mb-4 {GetHighlightClass(status)}")>
+
+                    <CardHeader>
+                        <Div style="display: flex; align-items: center;">
+                            <strong style="margin-right: 1rem;">@partNum</strong>
+                            <strong style="margin-right: 1rem; color: var(--gray);">@(string.IsNullOrEmpty(partDTO?.RevisionNum) ? " " : $"(Rev {partDTO?.RevisionNum})")</strong>
+                            <PartIcons Part="@partDTO" />
+                            <Div Style="flex-grow: 1;"></Div>
+                            @if (cmdexObject != null && CMHub.HasCMNotifDocumentEditPermission(CurrentUser?.ADUser))
+                            {
+                                @if (status == CMHub_CMNotifStatus.SentNotAccepted || status == CMHub_CMNotifStatus.SentOverdue)
+                                {
+                                    <Button Style="margin-right: 0.5rem;" Color="Color.Warning" Clicked="@(() => MarkCustomerAccepted(recordPart))">
+                                        <span class="@($"{NavHelpers.ThumbsUpIcon} me-1")" aria-hidden="true"></span> Mark Customer Accepted
+                                    </Button>
+                                }
+                                @if (status == CMHub_CMNotifStatus.SentOverdue)
+                                {
+                                    <Button Style="margin-right: 0.5rem;" Color="Color.Warning" Clicked="@(() => MarkCustomerAcceptedOverride(recordPart))">
+                                        <span class="@($"{NavHelpers.WarningIcon} me-1")" aria-hidden="true"></span> (OVERDUE) Override Acceptance
+                                    </Button>
+                                }
+                                @if (status == CMHub_CMNotifStatus.Accepted || status == CMHub_CMNotifStatus.AcceptedViaOverride)
+                                {
+                                    <Button Style="margin-right: 0.5rem;" Color="Color.Success" Clicked="@(() => SendImplemented(recordPart))">
+                                        <span class="@($"{NavHelpers.CheckIcon} me-1")" aria-hidden="true"></span> Send Confirmation of Implementation
+                                    </Button>
+                                }
+                                <Button Style="margin-right: 0.5rem;" Color="Color.Primary" Clicked="@(() => PdfFormModal!.Show(recordPart, ECNRecord, cmdexObject))">
+                                    <span class="@($"{NavHelpers.EditIcon} me-1")" aria-hidden="true"></span> @((recordPart == null || !recordPart.IsNotifSent) ? "Edit Notification Doc" : "Reopen Notification Doc")
+                                </Button>
+                                <Dropdown>
+                                    <DropdownToggle Color="Color.Secondary" Style="margin-right: -0.5rem;"></DropdownToggle>
+                                    <DropdownMenu>
+                                        @if (recordPart != null && (recordPart.HasCustAcceptance || recordPart.HasCustAcceptanceOverride))
+                                        {
+                                            <DropdownItem Clicked="@(async () => await ShowUploadAdditionalEvidenceModalAsync(recordPart))">
+                                                Upload Additional Evidence
+                                            </DropdownItem>
+                                        }
+                                    </DropdownMenu>
+                                </Dropdown>
+                            }
+                        </Div>
+                    </CardHeader>
+
+                    <CardBody>
+
+                        @if (cmdexObject != null)
+                        {
+                            <Row>
+                                <Div>
+                                    @partDTO?.PartDescription
+                                </Div>
+                            </Row>
+                            
+                            <Divider />
+
+                            <Row>
+                                <Column Style="flex-grow: 0; min-width: fit-content;">
+                                    <Button Color="Color.Secondary" Clicked="() => CMDexService.OpenCMDexPartInNewTabAsync(cmdexObject.Part.PartNum)" title="Open in CM Dex">
+                                        <span class="@NavHelpers.CMHub_CMDexIcon" aria-hidden="true"></span>
+                                    </Button>
+                                </Column>
+                                <Column>
+                                @{
+                                    <Div>Primary PM: <i style="color: var(--gray)">@(hasPrimary ? $"{pmName} ({pmEmail})" : "None Selected")</i></Div>
+                                    if (hasOwner)
+                                    {
+                                        <Div>Owner Customer Contact: <i style="color: var(--gray)">@custName - @conName (@conEmail)</i></Div>
+                                    }
+                                    else
+                                    {
+                                        <Div>Owner Customer Contact: <i style="color: var(--gray)">None Selected</i></Div>
+                                    }
+
+                                    if (cmdexObject != null)
+                                    {
+                                        foreach(var custCon in cmdexObject.CustConsAssociatedWithPrimaryPM)
+                                        {
+                                            var additionalContact = cmdexObject.GetCustomerContactFor(custCon);
+
+                                            if (!(custCon.IsOwner ?? false))
+                                            {
+                                                <Div>Additional Customer Contact: <i style="color: var(--gray)">@additionalContact?.DisplayContact.CustName - @additionalContact?.DisplayContact.ConName (@additionalContact?.DisplayContact.EMailAddress)</i></Div>
+                                            }
+                                        }
+                                    }
+                                }
+                                </Column>
+                            </Row>
+
+                            <Divider />
+                        }
+
+                        @if (status == CMHub_CMNotifStatus.PartNoLongerAssociated)
+                        {
+                            <Div>The following notification records exist for this Part which was at one time associated with @ECNRecord.ECNNumber, but the Part can no longer be found on the ECN.</Div>
+                        }
+                        else if (status == CMHub_CMNotifStatus.SentOverdue)
+                        {
+                            <Div>The following notification records exist for this Part (associated with @ECNRecord.ECNNumber). </Div>
+                            <br/>
+                            <b>The change notification was sent more than 14 days ago.</b>
+                        }
+                        else if (status == CMHub_CMNotifStatus.NoNotificationRecord)
+                        {
+                            <Div> No notification records exist for this Part, but it is currently associated with @ECNRecord.ECNNumber.</Div>
+                        }
+                        else if (status != CMHub_CMNotifStatus.Unknown)
+                        {
+                            <Div>The following notification records exist for this Part (associated with @ECNRecord.ECNNumber).</Div>
+                        }
+
+                        @if (recordPart != null)
+                        {
+                            <Divider />
+
+                            <Row>
+                                <Column md="6">
+                                    <Div><strong>Notification Document Started:</strong> @recordPart.DateCreated?.ToLocalTime().ToString("g")</Div>
+                                    <Span><strong>Last Notification Sent:</strong> @((recordPart.IsNotifSent ? recordPart.DateNotifSent?.ToLocalTime().ToString("g") : "None")) 
+                                        @if (!string.IsNullOrEmpty(LinkToMostRecentNotificationDocumentForPart(partNum)))
+                                        {
+                                            <a style="padding-left: 0.25rem;" href="@($"{NavHelpers.FileServe}{LinkToMostRecentNotificationDocumentForPart(partNum)}&ct=application/pdf")" target="_blank">Sent Document</a>
+                                        }
+                                    </Span>
+                                    @if (recordPart.IsNotifSent && recordPart.ApprovedByEmployee?.DisplayName != null)
+                                    {
+                                        <Div><strong>Sent By:</strong> @recordPart.ApprovedByEmployee.DisplayName</Div>
+                                    }
+                                </Column>
+
+                                <Column md="6">
+                                    @if (recordPart.IsNotifSent)
+                                    {
+                                        <Div><strong>Customer Accepted:</strong> @(recordPart.HasCustAcceptance ? "Yes" : (recordPart.HasCustAcceptanceOverride ? "Overridden" : "No"))</Div>
+                                        if (recordPart.HasCustAcceptance)
+                                        {
+                                            <Div><strong>Date Accepted:</strong> @recordPart.DateCustAccepted?.ToLocalTime().ToString("g")</Div>
+                                        }
+                                        else if (recordPart.HasCustAcceptanceOverride)
+                                        {
+                                            <Div><strong>Date Acceptance Overridden:</strong> @recordPart.DateCustAccepted?.ToLocalTime().ToString("g")</Div>
+                                        }
+                                    }
+                                </Column>
+                            </Row>
+                        }
+
+                        @if (ECNRecord.Record != null)
+                        {
+                            <Divider />
+
+                            <Row>
+                                <Column Style="flex-grow: 0; min-width: fit-content;">
+                                    <Button Color="Color.Secondary" Class="me-2" Clicked="@(async () => await ShowPartLogsAsync(recordPart?.PartNum))" hidden="@(ECNRecord.Record.RecordedLogs.Count <= 0)">
+                                        <span class="@($"{NavHelpers.ClockIcon} me-1")" aria-hidden="true"></span> View Part Logs
+                                    </Button>
+                                </Column>
+                                <Column>
+                                @{
+                                    var recentLog = @ECNRecord.Record.RecordedLogs.Where(_ => _.LogAssociatedWithPartNum == recordPart?.PartNum).OrderByDescending(_ => _.LogDate).FirstOrDefault();
+                                    if (recentLog != null)
+                                    { 
+                                        <Div>
+                                            Most Recent Log (@recentLog.LoggedByEmployee?.DisplayName) [@recentLog.LogDate.ToLocalTime().ToString("g")]:
+                                        </Div>
+                                        <Div>
+                                            <i style="color: var(--gray)">@recentLog.LogMessage</i>
+                                        </Div>
+                                    }
+                                }
+                                </Column>
+                                <Column Style="flex-grow: 0; min-width: fit-content;">
+                                    @if (CMHub.HasCMNotifCreateLogPermission(CurrentUser?.ADUser))
+                                    {
+                                        <Button Color="Color.Primary" Clicked="@(() => LogFormModal!.Show(ECNRecord.Record.Id, ECNRecord.ECNNumber, partNum, $"Log for {partNum}"))">
+                                            <span class="@($"{NavHelpers.AddIcon} me-1")" aria-hidden="true"></span> Add Part Log
+                                        </Button>
+                                    }
+                                </Column>
+                            </Row>
+                        }
+                    </CardBody>
+                </Card>
+            }
+        </Column>
+    }
+</Div>
+
+<!-- Task Logs Modal -->
+<CMHub_CMNotifRecordLogListModal @ref="LogListModal" OnClose="@(async () => { await InvokeAsync(StateHasChanged); })" />
+
+<!-- New Log Modal -->
+<CMHub_CMNotifNewLogFormModal @ref="LogFormModal" OnLogSubmitted="HandleLogSubmitted" OnClose="OnModalClosedAsync" />
+
+<!-- PDF Form Modal -->
+<CMHub_CMNotifPDFFormModal @ref="PdfFormModal" OnFormSaved="HandleFormSaved" OnFormSend="HandleFormSend" OnFormPreview="HandlePreviewNotifDoc" OnClose="StateHasChanged" PdfFieldLimits="PdfFieldLimits" IsNotificationSendingDisabled="@(!IsNotificationSendingEnabled())"/>
+
+<!-- Confirm Send Change Notification -->
+<ConfirmationModal @ref="SendNotifDocConfirmationModal" Title="Confirm Send of Notification Document" Message="@SendNotifDocConfirmationMessage" OnClose="ConfirmSendNotifDoc" />
+
+<!-- Confirm Customer Accepted -->
+<ConfirmationModal @ref="MarkAcceptedConfirmationModal"
+                   Title="Mark as Customer Accepted"
+                   OnClose="ConfirmMarkAccepted">
+    <Div>
+        <p>Are you sure you want to mark this as accepted by the customer?</p>
+        <label for="evidenceUpload" class="form-label">Attach evidence for this part (PDF of email communication preferred):</label>
+        <InputFile id="evidenceUpload" OnChange="OnEvidenceFileChange" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.txt,.doc,.docx,.xls,.xlsx" class="form-control" />
+        <label for="evidenceLogMessage" class="form-label mt-2">Log Message:</label>
+        <MemoEdit id="evidenceLogMessage" @bind-Text="_evidenceLogMessage" class="form-control" />
+    </Div>
+</ConfirmationModal>
+
+<!-- Confirm Customer Accepted Override -->
+<ConfirmationModal @ref="MarkAcceptedOverrideConfirmationModal"
+                   Title="Mark as Customer Accepted (Override)"
+                   OnClose="ConfirmMarkAcceptedOverride">
+    <Div>
+        <p>Are you sure you want to override and mark this as accepted by the customer?</p>
+        <label for="evidenceUploadOverride" class="form-label">Attach evidence for this part (PDF of email communication preferred):</label>
+        <InputFile id="evidenceUploadOverride" OnChange="OnEvidenceFileChange" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.txt,.doc,.docx,.xls,.xlsx" class="form-control" />
+        <label for="evidenceLogMessageOverride" class="form-label mt-2">Log Message:</label>
+        <MemoEdit id="evidenceLogMessageOverride" @bind-Text="_evidenceLogMessage" class="form-control" />
+    </Div>
+</ConfirmationModal>
+
+<!-- Upload Additional Evidence -->
+<ConfirmationModal @ref="UploadAdditionalEvidenceModal"
+                   Title="Upload Additional Evidence"
+                   OnClose="ConfirmUploadAdditionalEvidence">
+    <Div>
+        <p>Attach additional evidence for this part (PDF of email communication preferred):</p>
+        <InputFile id="additionalEvidenceUpload" OnChange="OnEvidenceFileChange" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.txt,.doc,.docx,.xls,.xlsx" class="form-control" />
+        <label for="additionalEvidenceLogMessage" class="form-label mt-2">Log Message:</label>
+        <MemoEdit id="additionalEvidenceLogMessage" @bind-Text="_evidenceLogMessage" class="form-control" />
+    </Div>
+</ConfirmationModal>
+
+<!-- Confirm Send Confirmation of Implementation -->
+<ConfirmationModal @ref="SendConfirmImplementedConfirmationModal" Title="Confirm Send of Implementation Document" Message="@SendNotifDocConfirmationMessage" OnClose="ConfirmSendImplementedDoc" />

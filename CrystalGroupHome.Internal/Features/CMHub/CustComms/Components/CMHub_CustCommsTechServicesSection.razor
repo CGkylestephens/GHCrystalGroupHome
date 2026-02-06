@@ -1,0 +1,151 @@
+@using CrystalGroupHome.Internal.Features.CMHub.CustComms.Models
+@using CrystalGroupHome.Internal.Features.CMHub.Pages
+@using CrystalGroupHome.SharedRCL.Helpers
+
+<Div>
+    <Div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+        <h4 style="margin: 0; margin-right: 1rem;">Tech Services Tasks</h4>
+        <Button Class="btn-sm" Color="Color.Light" Clicked="@(() => ShowTechServicesSection = !ShowTechServicesSection)">
+            @(ShowTechServicesSection ? "Hide" : "Show")
+        </Button>
+    </Div>
+
+    @if (ShowTechServicesSection)
+    {
+        <Card Class="@CardClass" Style="margin-bottom: 1rem;">
+            <CardHeader>
+                <Div style="display: flex; align-items: center;">
+                    <strong style="margin-right: 1rem;">Warranty/Support</strong>
+                    <Div Style="flex-grow: 1;"></Div>
+                    @if (IsEditMode && TechServicesTask != null)
+                    {
+                        <Select Style="max-width: 20rem; margin-right: -0.5rem;"
+                                TValue="int?"
+                                SelectedValue="TechServicesTask.StatusId"
+                                id="techServicesStatusSelect"
+                                SelectedValueChanged="@(value => OnStatusChanged.InvokeAsync((TechServicesTask, value)))"
+                                Disabled="@(!CanEdit)">
+                            @foreach (var status in TechServicesStatuses)
+                            {
+                                <SelectItem Value="@status.Id">@status.Description</SelectItem>
+                            }
+                        </Select>
+                    }
+                </Div>
+            </CardHeader>
+            <CardBody>
+                <Row>
+                    <Column Style="max-width: 16rem;">
+                        <label for="ltbQuantity">LTB Quantity</label>
+                        <NumericEdit TValue="int?"
+                                     Value="@LTBQuantity"
+                                     ValueChanged="@OnLTBQuantityValueChanged"
+                                     id="ltbQuantity"
+                                     Disabled="@(!CanEdit)"
+                                     Placeholder="Enter quantity" />
+                        <Div Style="color: var(--gray); font-size: 0.8rem; margin-top: 0.25rem;">
+                            <i>Quantity of EOL parts to purchase for warranty/support</i>
+                        </Div>
+                    </Column>
+                    <Column>
+                        @if (TechServicesTask != null && IsEditMode)
+                        {
+                            <Div Style="margin-bottom: 0.5rem;">
+                                Last Updated: <i>@(TechServicesTask.LastUpdated == DateTime.MinValue ? "Never" : TechServicesTask.LastUpdated.ToLocalTime().ToString("g"))</i>
+                            </Div>
+                        }
+                    </Column>
+                </Row>
+
+                @if (IsEditMode)
+                {
+                    <Divider />
+
+                    <Row>
+                        <Column Style="flex-grow: 0; min-width: fit-content;">
+                            <Button Color="Color.Secondary" Class="me-2" Clicked="@OnViewLogs" hidden="@(TaskLogCount <= 0)">
+                                <span class="@($"{NavHelpers.ClockIcon} me-1")" aria-hidden="true"></span> View Logs (@TaskLogCount)
+                            </Button>
+                        </Column>
+                        <Column>
+                            @if (TechServicesTask != null)
+                            {
+                                var recentLog = TechServicesTask.Logs?.OrderByDescending(_ => _.LogDate).FirstOrDefault();
+                                if (recentLog != null)
+                                {
+                                    <Div>
+                                        Most Recent Log (@(recentLog.Employee?.DisplayName ?? "Unknown")) [@recentLog.LogDate.ToLocalTime().ToString()]:
+                                    </Div>
+                                    <Div Style="white-space: pre-wrap;">
+                                        <i style="color: var(--gray)">@((MarkupString)HtmlHelpers.ConvertUrlsToLinks(recentLog.LogMessage))</i>
+                                    </Div>
+                                }
+                            }
+                        </Column>
+                        <Column Style="flex-grow: 0; min-width: fit-content;">
+                            <Button Color="Color.Primary" Clicked="@OnAddLog" Disabled="@(!CanEdit)">
+                                <span class="@($"{NavHelpers.AddIcon} me-1")" aria-hidden="true"></span> Add Task Log
+                            </Button>
+                        </Column>
+                    </Row>
+                }
+            </CardBody>
+        </Card>
+    }
+</Div>
+
+@code {
+    [Parameter] public CMHub_CustCommsPartChangeTaskModel? TechServicesTask { get; set; }
+    [Parameter] public int? LTBQuantity { get; set; }
+    [Parameter] public bool IsEditMode { get; set; }
+    [Parameter] public bool CanEdit { get; set; }
+    [Parameter] public List<CMHub_CustCommsPartChangeTaskStatusDTO> Statuses { get; set; } = [];
+    
+    [Parameter] public EventCallback<int?> OnLTBQuantityChanged { get; set; }
+    [Parameter] public EventCallback<(CMHub_CustCommsPartChangeTaskModel task, int? statusId)> OnStatusChanged { get; set; }
+    [Parameter] public EventCallback OnViewLogsClicked { get; set; }
+    [Parameter] public EventCallback OnAddLogClicked { get; set; }
+
+    private bool ShowTechServicesSection = true;
+
+    private int TaskLogCount => TechServicesTask?.Logs?.Count ?? 0;
+
+    /// <summary>
+    /// Filter statuses to only show Tech Services-specific statuses (those with TS_ prefix in Code)
+    /// </summary>
+    private IEnumerable<CMHub_CustCommsPartChangeTaskStatusDTO> TechServicesStatuses => 
+        Statuses.Where(s => s.Code.StartsWith("TS_", StringComparison.OrdinalIgnoreCase) && !s.Deleted)
+                .OrderBy(s => s.Sequence);
+
+    /// <summary>
+    /// Get the current status code for the Tech Services task
+    /// </summary>
+    private string? CurrentStatusCode => 
+        TechServicesTask?.StatusId != null 
+            ? Statuses.FirstOrDefault(s => s.Id == TechServicesTask.StatusId)?.Code 
+            : null;
+
+    /// <summary>
+    /// Determine the card CSS class based on the Tech Services status:
+    /// - TS_CONFIRMED (Confirmed) = green (success-highlight)
+    /// - All other statuses = white/default (hover-highlight)
+    /// </summary>
+    private string CardClass => CurrentStatusCode?.ToUpperInvariant() == "TS_CONFIRMED" 
+        ? "success-highlight" 
+        : "hover-highlight";
+
+    private async Task OnLTBQuantityValueChanged(int? newValue)
+    {
+        await OnLTBQuantityChanged.InvokeAsync(newValue);
+    }
+
+    private async Task OnViewLogs()
+    {
+        await OnViewLogsClicked.InvokeAsync();
+    }
+
+    private async Task OnAddLog()
+    {
+        await OnAddLogClicked.InvokeAsync();
+    }
+}

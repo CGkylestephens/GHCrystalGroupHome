@@ -1,0 +1,78 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.CustComms.Models
+@inject IModalService Modal
+
+<Modal @bind-Visible="IsVisible" Centered>
+    <ModalContent Size="ModalSize.Large">
+        <ModalHeader>
+            Add Log Entry
+        </ModalHeader>
+        <ModalBody>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+                @ContextLabel
+            </p>
+
+            <MemoEdit Rows="5" @bind-Text="LogMessage" Placeholder="Enter your log message..." Style="width: 100%;" />
+
+            @if (ShowValidationMessage)
+            {
+                <div style="color: red; margin-top: 0.5rem;">Log message cannot be empty.</div>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="Close">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="SubmitLog">Save Log</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public int TrackerId { get; set; }
+    [Parameter] public int? TaskId { get; set; } // null means tracker-level log
+    [Parameter] public string ContextLabel { get; set; } = string.Empty;
+    [Parameter] public EventCallback<CMHub_CustCommsPartChangeTaskLogModel> OnLogSubmitted { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    private string LogMessage = string.Empty;
+    private bool ShowValidationMessage = false;
+
+    private async Task Close()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync();
+        LogMessage = string.Empty;
+        ShowValidationMessage = false;
+    }
+
+    private async Task SubmitLog()
+    {
+        if (string.IsNullOrWhiteSpace(LogMessage))
+        {
+            ShowValidationMessage = true;
+            return;
+        }
+
+        var log = new CMHub_CustCommsPartChangeTaskLogModel
+            {
+                TrackerId = TrackerId,
+                TaskId = TaskId,
+                LogMessage = LogMessage,
+                LogDate = DateTime.UtcNow,
+                ManualLogEntry = true
+            };
+
+        await OnLogSubmitted.InvokeAsync(log);
+        await Close();
+    }
+
+    public void Show(int trackerId, int? taskId = null, string? context = null)
+    {
+        TrackerId = trackerId;
+        TaskId = taskId;
+        ContextLabel = context ?? "Tracker-Level Log";
+        IsVisible = true;
+        LogMessage = string.Empty;
+        ShowValidationMessage = false;
+        StateHasChanged();
+    }
+}

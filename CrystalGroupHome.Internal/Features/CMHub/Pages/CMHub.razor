@@ -1,0 +1,70 @@
+@attribute [Route(NavHelpers.CMHubMainPage)]
+@attribute [Authorize]
+@using CrystalGroupHome.Internal.Authorization
+@using CrystalGroupHome.SharedRCL.Helpers
+@using Microsoft.AspNetCore.Authorization
+@inherits CMHubBase
+
+<PageTitle>Configuration Managed Hub</PageTitle>
+
+<h1>Configuration Managed Hub</h1>
+
+<Row>
+    <Column>
+        <Card Class="hover-card blue" @onclick='() => NavigateToLink(NavHelpers.CMHub_CMDexMainPage)'>
+            <CardBody>
+                <div class="d-flex align-items-center" style="min-height: 8rem;">
+                    <span class="@($"{NavHelpers.CMHub_CMDexIcon} me-4")" style="font-size:3rem;" aria-hidden="true"></span>
+                    <div>
+                        <h3 class="mb-1">CM Dex</h3>
+                        <p class="mb-0">Track Configuration Managed parts and associate them with important people.</p>
+                    </div>
+                </div>
+            </CardBody>
+        </Card>
+    </Column>
+
+    <Column>
+        <Card Class="hover-card blue" @onclick='() => NavigateToLink(NavHelpers.CMHub_VendorCommsMainPage)'>
+            <CardBody>
+                <div class="d-flex align-items-center" style="min-height: 8rem;">
+                    <span class="@($"{NavHelpers.CMHub_VendorCommsIcon} me-4")" style="font-size:3rem;" aria-hidden="true"></span>
+                    <div>
+                        <h3 class="mb-1">Vendor Comms</h3>
+                        <p class="mb-0">Track communications with Configuration Managed part vendors to get quick leads on potential EOL parts.</p>
+                    </div>
+                </div>
+            </CardBody>
+        </Card>
+    </Column>
+</Row>
+
+<Row>
+    <Column>
+        <Card Class="hover-card blue" @onclick='() => NavigateToLink(NavHelpers.CMHub_CustCommsMainPage)'>
+            <CardBody>
+                <div class="d-flex align-items-center" style="min-height: 8rem;">
+                    <span class="@($"{NavHelpers.CMHub_CustCommsIcon} me-4")" style="font-size:3rem;" aria-hidden="true"></span>
+                    <div>
+                        <h3 class="mb-1">Customer Comms</h3>
+                        <p class="mb-0">Track the status of necessary part changes and communications with part customers.</p>
+                    </div>
+                </div>
+            </CardBody>
+        </Card>
+    </Column>
+
+    <Column>
+        <Card Class="hover-card blue" @onclick='() => NavigateToLink(NavHelpers.CMHub_CMNotifMainPage)'>
+            <CardBody>
+                <div class="d-flex align-items-center" style="min-height: 8rem;">
+                    <span class="@($"{NavHelpers.CHHub_CMNotifIcon} me-4")" style="font-size:3rem;" aria-hidden="true"></span>
+                    <div>
+                        <h3 class="mb-1">CM Notification System</h3>
+                        <p class="mb-0">Send and track official Configuration Managed notifications.</p>
+                    </div>
+                </div>
+            </CardBody>
+        </Card>
+    </Column>
+</Row>

@@ -1,0 +1,499 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.CMDex.Data
+@using CrystalGroupHome.Internal.Features.CMHub.CMDex.Models
+@using CrystalGroupHome.Internal.Features.CMHub.CMNotif.Models
+@using Blazorise
+@using CrystalGroupHome.SharedRCL.Helpers
+
+@inject IModalService Modal
+@inject ICMHub_CMDexService CMDexService
+
+<Modal @bind-Visible="IsVisible" Centered>
+    <ModalContent Size="ModalSize.Large">
+        @* Modal Header: Displays part specific notification info *@
+        <ModalHeader>
+            @if (Part != null)
+            {
+                <div>Notification info for Part @Part.PartNum</div>
+                <Button Color="Color.Secondary" Clicked="async() => {await CMDexService.OpenCMDexPartInNewTabAsync(Part.PartNum); await Close();}" title="Open in CM Dex">
+                    <span class="@NavHelpers.CMHub_CMDexIcon" aria-hidden="true"></span>
+                </Button>
+            }
+        </ModalHeader>
+        
+        @* Modal Body: Contains form fields for notification details *@
+        <ModalBody>
+            @if (Part != null)
+            {
+                @if (IsNotificationSendingDisabled)
+                {
+                    <div class="alert alert-info mb-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Test Mode:</strong> Emails will be sent to the test inbox instead of actual customers.
+                    </div>
+                }
+
+                <Row class="mb-3">
+                    <Column>
+                        <label for="companyInput" class="form-label">Company</label>
+                        <TextEdit @bind-Text="FormData.Company" id="companyInput" class="form-control" Disabled="true"/>
+                    </Column>
+                </Row>
+
+                <Row class="mb-3">
+                    <Column>
+                        <label for="contactInput" class="form-label">Contact Name</label>
+                        <TextEdit @bind-Text="FormData.ContactName" id="contactInput" class="form-control" Disabled="true"/>
+                    </Column>
+                </Row>
+
+                <Row Style="margin-left: 1rem; align-items: center; margin-bottom: 0.5rem;">
+                    <Column Style="padding: 0;">
+                        <Check TValue="bool"
+                               @bind-Checked="@FormData.AffectsUnitPrice"
+                               Disabled="@IsSaving">
+                            Change Affects Unit Price
+                        </Check>
+                    </Column>
+                </Row>
+
+                <Row class="mb-3">
+                    <Column>
+                        <Div>
+                            <label for="changeDetails" class="form-label">Change Details (Shown to Customer)</label>
+                        </Div>
+                        <MemoEdit @bind-Text="FormData.DetailOfChange" Rows="3" id="changeDetails" class="form-control" Disabled="@IsSaving" MaxLength="@GetFieldLimit(NotifDocPdfFields.CHANGE_DETAILS)"/>
+                    </Column>
+                </Row>
+
+                <Row class="mb-3">
+                    <Column>
+                        <Button Color="Color.Light" Size="Size.Small" Clicked="@ToggleReasonCollapse" Class="p-1">
+                            @(IsOriginalReasonHidden ? "▶" : "▼") Original Reason for Change (From ECN)
+                        </Button>
+
+                        <Card hidden="@IsOriginalReasonHidden" Class="mt-1">
+                            <Div Class="border rounded p-2 bg-light" Style="color: lightslategray">
+                                @ECN?.ReasonForChangeAsHtml
+                            </Div>
+                        </Card>
+                    </Column>
+                </Row>
+
+                <Row class="mb-3">
+                    <Column>
+                        <label for="partNumber" class="form-label">Part Number</label>
+                        <TextEdit @bind-Text="FormData.PartNum" id="partNumber" class="form-control" Disabled="true"/>
+                    </Column>
+                </Row>
+
+                <Row class="mb-3">
+                    <Column>
+                        <label for="description" class="form-label">Description</label>
+                        <TextEdit @bind-Text="FormData.PartDescription" id="description" class="form-control" Disabled="true"/>
+                    </Column>
+                </Row>
+
+                <Row class="mb-3">
+                    <Column>
+                        <label for="affectedPart" class="form-label">Affected Part Number & Description</label>
+                        <MemoEdit @bind-Text="FormData.AffectedPartNum" id="affectedPart" class="form-control" Disabled="@IsSaving" MaxLength="@GetFieldLimit(NotifDocPdfFields.AFFECTED_PART)"/>
+                    </Column>
+                </Row>
+
+                <Row class="mb-3">
+                    <Column>
+                        <label for="replacementPart" class="form-label">Replacement Part Number & Description</label>
+                        <MemoEdit @bind-Text="FormData.ReplacementPartNum" id="replacementPart" class="form-control" Disabled="@IsSaving" MaxLength="@GetFieldLimit(NotifDocPdfFields.REPLACEMENT_PART)"/>
+                    </Column>
+                </Row>
+
+                <Row class="mb-3">
+                    <Column>
+                        <label for="notes" class="form-label">Notes</label>
+                        <MemoEdit @bind-Text="FormData.Notes" Rows="2" id="notes" class="form-control" Disabled="@IsSaving" MaxLength="@GetFieldLimit(NotifDocPdfFields.NOTES)"/>
+                    </Column>
+                </Row>
+
+                @* Optional field for customizing the email body HTML *@
+                <Row class="mb-3">
+                    <Column>
+                        <label for="emailBodyCustomHtml" class="form-label">Custom Email Body (optional)</label>
+                        <MemoEdit @bind-Text="FormData.EmailBodyCustomHtml" Rows="3" id="emailBodyCustomHtml" class="form-control" Disabled="@IsSaving" />
+                    </Column>
+                </Row>
+            }
+
+            <!-- Validation messages block -->
+            <div>
+                @if (ShouldShowPreviewWarning())
+                {
+                    <div class="alert alert-warning mb-2">
+                        Some fields are near their character limit or contain line breaks.  
+                        The text may not fit properly in the PDF form.  
+                        Please <strong>preview the notification document</strong> before sending.
+                    </div>
+                }
+
+                @if (!(Part?.CMDexPart?.HasPrimary ?? false))
+                {
+                    <div class="text-danger mb-1">The part requires a Primary PM. Fix in CM Dex.</div>
+                }
+                else if (!EmailHelpers.IsValidEmail(FormData.PMEmail))
+                {
+                    <div class="text-danger mb-1">A valid PM email is required. Fix in CM Dex.</div>
+                }
+                
+                @if (!(Part?.CMDexPart?.HasOwner ?? false))
+                {
+                    <div class="text-danger mb-1">The part requires a Customer Owner. Fix in CM Dex.</div>
+                }
+                else if (!EmailHelpers.IsValidEmail(FormData.ContactEmail))
+                {
+                    <div class="text-danger mb-1">A valid contact email is required. Fix in CM Dex.</div>
+                }
+
+                @if (string.IsNullOrEmpty(FormData.AffectedPartNum))
+                {
+                    <div class="text-danger mb-1">Affected part number is required.</div>
+                }
+
+                @if (FormData.RecordId == 0)
+                {
+                    <div class="text-danger mb-1">Save the form before sending.</div>
+                }
+            </div>
+        </ModalBody>
+        
+        @* Modal Footer: Contains action buttons for Cancel, Save, and Send Notification *@
+        <ModalFooter>
+            <!-- Action buttons -->
+            @if (!IsSaving)
+            {
+                <Button Color="Color.Secondary" Clicked="Close" Disabled="@IsSaving">Cancel</Button>
+            }
+            
+            <Div Style="flex: 1;"></Div>
+            
+            <Button Color="Color.Link" Clicked="ConfirmPreview" Disabled="@( !IsValidForm || IsSaving )">Preview Notification</Button>
+            @if (IsSaving)
+            {
+                <Button Color="Color.Primary" Disabled>...Saving...</Button>
+            }
+            else
+            {
+                <Button Color="Color.Primary" Clicked="Save" Disabled="@IsSaving">Save Form Data</Button>
+            }
+            @if (!IsSaving)
+            {
+                <Button Color="Color.Success" Clicked="ConfirmSend" Disabled="@( !IsValidForm || IsSaving || FormData.RecordId == 0 )">Send Notification</Button>
+            }
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    // Component parameters and state
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public CMHub_CMNotifRecordPartModel? Part { get; set; }
+    [Parameter] public CMHub_CMNotifECNMatchedRecordModel? ECN { get; set; }
+    [Parameter] public EventCallback<PDFFormDataModel> OnFormSend { get; set; }
+    [Parameter] public EventCallback<PDFFormDataModel> OnFormSaved { get; set; }
+    [Parameter] public EventCallback<PDFFormDataModel> OnFormPreview { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public Dictionary<string, int> PdfFieldLimits { get; set; } = new();
+    [Parameter] public bool IsNotificationSendingDisabled { get; set; } = false;
+
+    private int GetFieldLimit(string fieldName) =>
+        PdfFieldLimits.TryGetValue(fieldName, out var limit) ? limit : 255;
+
+    private bool ShouldShowPreviewWarning()
+    {
+        // Check each text field for exceeding 50% of limit or containing line breaks
+        return IsFieldOverHalfLimit(FormData.DetailOfChange, "CHANGE_DETAILS") ||
+               IsFieldOverHalfLimit(FormData.AffectedPartNum, "AFFECTED_PART") ||
+               IsFieldOverHalfLimit(FormData.ReplacementPartNum, "REPLACEMENT_PART") ||
+               IsFieldOverHalfLimit(FormData.Notes, "NOTES") ||
+               ContainsFullReturns(FormData.DetailOfChange) ||
+               ContainsFullReturns(FormData.AffectedPartNum) ||
+               ContainsFullReturns(FormData.ReplacementPartNum) ||
+               ContainsFullReturns(FormData.Notes);
+    }
+
+    private bool IsFieldOverHalfLimit(string? value, string fieldName)
+    {
+        if (string.IsNullOrEmpty(value)) return false;
+        int limit = GetFieldLimit(fieldName);
+        return value.Length > limit / 2;
+    }
+
+    private bool ContainsFullReturns(string? value)
+    {
+        return !string.IsNullOrEmpty(value) && value.Contains("\n");
+    }
+
+    // Property to check overall form validity based on multiple criteria
+    public bool IsValidForm => 
+        (Part?.CMDexPart?.HasPrimary ?? false)
+        && EmailHelpers.IsValidEmail(FormData.ContactEmail)
+        && (Part?.CMDexPart?.HasOwner ?? false)
+        && EmailHelpers.IsValidEmail(FormData.PMEmail)
+        && !string.IsNullOrEmpty(FormData.AffectedPartNum)
+        && FormData.RecordId != 0;
+
+    // Model holding the form data
+    private PDFFormDataModel FormData = new();
+
+    // Flag indicating if the form is currently being saved
+    public bool IsSaving = false;
+
+    private bool IsOriginalReasonHidden { get; set; } = true;
+
+    private void ToggleReasonCollapse()
+    {
+        IsOriginalReasonHidden = !IsOriginalReasonHidden;
+    }
+
+    // Method to show and pre-populate the modal with part and ECN details
+    public async Task Show(CMHub_CMNotifRecordPartModel? part, CMHub_CMNotifECNMatchedRecordModel ecn, CMHub_CMDexPartModel cmdexPart)
+    {
+        if (part == null)
+        {
+            part = new CMHub_CMNotifRecordPartModel()
+            {
+                PartNum = cmdexPart.Part.PartNum,
+                CMDexPart = cmdexPart
+            };
+        }
+
+        Part = part;
+        ECN = ecn;
+
+        // Pre-populate known fields from part and ECN objects
+        FormData = new PDFFormDataModel
+        {
+            PartId = part.Id,
+            RecordId = part.RecordId,
+            ECNNum = ecn.ECNNumber,
+            ECNId = ecn.ECNId,
+            PartNum = part.PartNum,
+            DateCreated = part.DateCreated,
+            PartDescription = part.CMDexPart?.Part?.PartDescription ?? "",
+            DetailOfChange = part.ECNChangeDetail,
+            Notes = part.Notes,
+            EffectiveDate = part.EffectiveDate,
+            AffectedPartNum = part.AffectedPartNum,
+            ReplacementPartNum = part.ReplacementPartNum,
+            Company = part.CMDexPart?.OwnerCustName ?? "",
+            ContactName = part.CMDexPart?.OwnerConName ?? "",
+            ContactEmail = part.CMDexPart?.OwnerConEmail ?? "",
+            PMEmail = part.CMDexPart?.PrimaryPMEmployee?.Mail ?? "",
+            PMName = part.CMDexPart?.PrimaryPMEmployee?.DisplayName ?? "",
+            AffectsUnitPrice = part.PriceEffect,
+            IsNotifSent = part.IsNotifSent,
+            NotificationDate = part.DateNotifSent,
+            IsConfirmSent = part.IsConfirmSent,
+            ConfirmationDate = part.DateConfirmSent,
+            HasCustAcceptance = part.HasCustAcceptance,
+            HasCustAcceptanceOverride = part.HasCustAcceptanceOverride,
+            DateCustAccepted = part.DateCustAccepted,
+            CMDexPart = await CMDexService.GetCMDexPartAsync(part.PartNum),
+            EmailBodyCustomHtml = string.Empty
+        };
+
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    // Method to close the modal and invoke the OnClose callback
+    public async Task Close()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync();
+    }
+
+    // Method to handle the send notification action, invoking the OnFormSend callback if assigned
+    private async Task ConfirmSend()
+    {
+        if (OnFormSend.HasDelegate)
+        {
+            await OnFormSend.InvokeAsync(FormData);
+        }
+    }
+
+    // Method to handle the preview notification action, invoking the OnFormPreview callback if assigned
+    private async Task ConfirmPreview()
+    {
+        if (OnFormPreview.HasDelegate)
+        {
+            await OnFormPreview.InvokeAsync(FormData);
+        }
+    }
+
+    // Save method for form data; sets saving flag and invokes OnFormSaved callback
+    private async Task Save()
+    {
+        IsSaving = true;
+        StateHasChanged();
+
+        try
+        {
+            if (OnFormSaved.HasDelegate)
+            {
+                await OnFormSaved.InvokeAsync(FormData);
+            }
+        }
+        finally
+        {
+            IsSaving = false;
+        }
+    }
+
+    // PDFForm Type Enum
+    public enum PDFFormType
+    {
+        ConfigurationManagementChangeNotification,
+        ConfirmationOfImplementation
+    }
+
+    // Model representing the form data
+    public class PDFFormDataModel
+    {
+        public int PartId { get; set; } = 0;
+        public string ECNNum { get; set; } = string.Empty;
+        public int ECNId { get; set; } = 0;
+        public int RecordId { get; set; } = 0;
+        public string Company { get; set; } = string.Empty;
+        public string ContactName { get; set; } = string.Empty;
+        public string ContactEmail { get; set; } = string.Empty;
+        public string PMName { get; set; } = string.Empty;
+        public string PMEmail { get; set; } = string.Empty;
+        public DateTime? EffectiveDate { get; set; }
+        public bool AffectsUnitPrice { get; set; } = false;
+        public string DetailOfChange { get; set; } = string.Empty;
+        public string PartNum { get; set; } = string.Empty;
+        public DateTime? DateCreated { get; set; }
+        public string PartDescription { get; set; } = string.Empty;
+        public string AffectedPartNum { get; set; } = string.Empty;
+        public string ReplacementPartNum { get; set; } = string.Empty;
+        public bool IsApproved { get; set; } = false;
+        public string ApprovedByEmpId { get; set; } = string.Empty;
+        public bool IsNotifSent { get; set; } = false;
+        public DateTime? NotificationDate { get; set; }
+        public bool IsConfirmSent { get; set; } = false;
+        public DateTime? ConfirmationDate { get; set; }
+        public bool HasCustAcceptance { get; set; } = false;
+        public bool HasCustAcceptanceOverride { get; set; } = false;
+        public DateTime? DateCustAccepted { get; set; } = null;
+        public string Notes { get; set; } = string.Empty;
+        public PDFFormType PDFFormType { get; set; } = PDFFormType.ConfigurationManagementChangeNotification;
+        public CMHub_CMDexPartModel? CMDexPart = null;
+        public string EmailBodyCustomHtml { get; set; } = string.Empty;
+    }
+
+    // Static method to convert PDF form data to a notification part model
+    public static CMHub_CMNotifRecordPartModel ConvertPdfFormToNotifPart(PDFFormDataModel pdfForm)
+    {
+        return new CMHub_CMNotifRecordPartModel
+        {
+            Id = pdfForm.PartId,
+            RecordId = pdfForm.RecordId,
+            PartNum = pdfForm.PartNum,
+            DateCreated = pdfForm.DateCreated,
+            AffectedPartNum = pdfForm.AffectedPartNum,
+            ReplacementPartNum = pdfForm.ReplacementPartNum,
+            ECNChangeDetail = pdfForm.DetailOfChange,
+            EffectiveDate = pdfForm.EffectiveDate,
+            PriceEffect = pdfForm.AffectsUnitPrice,
+            Notes = pdfForm.Notes,
+            PDFFormType = pdfForm.PDFFormType,
+            IsApproved = pdfForm.IsApproved,
+            ApprovedByEmpId = pdfForm.ApprovedByEmpId,
+            IsNotifSent = pdfForm.IsNotifSent,
+            DateNotifSent = pdfForm.NotificationDate,
+            IsConfirmSent = pdfForm.IsConfirmSent,
+            DateConfirmSent = pdfForm.ConfirmationDate,
+            HasCustAcceptance = pdfForm.HasCustAcceptance,
+            HasCustAcceptanceOverride = pdfForm.HasCustAcceptanceOverride,
+            DateCustAccepted = pdfForm.DateCustAccepted,
+            Deleted = false
+        };
+    }
+
+    public static class NotifDocPdfFields
+    {
+        public const string ID = "ID";
+        public const string COMPANY = "COMPANY";
+        public const string CONTACT = "CONTACT";
+        public const string ECN_NUM = "ECN_NUM";
+        public const string PRICE_AFFECTS = "PRICE_AFFECTS";
+        public const string PRICE_AFFECTS_LABEL = "PRICE_AFFECTS_LABEL";
+        public const string NEW_PRICE = "NEW_PRICE";
+        public const string CHANGE_DETAILS = "CHANGE_DETAILS";
+        public const string PART_NUM = "PART_NUM";
+        public const string PART_DESC = "PART_DESC";
+        public const string AFFECTED_PART = "AFFECTED_PART";
+        public const string REPLACEMENT_PART = "REPLACEMENT_PART";
+        public const string CG_POC = "CG_POC";
+        public const string NOTIF_DATE = "NOTIF_DATE";
+        public const string NOTES = "NOTES";
+        public const string EFFECTIVE_DATE = "EFFECTIVE_DATE";
+        public const string TITLE = "TITLE";
+        public const string REV = "REV";
+        public const string WARNING = "WARNING";
+        public const string AFFECTED_WARNING = "AFFECTED_WARNING";
+    }
+
+    // Maps form data to a dictionary for PDF field values
+    public static Dictionary<string, string> MapFormDataToPdfFields(PDFFormDataModel model)
+    {
+        return new()
+        {
+            { NotifDocPdfFields.ID, model.PartId.ToString() },
+            { NotifDocPdfFields.COMPANY, model.Company },
+            { NotifDocPdfFields.CONTACT, model.ContactName },
+            { NotifDocPdfFields.ECN_NUM, model.ECNNum },
+            { NotifDocPdfFields.PRICE_AFFECTS, model.AffectsUnitPrice ? "Yes" : "No" },
+            { NotifDocPdfFields.PRICE_AFFECTS_LABEL, model.PDFFormType == PDFFormType.ConfigurationManagementChangeNotification ? "Change affects unit price:           No           Yes" : "" },
+            { NotifDocPdfFields.CHANGE_DETAILS, model.DetailOfChange },
+            { NotifDocPdfFields.PART_NUM, model.PartNum },
+            { NotifDocPdfFields.PART_DESC, model.PartDescription },
+            { NotifDocPdfFields.AFFECTED_PART, model.AffectedPartNum },
+            { NotifDocPdfFields.REPLACEMENT_PART, model.ReplacementPartNum },
+            { NotifDocPdfFields.CG_POC, $"{model.PMName} ({model.PMEmail})" },
+            { NotifDocPdfFields.NOTIF_DATE, model.NotificationDate?.ToShortDateString() ?? DateTime.Today.ToShortDateString() },
+            { NotifDocPdfFields.NOTES, model.Notes },
+            { NotifDocPdfFields.EFFECTIVE_DATE, model.EffectiveDate?.ToShortDateString() ?? DateTime.Today.ToShortDateString() },
+            { NotifDocPdfFields.TITLE, model.PDFFormType == PDFFormType.ConfigurationManagementChangeNotification ? "Configuration Management Change Notice" : "Confirmation of Implementation Notice" },
+            { NotifDocPdfFields.REV, "" },
+            { NotifDocPdfFields.WARNING, model.PDFFormType == PDFFormType.ConfigurationManagementChangeNotification ? "To ensure prompt processing of configuration changes and to avoid delays in pending shipments, please accept this change upon receipt,\nor respond within 14 days with any questions or concerns. If no response is received in 14 days, acceptance of this change will be assumed." : "" },
+            { NotifDocPdfFields.AFFECTED_WARNING, model.AffectsUnitPrice ? $"Contact {model.PMName} at {model.PMEmail} to request an updated quote." : "" }
+        };
+    }
+
+    // Maps form data to a dictionary for PDF field values
+    public static Dictionary<string, string> MapPartRecordDataToPdfFields(CMHub_CMNotifRecordPartModel model, string ecnNum, int partId)
+    {
+        return new()
+        {
+            { NotifDocPdfFields.ID, partId.ToString() },
+            { NotifDocPdfFields.COMPANY, model.CMDexPart?.OwnerCustName ?? "N/A" },
+            { NotifDocPdfFields.CONTACT, model.CMDexPart?.OwnerConName ?? "N/A" },
+            { NotifDocPdfFields.ECN_NUM, ecnNum },
+            { NotifDocPdfFields.PRICE_AFFECTS, model.PriceEffect ? "Yes" : "No" },
+            { NotifDocPdfFields.PRICE_AFFECTS_LABEL, model.PDFFormType == PDFFormType.ConfigurationManagementChangeNotification ? "Change affects unit price:           No           Yes" : "" },
+            { NotifDocPdfFields.CHANGE_DETAILS, model.ECNChangeDetail },
+            { NotifDocPdfFields.PART_NUM, model.PartNum },
+            { NotifDocPdfFields.PART_DESC, model.CMDexPart?.Part.PartDescription ?? "N/A" },
+            { NotifDocPdfFields.AFFECTED_PART, model.AffectedPartNum },
+            { NotifDocPdfFields.REPLACEMENT_PART, model.ReplacementPartNum },
+            { NotifDocPdfFields.CG_POC, $"{model.CMDexPart?.PrimaryPMName} ({model.CMDexPart?.PrimaryPMEmail})" },
+            { NotifDocPdfFields.NOTIF_DATE, model.DateNotifSent?.ToShortDateString() ?? DateTime.Today.ToShortDateString() },
+            { NotifDocPdfFields.NOTES, model.Notes },
+            { NotifDocPdfFields.EFFECTIVE_DATE, model.EffectiveDate?.ToShortDateString() ?? DateTime.Today.ToShortDateString() },
+            { NotifDocPdfFields.TITLE, model.PDFFormType == PDFFormType.ConfigurationManagementChangeNotification ? "Configuration Management Change Notice" : "Confirmation of Implementation Notice" },
+            { NotifDocPdfFields.REV, "" },
+            { NotifDocPdfFields.WARNING, model.PDFFormType == PDFFormType.ConfigurationManagementChangeNotification ? "To ensure prompt processing of configuration changes and to avoid delays in pending shipments, please accept this change upon receipt,\nor respond within 14 days with any questions or concerns. If no response is received in 14 days, acceptance of this change will be assumed." : "" },
+            { NotifDocPdfFields.AFFECTED_WARNING, model.PriceEffect ? $"Contact {model.CMDexPart?.PrimaryPMName} at {model.CMDexPart?.PrimaryPMEmail} to request an updated quote." : "" }
+        };
+    }
+}

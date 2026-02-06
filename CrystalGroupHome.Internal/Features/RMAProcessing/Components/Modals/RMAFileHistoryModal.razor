@@ -1,0 +1,214 @@
+﻿@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using Blazorise
+@using Blazorise.DataGrid
+@inherits RMAFileHistoryModalBase
+
+@if (IsVisible)
+{
+    <Modal Visible="@IsVisible" Closing="@OnModalClosing">
+        <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+            <ModalHeader>
+                <ModalTitle>
+                    File History for RMA @RmaNumber
+                    @if (HasLineSerialContext())
+                    {
+                        <text> - Line @RmaLineNumber</text>
+                        @if (!string.IsNullOrEmpty(SerialNumber))
+                        {
+                            <text> : SN @SerialNumber</text>
+                        }
+                    }
+                </ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                @if (RMAFileHistory.Any())
+                {
+                    <!-- Filter Toggle Controls -->
+                    <Row class="mb-3">
+                        <Column Style="display: flex; gap: 0.5rem; justify-content: end; flex-wrap: wrap-reverse;">
+                            <Button Color="Color.Secondary" Clicked="@ClearAllHistoryFilters"
+                                    Style="@(!HasActiveFilters() ? "display: none;" : string.Empty)">
+                                <span class="fas fa-times me-1" aria-hidden="true"></span> Clear All Filters
+                            </Button>
+                            <Button Color="Color.Info" Clicked="@ToggleFilters">
+                                <span class="@(ShowFilters ? "fas fa-eye-slash" : "fas fa-filter") me-1" aria-hidden="true"></span>
+                                @(ShowFilters ? "Hide Filters" : "Show Filters")
+                            </Button>
+                        </Column>
+                    </Row>
+
+                    <div class="alert alert-info py-2 mb-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>@FilteredHistoryCount</strong> of <strong>@RMAFileHistory.Count</strong> history records shown
+                        @if (ShowFilters)
+                        {
+                            <text>. Use the filter controls below to narrow down results.</text>
+                        }
+                        else
+                        {
+                            <text>. Click "Show Filters" to filter results.</text>
+                        }
+                    </div>
+
+                    <DataGrid TItem="RMAFileHistoryModel"
+                              Data="@FilteredRMAFileHistory"
+                              @ref="HistoryDataGrid"
+                              Filterable="@ShowFilters"
+                              Sortable="true"
+                              SortMode="DataGridSortMode.Multiple"
+                              ShowPager="true"
+                              PageSize="20"
+                              PagerPosition="DataGridPagerPosition.TopAndBottom"
+                              Responsive="true"
+                              ResponsiveMode="TableResponsiveMode.Mobile"
+                              Hoverable="true"
+                              Striped="true">
+                        <DataGridColumns>
+                            <DataGridColumn Field="@nameof(RMAFileHistoryModel.Action)" Caption="Action"
+                                            Filterable="@ShowFilters" Sortable="true">
+                                <DisplayTemplate Context="history">
+                                    <span class="badge @GetActionBadgeClass(history.Action)">@history.Action</span>
+                                    @if (history.IsSystemAction)
+                                    {
+                                        <small class="badge bg-warning ms-1">System</small>
+                                    }
+                                </DisplayTemplate>
+                                <FilterTemplate>
+                                    <TextEdit Text="@ActionFilter"
+                                              TextChanged="@OnActionFilterChanged"
+                                              Placeholder="Filter actions..." />
+                                </FilterTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn Field="@nameof(RMAFileHistoryModel.FileName)" Caption="File Name"
+                                            Filterable="@ShowFilters" Sortable="true">
+                                <DisplayTemplate Context="history">
+                                    <div>
+                                        <div class="fw-bold">@history.FileName</div>
+                                        <small class="text-muted">@FormatFileSize(history.FileSize)</small>
+                                    </div>
+                                </DisplayTemplate>
+                                <FilterTemplate>
+                                    <TextEdit Text="@FileNameFilter"
+                                              TextChanged="@OnFileNameFilterChanged"
+                                              Placeholder="Filter filenames..." />
+                                </FilterTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn Field="@nameof(RMAFileHistoryModel.CategoryDisplayValue)" Caption="Category"
+                                            Filterable="@ShowFilters" Sortable="true">
+                                <DisplayTemplate Context="history">
+                                    <span class="badge bg-secondary">@history.CategoryDisplayValue</span>
+                                </DisplayTemplate>
+                                <FilterTemplate>
+                                    <Select TValue="string"
+                                            SelectedValue="@CategoryHistoryFilter"
+                                            SelectedValueChanged="@OnCategoryHistoryFilterChanged">
+                                        <SelectItem TValue="string" Value="@string.Empty">All Categories</SelectItem>
+                                        @foreach (var category in GetUniqueCategories())
+                                        {
+                                            <SelectItem TValue="string" Value="@category">@category</SelectItem>
+                                        }
+                                    </Select>
+                                </FilterTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn Field="@nameof(RMAFileHistoryModel.SerialNumber)" Caption="Serial / Line"
+                                            Filterable="@ShowFilters" Sortable="true">
+                                <DisplayTemplate Context="history">
+                                    @if (!string.IsNullOrEmpty(history.SerialNumber))
+                                    {
+                                        <span>@history.SerialNumber</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                    @if (history.RMALineNumber.HasValue)
+                                    {
+                                        <br><small class="text-muted">Line @history.RMALineNumber</small>
+                                    }
+                                </DisplayTemplate>
+                                <FilterTemplate>
+                                    <TextEdit Text="@SerialNumberHistoryFilter"
+                                              TextChanged="@OnSerialNumberHistoryFilterChanged"
+                                              Placeholder="Filter serial..." />
+                                </FilterTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn Field="@nameof(RMAFileHistoryModel.ActionByUsername)" Caption="User"
+                                            Filterable="@ShowFilters" Sortable="true">
+                                <FilterTemplate>
+                                    <Select TValue="string"
+                                            SelectedValue="@UsernameFilter"
+                                            SelectedValueChanged="@OnUsernameFilterChanged">
+                                        <SelectItem TValue="string" Value="@string.Empty">All Users</SelectItem>
+                                        @foreach (var user in GetUniqueUsers())
+                                        {
+                                            <SelectItem TValue="string" Value="@user">@user</SelectItem>
+                                        }
+                                    </Select>
+                                </FilterTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn Field="@nameof(RMAFileHistoryModel.ActionDate)" Caption="Date"
+                                            Filterable="@ShowFilters" Sortable="true"
+                                            DisplayFormat="{0:yyyy-MM-dd HH:mm:ss}">
+                                <FilterTemplate>
+                                    <div class="d-flex flex-column">
+                                        <small class="text-muted mb-1">From Date:</small>
+                                        <DateEdit TValue="DateTime?"
+                                                  Date="@DateFromFilter"
+                                                  DateChanged="@OnDateFromFilterChanged"
+                                                  DisplayFormat="yyyy-MM-dd"
+                                                  InputFormat="yyyy-MM-dd" />
+                                        <small class="text-muted mt-2 mb-1">To Date:</small>
+                                        <DateEdit TValue="DateTime?"
+                                                  Date="@DateToFilter"
+                                                  DateChanged="@OnDateToFilterChanged"
+                                                  DisplayFormat="yyyy-MM-dd"
+                                                  InputFormat="yyyy-MM-dd" />
+                                    </div>
+                                </FilterTemplate>
+                            </DataGridColumn>
+
+                            <DataGridColumn Field="@nameof(RMAFileHistoryModel.ActionDetails)" Caption="Details"
+                                            Filterable="@ShowFilters">
+                                <DisplayTemplate Context="history">
+                                    @if (!string.IsNullOrEmpty(history.ActionDetails))
+                                    {
+                                        <span title="@history.ActionDetails">
+                                            @(history.ActionDetails.Length > 50 ?
+                                              history.ActionDetails.Substring(0, 50) + "..." :
+                                              history.ActionDetails)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </DisplayTemplate>
+                                <FilterTemplate>
+                                    <TextEdit Text="@ActionDetailsFilter"
+                                              TextChanged="@OnActionDetailsFilterChanged"
+                                              Placeholder="Filter details..." />
+                                </FilterTemplate>
+                            </DataGridColumn>
+                        </DataGridColumns>
+                    </DataGrid>
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-history fa-2x text-muted mb-2"></i>
+                        <p>No file history available for this RMA.</p>
+                    </div>
+                }
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="CloseModal">Close</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+}

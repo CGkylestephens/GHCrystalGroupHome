@@ -1,0 +1,10 @@
+﻿@using CrystalGroupHome.SharedRCL.Helpers
+
+<span title="@HoverText" style="cursor: help; align-self: center;">
+    <span style="@Style" class="@NavHelpers.InfoIcon" aria-hidden="true"></span>
+</span>
+
+@code {
+    [Parameter] public string HoverText { get; set; } = string.Empty;
+    [Parameter] public string Style { get; set; } = string.Empty;
+}

@@ -1,0 +1,344 @@
+@using CrystalGroupHome.Internal.Authorization
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Pages
+@using CrystalGroupHome.Internal.Common.Data.Labor
+@using CrystalGroupHome.Internal.Features.CMHub.Pages
+@using CrystalGroupHome.Internal.Features.FirstTimeYield.Pages
+@using CrystalGroupHome.SharedRCL.Data
+@using CrystalGroupHome.SharedRCL.Data.Labor
+@using CrystalGroupHome.SharedRCL.Helpers
+@using Microsoft.AspNetCore.Components.Routing
+@inject NavigationManager NavigationManager
+@inject IntranetConfig IntranetConfig
+@inject IWebHostEnvironment Environment
+
+<div class="sidebar @GetSidebarHiddenClass()">
+    <div class="top-row navbar navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="@GetIntranetHomeLink()">
+                <img src="_content/CrystalGroupHome.SharedRCL/images/logos/CrystalGroup_logo_horiz_light.png" alt="Crystal Group Logo" height="40" />
+            </a>
+            <button type="button" title="Navigation Menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <button type="button" title="Hide Navigation" Class="navbar-hide @GetHideClass()" @onclick="ToggleHideNavMenu">
+            <span class="fa @GetHideIcon()" aria-hidden="true"></span>
+        </button>
+    </div>
+
+    <div class="@NavMenuCssClass @GetSidebarHiddenClass()" @onclick="ToggleNavMenu">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="@GetIntranetHomeLink()" Match="NavLinkMatch.All">
+                    <span class="@($"{NavHelpers.HomeIcon} me-2")" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
+            @* Conditionally render based on the current URL *@
+            @if (NavigationManager.Uri.Contains(NavHelpers.FirstTimeYieldRoot))
+            {
+                @* First Time Yield - Back *@
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                        <span class="@($"{NavHelpers.BackCircleIcon} me-2")" aria-hidden="true"></span> Back
+                    </NavLink>
+                </div>
+
+                @* First Time Yield - Header *@
+                <h3 Class="nav-header">
+                    <span class="@($"{NavHelpers.FirstTimeYieldIcon} me-3")" aria-hidden="true"></span>
+                    <div>First Time Yield</div>
+                </h3>
+
+                @* First Time Yield - Items *@
+                <div class="nav-item px-3">
+                    <a class="nav-link @GetActiveClass(NavHelpers.FirstTimeYieldMainPage)" href="@NavHelpers.FirstTimeYieldMainPage">
+                        <span class="@($"{NavHelpers.FirstTimeYieldEntryHistoryIcon} me-2")" aria-hidden="true"></span> Entry History
+                    </a>
+                </div>
+                <div class="nav-item px-3">
+                    <a class="nav-link @GetActiveClass(NavHelpers.FirstTimeYieldAddEntry)" href="@NavHelpers.FirstTimeYieldAddEntry">
+                        <span class="@($"{NavHelpers.FirstTimeYieldAddEntryIcon} me-2")" aria-hidden="true"></span> Add Entry
+                    </a>
+                </div>
+
+                if (FirstTimeYield.IsAdmin(CurrentUser?.ADUser))
+                {
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.FirstTimeYieldAdmin)" href="@NavHelpers.FirstTimeYieldAdmin">
+                            <span class="@($"{NavHelpers.FirstTimeYieldAdminToolsIcon} me-2")" aria-hidden="true"></span> Admin Tools
+                        </a>
+                    </div>
+                }
+            }
+            else if (NavigationManager.Uri.Contains(NavHelpers.CMHubRoot))
+            {
+                if (NavigationManager.Uri.Contains(NavHelpers.CMHub_CMDexRoot))
+                {
+                    @* CM Dex - Back *@
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="@NavHelpers.CMHubMainPage" Match="NavLinkMatch.All">
+                            <span class="@($"{NavHelpers.BackCircleIcon} me-2")" aria-hidden="true"></span> Back
+                        </NavLink>
+                    </div>
+
+                    @* CM Dex - Header *@
+                    <h3 Class="nav-header">
+                        <span class="@($"{NavHelpers.CMHub_CMDexIcon} me-3")" aria-hidden="true"></span>
+                        <div>CM Dex</div>
+                    </h3>
+
+                    @* CM Dex - Items *@
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.CMHub_CMDexMainPage)" href="@NavHelpers.CMHub_CMDexMainPage">
+                            <span class="@($"{NavHelpers.CMHub_CMDexPartRelationsIcon} me-2")" aria-hidden="true"></span> Part Relations
+                        </a>
+                    </div>
+                }
+                else if (NavigationManager.Uri.Contains(NavHelpers.CMHub_VendorCommsRoot))
+                {
+                    @* Vendor Comms - Back *@
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="@NavHelpers.CMHubMainPage" Match="NavLinkMatch.All">
+                            <span class="@($"{NavHelpers.BackCircleIcon} me-2")" aria-hidden="true"></span> Back
+                        </NavLink>
+                    </div>
+
+                    @* Vendor Comms - Header *@
+                    <h3 Class="nav-header">
+                        <span class="@($"{NavHelpers.CMHub_VendorCommsIcon} me-3")" aria-hidden="true"></span>
+                        <div>Vendor Comms</div>
+                    </h3>
+
+                    @* Vendor Comms - Items *@
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.CMHub_VendorCommsMainPage)" href="@NavHelpers.CMHub_VendorCommsMainPage">
+                            <span class="@($"{NavHelpers.CMHub_VendorCommsCommunicationTrackersIcon} me-2")" aria-hidden="true"></span> Communication Trackers
+                        </a>
+                    </div>
+                }
+                else if (NavigationManager.Uri.Contains(NavHelpers.CMHub_CustCommsRoot))
+                {
+                    @* Cust Comms - Back *@
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="@NavHelpers.CMHubMainPage" Match="NavLinkMatch.All">
+                            <span class="@($"{NavHelpers.BackCircleIcon} me-2")" aria-hidden="true"></span> Back
+                        </NavLink>
+                    </div>
+
+                    @* Cust Comms - Header *@
+                    <h3 Class="nav-header">
+                        <span class="@($"{NavHelpers.CMHub_CustCommsIcon} me-3")" aria-hidden="true"></span>
+                        <div>Customer Comms</div>
+                    </h3>
+
+                    @* Cust Comms - Items *@
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.CMHub_CustCommsMainPage)" href="@NavHelpers.CMHub_CustCommsMainPage">
+                            <span class="@($"{NavHelpers.CMHub_CustCommsPartChangeTrackersIcon} me-2")" aria-hidden="true"></span> Part Change Trackers
+                        </a>
+                    </div>
+                    @if (CMHub.HasCustCommsTrackerEditPermission(CurrentUser?.ADUser))
+                    {
+                        <div class="nav-item px-3">
+                            <a class="nav-link @GetActiveClass(NavHelpers.CMHub_CustCommsAddTracker)" href="@NavHelpers.CMHub_CustCommsAddTracker">
+                                <span class="@($"{NavHelpers.CMHub_CustCommsAddPartChangeTrackerIcon} me-2")" aria-hidden="true"></span> Add Tracker
+                            </a>
+                        </div>
+                    }
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.CMHub_CustCommsTaskList)" href="@NavHelpers.CMHub_CustCommsTaskList">
+                            <span class="@($"{NavHelpers.CMHub_CustCommsPartChangeTasksIcon} me-2")" aria-hidden="true"></span> Part Change Tasks
+                        </a>
+                    </div>
+                }
+                else if (NavigationManager.Uri.Contains(NavHelpers.CMHub_CMNotifRoot))
+                {
+                    @* CM Notif - Back *@
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="@NavHelpers.CMHubMainPage" Match="NavLinkMatch.All">
+                            <span class="@($"{NavHelpers.BackCircleIcon} me-2")" aria-hidden="true"></span> Back
+                        </NavLink>
+                    </div>
+
+                    @* CM Notif - Header *@
+                    <h3 Class="nav-header">
+                        <span class="@($"{NavHelpers.CHHub_CMNotifIcon} me-3")" aria-hidden="true"></span>
+                        <div>CM Notifications</div>
+                    </h3>
+
+                    @* CM Notif - Items *@
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.CMHub_CMNotifMainPage)" href="@NavHelpers.CMHub_CMNotifMainPage">
+                            <span class="@($"{NavHelpers.CMHub_CMNotifRecordsIcon} me-2")" aria-hidden="true"></span> Notification Records
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    @* CM Hub - Back *@
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                            <span class="@($"{NavHelpers.BackCircleIcon} me-2")" aria-hidden="true"></span> Back
+                        </NavLink>
+                    </div>
+
+                    @* CM Hub - Header *@
+                    <h3 Class="nav-header">
+                        <span class="@($"{NavHelpers.CMHubIcon} me-3")" aria-hidden="true"></span>
+                        <div>CM Hub</div>
+                    </h3>
+
+                    @* CM Hub - Items *@
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.CMHub_CMDexMainPage, true)" href="@NavHelpers.CMHub_CMDexMainPage">
+                            <span class="@($"{NavHelpers.CMHub_CMDexIcon} me-2")" aria-hidden="true"></span> CM Dex
+                        </a>
+                    </div>
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.CMHub_VendorCommsMainPage, true)" href="@NavHelpers.CMHub_VendorCommsMainPage">
+                            <span class="@($"{NavHelpers.CMHub_VendorCommsIcon} me-2")" aria-hidden="true"></span>Vendor Comms
+                        </a>
+                    </div>
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.CMHub_CustCommsMainPage, true)" href="@NavHelpers.CMHub_CustCommsMainPage">
+                            <span class="@($"{NavHelpers.CMHub_CustCommsIcon} me-2")" aria-hidden="true"></span>Customer Comms
+                        </a>
+                    </div>
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.CMHub_CMNotifMainPage, true)" href="@NavHelpers.CMHub_CMNotifMainPage">
+                            <span class="@($"{NavHelpers.CHHub_CMNotifIcon} me-2")" aria-hidden="true"></span> CMNS
+                        </a>
+                    </div>
+                }
+            }
+            else if (NavigationManager.Uri.Contains(NavHelpers.RMAProcessingRoot))
+            {
+                @* RMA Processing - Back *@
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                        <span class="@($"{NavHelpers.BackCircleIcon} me-2")" aria-hidden="true"></span> Back
+                    </NavLink>
+                </div>
+
+                @* RMA Processing - Header *@
+                <h3 Class="nav-header">
+                    <span class="@($"{NavHelpers.RMAProcessingIcon} me-3")" aria-hidden="true"></span>
+                    <div>RMA Processing</div>
+                </h3>
+
+                @* RMA Processing - Items *@
+                <div class="nav-item px-3">
+                    <a class="nav-link @GetActiveClass(NavHelpers.RMAProcessingRoot)" href="@NavHelpers.RMAProcessingRoot">
+                        <span class="@($"{NavHelpers.DataGridListIcon} me-2")" aria-hidden="true"></span> RMA Dashboard
+                    </a>
+                </div>
+            }
+            else
+            {
+                @* Default Menu - Items *@
+                <div class="nav-item px-3">
+                    <a class="nav-link @GetActiveClass(NavHelpers.FirstTimeYieldMainPage, true)" href="@NavHelpers.FirstTimeYieldMainPage">
+                        <span class="@($"{NavHelpers.FirstTimeYieldIcon} me-2")" aria-hidden="true"></span> First Time Yield
+                    </a>
+                </div>
+                <div class="nav-item px-3">
+                    <a class="nav-link @GetActiveClass(NavHelpers.CMHubMainPage, true)" href="@NavHelpers.CMHubMainPage">
+                        <span class="@($"{NavHelpers.CMHubIcon} me-2")" aria-hidden="true"></span> CM Hub
+                    </a>
+                </div>
+                <AuthorizeView Policy="@AuthorizationPolicies.RMAProcessingAccess">
+                    <Authorized>
+                        <div class="nav-item px-3">
+                            <a class="nav-link @GetActiveClass(NavHelpers.RMAProcessingRoot, true)" href="@NavHelpers.RMAProcessingRoot">
+                                <span class="@($"{NavHelpers.RMAProcessingIcon} me-2")" aria-hidden="true"></span> RMA Processing
+                            </a>
+                        </div>
+                    </Authorized>
+                </AuthorizeView>
+                @if (AccessOverrides.IsIT(CurrentUser?.ADUser))
+                {
+                    <div class="nav-item px-3">
+                        <a class="nav-link @GetActiveClass(NavHelpers.EpicompareMainPage, true)" href="@NavHelpers.EpicompareMainPage">
+                            <span class="@($"{NavHelpers.EpicompareIcon} me-2")" aria-hidden="true"></span> Epicompare
+                        </a>
+                    </div>
+                }
+            }
+        </nav>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] public ADUserModel? CurrentUser { get; set; }
+
+    private bool hideNavMenu = false;
+    private bool collapseNavMenu = true;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : "not-collapsed";
+
+    protected string GetIntranetHomeLink()
+    {
+        return $"https://{IntranetConfig.LegacyIntranetHostName}.crystalrugged.com/Home/";
+    }
+
+    protected override void OnInitialized()
+    {
+        // Subscribe to location changes
+        NavigationManager.LocationChanged += HandleLocationChanged;
+    }
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void ToggleHideNavMenu()
+    {
+        hideNavMenu = !hideNavMenu;
+    }
+
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        // Trigger a re-render when the URL changes
+        StateHasChanged();
+    }
+
+    private string GetHideClass()
+    {
+        return hideNavMenu ? "open" : "close";
+    }
+
+    private string GetHideIcon()
+    {
+        return hideNavMenu ? "fa-caret-right" : "fa-caret-left";
+    }
+
+    private string GetSidebarHiddenClass()
+    {
+        return hideNavMenu ? "hidden" : "";
+    }
+
+    /// <summary>
+    /// Determines if the nav link should be active by comparing URL paths (ignoring query strings).
+    /// </summary>
+    /// <param name="href">The href value of the nav link.</param>
+    /// <param name="usePrefix">If true, matches when the current path starts with the href (for parent routes).</param>
+    /// <returns>"active" if the link should be highlighted, otherwise an empty string.</returns>
+    private string GetActiveClass(string href, bool usePrefix = false)
+    {
+        var currentUri = new Uri(NavigationManager.Uri);
+        var currentPath = currentUri.AbsolutePath;
+
+        if (usePrefix)
+        {
+            return currentPath.StartsWith(href, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+        }
+
+        return string.Equals(currentPath, href, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe to prevent memory leaks
+        NavigationManager.LocationChanged -= HandleLocationChanged;
+    }
+}

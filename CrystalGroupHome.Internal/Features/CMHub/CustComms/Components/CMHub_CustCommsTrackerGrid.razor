@@ -1,0 +1,76 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.CustComms.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.Internal.Features.CMHub.Pages
+@inherits CMHub_CustCommsTrackerGridBase
+
+<div style="max-width: 1600px;">
+
+    <Row>
+        <Column>
+            <h2>Part Change Trackers</h2>
+        </Column>
+        <Column Style="display: flex; gap: 0.5rem; justify-content: end; flex-wrap: wrap-reverse;" Class="mb-2">
+            @* Add Tracker Button *@
+            @if (CMHub.HasCustCommsTrackerEditPermission(CurrentUser?.ADUser))
+            {
+                <Button Color="Color.Primary" Clicked="NavigateToAddTracker">
+                    <span class="@($"{NavHelpers.AddCircleIcon} me-2")" aria-hidden="true"></span> Add Tracker
+                </Button>
+            }
+        </Column>
+    </Row>
+
+    <Row>
+        <LoadingIndicator @bind-Visible="@IsLoading">
+            <DataGrid TItem="CMHub_CustCommsPartChangeTrackerModel" Data="@Trackers"
+                      Responsive
+                      ResponsiveMode="@TableResponsiveMode.Mobile"
+                      Filterable
+                      FilterMethod="DataGridFilterMethod.Contains"
+                      Sortable
+                      ShowPager
+                      ShowPageSizes
+                      @ref="TrackerGrid"
+                      DetailRowStartsVisible="false"
+                      RowSelectable="e => false"
+                      RowClicked="SelectRow"
+                      RowStyling="@OnRowStyling">
+                <DataGridColumns>
+                    <DataGridColumn Sortable="false" Filterable="false">
+                        <DisplayTemplate Context="model">
+                            <span class="inline-flex">
+                                <span class="@(model.IsSelected ? "inline-flex" : "inline-flex visibility-hidden")">
+                                    <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-1" Color="Color.Primary" Clicked="@(() => NavigateToEditPartChangeTracker(model))">
+                                        <span class="@NavHelpers.EditIcon" aria-hidden="true"></span>
+                                    </Button>
+                                </span>
+                            </span>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CustCommsPartChangeTrackerModel" Field="@nameof(CMHub_CustCommsPartChangeTrackerModel.PartNum)" Caption="Part Number" Sortable="true" Filterable="true" />
+                    <DataGridColumn TItem="CMHub_CustCommsPartChangeTrackerModel" Field="@nameof(CMHub_CustCommsPartChangeTrackerModel.PartDesc)" Caption="Description" Sortable="true" Filterable="true" />
+                    <DataGridColumn TItem="CMHub_CustCommsPartChangeTrackerModel" Field="@nameof(CMHub_CustCommsPartChangeTrackerModel.LastTimeBuyDate)" Caption="Last Time Buy" DisplayFormat="{0:MM/dd/yyyy}" Filterable="false" Sortable="true" TextAlignment="TextAlignment.Center" />
+                    <DataGridColumn TItem="CMHub_CustCommsPartChangeTrackerModel" Field="@nameof(CMHub_CustCommsPartChangeTrackerModel.CompletedTasks)" Caption="Tasks Completed" Sortable="true" Filterable="false" TextAlignment="TextAlignment.Center">
+                        <DisplayTemplate>
+                            @context.CompletedTasks / @context.TotalTasks
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CustCommsPartChangeTrackerModel" Caption="Progress" Filterable="false" TextAlignment="TextAlignment.Center">
+                        <DisplayTemplate>
+                            @if (context != null)
+                            {
+                                var percentage = context.TotalTasks > 0 ? Math.Round((double)context.CompletedTasks / context.TotalTasks * 100) : 0;
+                                <div class="simple-progress-bar-container">
+                                    <div class="simple-progress-bar-value bg-success" style="width: @(percentage)%"></div>
+                                </div>
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CustCommsPartChangeTrackerModel" Field="@nameof(CMHub_CustCommsPartChangeTrackerModel.LastUpdated)" Caption="Last Updated" DisplayFormat="{0:MM/dd/yyyy}" Filterable="false" Sortable="true" TextAlignment="TextAlignment.Center" />
+                    <DataGridCommandColumn TItem="CMHub_CustCommsPartChangeTrackerModel">
+                    </DataGridCommandColumn>
+                </DataGridColumns>
+            </DataGrid>
+        </LoadingIndicator>
+    </Row>
+</div>

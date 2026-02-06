@@ -1,0 +1,872 @@
+@using Blazorise.DataGrid
+@using CrystalGroupHome.Internal.Features.EnvironmentComparer.Models
+@using Microsoft.AspNetCore.Components.Web
+
+<Card class="mb-4">
+    <CardHeader>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Application Layer Comparison Results</h2>
+        </div>
+    </CardHeader>
+    <CardBody>
+        @* Content Search Section *@
+        <div class="content-search-section mb-3">
+            <div class="content-search-header" @onclick="() => _searchExpanded = !_searchExpanded" style="cursor: pointer;">
+                <div class="d-flex align-items-center">
+                    <i class="fa @(_searchExpanded ? "fa-chevron-down" : "fa-chevron-right") me-2"></i>
+                    <i class="fa fa-search me-2"></i>
+                    <strong>Content Search</strong>
+                    @if (_searchResults.Count > 0)
+                    {
+                        <span class="badge bg-primary ms-2">@_searchResults.Count results</span>
+                    }
+                </div>
+            </div>
+            
+            @if (_searchExpanded)
+            {
+                <div class="content-search-body mt-2">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-6 col-lg-4">
+                            <label class="form-label small text-muted mb-1">Search in layer content</label>
+                            <div class="input-group">
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="Enter search text (min 2 characters)..."
+                                       @bind="_searchText"
+                                       @bind:event="oninput"
+                                       @bind:after="OnSearchTextChanged"
+                                       @onkeypress="HandleSearchKeyPress" />
+                                @if (!string.IsNullOrEmpty(_searchText))
+                                {
+                                    <button class="btn btn-outline-secondary" type="button" @onclick="ClearSearch" title="Clear search">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="chkCaseSensitive" @bind="_searchCaseSensitive">
+                                <label class="form-check-label small" for="chkCaseSensitive">Case sensitive</label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-primary" @onclick="ExecuteSearch" disabled="@(_isSearching || string.IsNullOrWhiteSpace(_searchText) || _searchText.Length < 2)">
+                                @if (_isSearching)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                    <span>Searching...</span>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-search me-1"></i>
+                                    <span>Search</span>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="small text-muted mt-1">
+                        <i class="fa fa-info-circle me-1"></i>
+                        Searches through published content and draft (SysCharacter03) fields across all layers. Click a result to view the full content with matches highlighted.
+                    </div>
+
+                    @if (_searchResults.Count > 0)
+                    {
+                        <div class="search-results mt-3">
+                            <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                                <table class="table table-sm table-hover mb-0">
+                                    <thead class="table-light sticky-top">
+                                        <tr>
+                                            <th style="width: 200px;">Application</th>
+                                            <th style="width: 150px;">Layer</th>
+                                            <th style="width: 100px;">Environment</th>
+                                            <th style="width: 120px;">Category</th>
+                                            <th style="width: 100px;">Found In</th>
+                                            <th style="width: 60px;">Matches</th>
+                                            <th>Preview</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var result in _searchResults)
+                                        {
+                                            <tr class="search-result-row">
+                                                <td class="text-truncate" style="max-width: 200px;" title="@result.Layer.Id">@result.Layer.Id</td>
+                                                <td class="text-truncate" style="max-width: 150px;" title="@result.Layer.LayerName">@result.Layer.LayerName</td>
+                                                <td>
+                                                    @if (result.Environment == "Both")
+                                                    {
+                                                        <span class="badge bg-secondary">Both</span>
+                                                    }
+                                                    else if (result.Environment == SourceEnvironmentName)
+                                                    {
+                                                        <span class="badge bg-info">@SourceEnvironmentName</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-warning text-dark">@TargetEnvironmentName</span>
+                                                    }
+                                                </td>
+                                                <td><span class="small">@result.Category</span></td>
+                                                <td>
+                                                    @foreach (var loc in result.MatchLocations)
+                                                    {
+                                                        <button class="btn btn-sm badge @(loc == "Published" ? "bg-success" : "bg-warning text-dark") me-1 view-content-btn" 
+                                                                @onclick="() => OpenContentViewerFromSearch(result, loc)"
+                                                                @onclick:stopPropagation="true"
+                                                                title="Click to view @loc content">
+                                                            @loc <i class="fa fa-external-link ms-1" style="font-size: 0.7em;"></i>
+                                                        </button>
+                                                    }
+                                                </td>
+                                                <td class="text-center"><span class="badge bg-primary">@result.MatchCount</span></td>
+                                                <td class="small text-muted text-truncate" style="max-width: 300px; cursor: pointer;" 
+                                                    title="Click to view content"
+                                                    @onclick="() => OpenContentViewerFromSearch(result, result.MatchLocations.First())">
+                                                    @GetContentPreview(result.Layer, _searchText)
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    else if (_hasSearched && !_isSearching)
+                    {
+                        <div class="alert alert-info mt-3 mb-0">
+                            <i class="fa fa-info-circle me-2"></i>
+                            No matches found for "<strong>@_searchText</strong>". Try a different search term or disable case sensitivity.
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <Tabs SelectedTab="@_selectedTab" SelectedTabChanged="@OnTabChanged">
+            <Items>
+                <Tab Name="identical">Identical (@ComparisonResult.Identical.Count)</Tab>
+                <Tab Name="publishedDiff">Published Diff (@ComparisonResult.PublishedDifferences.Count)</Tab>
+                <Tab Name="pendingChanges">Pending Changes (@ComparisonResult.DraftDifferences.Count)</Tab>
+                <Tab Name="bothDiff">Both Diff (@ComparisonResult.BothDifferences.Count)</Tab>
+                <Tab Name="onlyInSource">Only In @SourceEnvironmentName (@ComparisonResult.ExistsOnlyInSource.Count)</Tab>
+                <Tab Name="onlyInTarget">Only In @TargetEnvironmentName (@ComparisonResult.ExistsOnlyInTarget.Count)</Tab>
+            </Items>
+            <Content>
+                <TabPanel Name="identical">
+                    <DataGrid TItem="ApplicationLayerDefinition"
+                              Data="@ComparisonResult.Identical"
+                              Filterable="true"
+                              Sortable="true"
+                              Striped="true"
+                              Hoverable="true"
+                              ShowPager="true"
+                              PageSize="10"
+                              SelectedRowChanged="@OnIdenticalSelected"
+                              SelectionMode="DataGridSelectionMode.Single">
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.Id)" Caption="Application ID" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.LayerName)" Caption="Layer Name" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.SubType)" Caption="Type" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.LastUpdatedBy)" Caption="Last Updated By" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.LastUpdated)" Caption="Last Updated" Sortable="true">
+                            <DisplayTemplate>
+                                @context.LastUpdated.ToString("yyyy-MM-dd HH:mm")
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn Caption="View" Width="80px">
+                            <DisplayTemplate>
+                                <button type="button" class="btn btn-sm btn-outline-primary" 
+                                        @onclick="() => ViewIdenticalLayer(context)" 
+                                        @onclick:stopPropagation="true"
+                                        @onclick:preventDefault="true"
+                                        title="View layer content">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGrid>
+                </TabPanel>
+
+                <TabPanel Name="publishedDiff">
+                    <Alert Color="Color.Info" Visible="true" class="mb-3">
+                        <strong>Published Differences:</strong> These layers have different published (active) content between environments.
+                    </Alert>
+                    <DataGrid TItem="ComparisonDifference<ApplicationLayerDefinition>"
+                              Data="@ComparisonResult.PublishedDifferences"
+                              Filterable="true"
+                              Sortable="true"
+                              Striped="true"
+                              Hoverable="true"
+                              ShowPager="true"
+                              PageSize="10"
+                              SelectedRowChanged="@OnDifferenceSelected"
+                              SelectionMode="DataGridSelectionMode.Single">
+                        <DataGridColumn Field="SourceItem.Id" Caption="Application ID" />
+                        <DataGridColumn Field="SourceItem.LayerName" Caption="Layer Name" />
+                        <DataGridColumn Field="SourceItem.SubType" Caption="Type" />
+                        <DataGridColumn Field="SourceItem.LastUpdatedBy" Caption="@($"{SourceEnvironmentName} By")" />
+                        <DataGridColumn Field="SourceItem.LastUpdated" Caption="@($"{SourceEnvironmentName} Date")" Sortable="true">
+                            <DisplayTemplate>
+                                @context.SourceItem.LastUpdated.ToString("MM-dd HH:mm")
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn Field="TargetItem.LastUpdatedBy" Caption="@($"{TargetEnvironmentName} By")" />
+                        <DataGridColumn Field="TargetItem.LastUpdated" Caption="@($"{TargetEnvironmentName} Date")" Sortable="true">
+                            <DisplayTemplate>
+                                @context.TargetItem.LastUpdated.ToString("MM-dd HH:mm")
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn Caption="View" Width="100px">
+                            <DisplayTemplate>
+                                <div class="btn-group btn-group-sm">
+                                    <button type="button" class="btn btn-outline-info" 
+                                            @onclick="() => ViewPublishedDiffSource(context.SourceItem)" 
+                                            @onclick:stopPropagation="true"
+                                            @onclick:preventDefault="true"
+                                            title="View source">
+                                        S
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning" 
+                                            @onclick="() => ViewPublishedDiffTarget(context.TargetItem)" 
+                                            @onclick:stopPropagation="true"
+                                            @onclick:preventDefault="true"
+                                            title="View target">
+                                        T
+                                    </button>
+                                </div>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGrid>
+                    @if (IsContentLoading && LoadingContentType == "applayer_difference")
+                    {
+                        <div class="content-loading-panel">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="content-loading-text">Loading comparison...</span>
+                        </div>
+                    }
+                    else if (_localSelectedDifference != null)
+                    {
+                        <Div class="mt-4">
+                            <h3>Comparison for <strong>@_localSelectedDifference.SourceItem.LayerName</strong></h3>
+                            <CollapsedDiff OldText="@_localSelectedDifference.SourceItem.PublishedContent"
+                                           NewText="@_localSelectedDifference.TargetItem.PublishedContent"
+                                           OldTextLabel="@SourceEnvironmentName"
+                                           NewTextLabel="@TargetEnvironmentName"
+                                           ContextLines="3" />
+                        </Div>
+                    }
+                </TabPanel>
+
+                @* Pending Changes Tab *@
+                <TabPanel Name="pendingChanges">
+                    <Alert Color="Color.Warning" Visible="true" class="mb-3">
+                        <strong>Pending Changes:</strong> These layers have unpublished draft changes in one or both environments. 
+                        Select a layer to see what would change if the draft was published.
+                    </Alert>
+                    <DataGrid TItem="ComparisonDifference<ApplicationLayerDefinition>"
+                              Data="@ComparisonResult.DraftDifferences"
+                              Filterable="true"
+                              Sortable="true"
+                              Striped="true"
+                              Hoverable="true"
+                              ShowPager="true"
+                              PageSize="10"
+                              SelectedRowChanged="@OnDifferenceSelected"
+                              SelectionMode="DataGridSelectionMode.Single">
+                        <DataGridColumn Field="SourceItem.Id" Caption="Application ID" />
+                        <DataGridColumn Field="SourceItem.LayerName" Caption="Layer Name" />
+                        <DataGridColumn Field="SourceItem.SubType" Caption="Type" />
+                        <DataGridColumn Caption="@($"{SourceEnvironmentName} Draft")">
+                            <DisplayTemplate>
+                                @if (context.SourceItem.HasDraft)
+                                {
+                                    <span class="badge bg-warning text-dark">Has Draft</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">No Draft</span>
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn Caption="@($"{TargetEnvironmentName} Draft")">
+                            <DisplayTemplate>
+                                @if (context.TargetItem.HasDraft)
+                                {
+                                    <span class="badge bg-warning text-dark">Has Draft</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">No Draft</span>
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn Field="SourceItem.LastUpdatedBy" Caption="Updated By" />
+                        <DataGridColumn Field="SourceItem.LastUpdated" Caption="Updated" Sortable="true">
+                            <DisplayTemplate>
+                                @context.SourceItem.LastUpdated.ToString("MM-dd HH:mm")
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn Caption="View" Width="100px">
+                            <DisplayTemplate>
+                                <div class="btn-group btn-group-sm">
+                                    <button type="button" class="btn btn-outline-info" 
+                                            @onclick="() => ViewPendingChangesSource(context.SourceItem)" 
+                                            @onclick:stopPropagation="true"
+                                            @onclick:preventDefault="true"
+                                            title="View source">
+                                        S
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning" 
+                                            @onclick="() => ViewPendingChangesTarget(context.TargetItem)" 
+                                            @onclick:stopPropagation="true"
+                                            @onclick:preventDefault="true"
+                                            title="View target">
+                                        T
+                                    </button>
+                                </div>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGrid>
+                    @if (IsContentLoading && LoadingContentType == "applayer_difference")
+                    {
+                        <div class="content-loading-panel">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="content-loading-text">Loading comparison...</span>
+                        </div>
+                    }
+                    else if (_localSelectedDifference != null)
+                    {
+                        <Div class="mt-4">
+                            <h3>Pending Changes for <strong>@_localSelectedDifference.SourceItem.LayerName</strong></h3>
+                            
+                            @if (_localSelectedDifference.SourceItem.HasDraft)
+                            {
+                                <h4 class="mt-3">
+                                    <span class="badge bg-warning text-dark me-2">@SourceEnvironmentName</span>
+                                    Draft ? Published (what would change if published)
+                                </h4>
+                                <CollapsedDiff OldText="@_localSelectedDifference.SourceItem.PublishedContent"
+                                               NewText="@_localSelectedDifference.SourceItem.DraftContent"
+                                               OldTextLabel="Published"
+                                               NewTextLabel="Draft"
+                                               ContextLines="3" />
+                            }
+                            else
+                            {
+                                <p class="text-muted mt-3"><em>@SourceEnvironmentName has no pending draft changes.</em></p>
+                            }
+
+                            @if (_localSelectedDifference.TargetItem.HasDraft)
+                            {
+                                <h4 class="mt-4">
+                                    <span class="badge bg-warning text-dark me-2">@TargetEnvironmentName</span>
+                                    Draft ? Published (what would change if published)
+                                </h4>
+                                <CollapsedDiff OldText="@_localSelectedDifference.TargetItem.PublishedContent"
+                                               NewText="@_localSelectedDifference.TargetItem.DraftContent"
+                                               OldTextLabel="Published"
+                                               NewTextLabel="Draft"
+                                               ContextLines="3" />
+                            }
+                            else
+                            {
+                                <p class="text-muted mt-4"><em>@TargetEnvironmentName has no pending draft changes.</em></p>
+                            }
+
+                            <details class="mt-4">
+                                <summary class="btn btn-outline-secondary btn-sm">
+                                    Show Cross-Environment Draft Comparison (Source Draft vs Target Published)
+                                </summary>
+                                <div class="mt-3">
+                                    <p class="text-muted">This shows how the draft in @SourceEnvironmentName compares to what's currently live in @TargetEnvironmentName</p>
+                                    <CollapsedDiff OldText="@_localSelectedDifference.TargetItem.PublishedContent"
+                                                   NewText="@(_localSelectedDifference.SourceItem.HasDraft ? _localSelectedDifference.SourceItem.DraftContent : _localSelectedDifference.SourceItem.PublishedContent)"
+                                                   OldTextLabel="@($"{TargetEnvironmentName} Published")"
+                                                   NewTextLabel="@($"{SourceEnvironmentName} Draft")"
+                                                   ContextLines="3" />
+                                </div>
+                            </details>
+                        </Div>
+                    }
+                </TabPanel>
+
+                <TabPanel Name="bothDiff">
+                    <Alert Color="Color.Danger" Visible="true" class="mb-3">
+                        <strong>Both Published and Draft Differ:</strong> These layers have differences in both published AND draft content.
+                    </Alert>
+                    <DataGrid TItem="ComparisonDifference<ApplicationLayerDefinition>"
+                              Data="@ComparisonResult.BothDifferences"
+                              Filterable="true"
+                              Sortable="true"
+                              Striped="true"
+                              Hoverable="true"
+                              ShowPager="true"
+                              PageSize="10"
+                              SelectedRowChanged="@OnDifferenceSelected"
+                              SelectionMode="DataGridSelectionMode.Single">
+                        <DataGridColumn Field="SourceItem.Id" Caption="Application ID" />
+                        <DataGridColumn Field="SourceItem.LayerName" Caption="Layer Name" />
+                        <DataGridColumn Field="SourceItem.SubType" Caption="Type" />
+                        <DataGridColumn Field="SourceItem.LastUpdatedBy" Caption="@($"{SourceEnvironmentName} By")" />
+                        <DataGridColumn Field="SourceItem.LastUpdated" Caption="@($"{SourceEnvironmentName} Date")" Sortable="true">
+                            <DisplayTemplate>
+                                @context.SourceItem.LastUpdated.ToString("MM-dd HH:mm")
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn Field="TargetItem.LastUpdatedBy" Caption="@($"{TargetEnvironmentName} By")" />
+                        <DataGridColumn Field="TargetItem.LastUpdated" Caption="@($"{TargetEnvironmentName} Date")" Sortable="true">
+                            <DisplayTemplate>
+                                @context.TargetItem.LastUpdated.ToString("MM-dd HH:mm")
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn Caption="View" Width="100px">
+                            <DisplayTemplate>
+                                <div class="btn-group btn-group-sm">
+                                    <button type="button" class="btn btn-outline-info" 
+                                            @onclick="() => ViewBothDiffSource(context.SourceItem)" 
+                                            @onclick:stopPropagation="true"
+                                            @onclick:preventDefault="true"
+                                            title="View source">
+                                        S
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning" 
+                                            @onclick="() => ViewBothDiffTarget(context.TargetItem)" 
+                                            @onclick:stopPropagation="true"
+                                            @onclick:preventDefault="true"
+                                            title="View target">
+                                        T
+                                    </button>
+                                </div>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGrid>
+                    @if (IsContentLoading && LoadingContentType == "applayer_difference")
+                    {
+                        <div class="content-loading-panel">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="content-loading-text">Loading comparison...</span>
+                        </div>
+                    }
+                    else if (_localSelectedDifference != null)
+                    {
+                        <Div class="mt-4">
+                            <h3>Comparison for <strong>@_localSelectedDifference.SourceItem.LayerName</strong></h3>
+                        
+                            <h4 class="mt-3">Published Content <span class="badge bg-danger">Different</span></h4>
+                            <CollapsedDiff OldText="@_localSelectedDifference.SourceItem.PublishedContent"
+                                           NewText="@_localSelectedDifference.TargetItem.PublishedContent"
+                                           OldTextLabel="@SourceEnvironmentName"
+                                           NewTextLabel="@TargetEnvironmentName"
+                                           ContextLines="3" />
+                            
+                            <h4 class="mt-4">Pending Draft Changes</h4>
+                            @if (_localSelectedDifference.SourceItem.HasDraft)
+                            {
+                                <h5 class="mt-3">
+                                    <span class="badge bg-warning text-dark me-2">@SourceEnvironmentName</span>
+                                    Draft ? Published
+                                </h5>
+                                <CollapsedDiff OldText="@_localSelectedDifference.SourceItem.PublishedContent"
+                                               NewText="@_localSelectedDifference.SourceItem.DraftContent"
+                                               OldTextLabel="Published"
+                                               NewTextLabel="Draft"
+                                               ContextLines="3" />
+                            }
+                            @if (_localSelectedDifference.TargetItem.HasDraft)
+                            {
+                                <h5 class="mt-3">
+                                    <span class="badge bg-warning text-dark me-2">@TargetEnvironmentName</span>
+                                    Draft ? Published
+                                </h5>
+                                <CollapsedDiff OldText="@_localSelectedDifference.TargetItem.PublishedContent"
+                                               NewText="@_localSelectedDifference.TargetItem.DraftContent"
+                                               OldTextLabel="Published"
+                                               NewTextLabel="Draft"
+                                               ContextLines="3" />
+                            }
+                        </Div>
+                    }
+                </TabPanel>
+
+                <TabPanel Name="onlyInSource">
+                    <DataGrid TItem="ApplicationLayerDefinition"
+                              Data="@ComparisonResult.ExistsOnlyInSource"
+                              Filterable="true"
+                              Sortable="true"
+                              ShowSearchBar="true"
+                              Striped="true"
+                              Hoverable="true"
+                              ShowPager="true"
+                              PageSize="10"
+                              SelectedRowChanged="@OnOnlyInSourceSelected"
+                              SelectionMode="DataGridSelectionMode.Single">
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.Id)" Caption="Application ID" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.LayerName)" Caption="Layer Name" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.SubType)" Caption="Type" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.LastUpdatedBy)" Caption="Last Updated By" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.LastUpdated)" Caption="Last Updated" Sortable="true">
+                            <DisplayTemplate>
+                                @context.LastUpdated.ToString("yyyy-MM-dd HH:mm")
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn Caption="View" Width="80px">
+                            <DisplayTemplate>
+                                <button type="button" class="btn btn-sm btn-outline-primary" 
+                                        @onclick="() => ViewOnlyInSourceLayer(context)" 
+                                        @onclick:stopPropagation="true"
+                                        @onclick:preventDefault="true"
+                                        title="View layer content">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGrid>
+                </TabPanel>
+
+                <TabPanel Name="onlyInTarget">
+                    <DataGrid TItem="ApplicationLayerDefinition"
+                              Data="@ComparisonResult.ExistsOnlyInTarget"
+                              Filterable="true"
+                              Sortable="true"
+                              Striped="true"
+                              Hoverable="true"
+                              ShowPager="true"
+                              PageSize="10"
+                              SelectedRowChanged="@OnOnlyInTargetSelected"
+                              SelectionMode="DataGridSelectionMode.Single">
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.Id)" Caption="Application ID" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.LayerName)" Caption="Layer Name" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.SubType)" Caption="Type" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.LastUpdatedBy)" Caption="Last Updated By" />
+                        <DataGridColumn Field="@nameof(ApplicationLayerDefinition.LastUpdated)" Caption="Last Updated" Sortable="true">
+                            <DisplayTemplate>
+                                @context.LastUpdated.ToString("yyyy-MM-dd HH:mm")
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn Caption="View" Width="80px">
+                            <DisplayTemplate>
+                                <button type="button" class="btn btn-sm btn-outline-primary" 
+                                        @onclick="() => ViewOnlyInTargetLayer(context)" 
+                                        @onclick:stopPropagation="true"
+                                        @onclick:preventDefault="true"
+                                        title="View layer content">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGrid>
+                </TabPanel>
+            </Content>
+        </Tabs>
+    </CardBody>
+</Card>
+
+@* Content Viewer Modal *@
+<Modal @ref="_contentModal" Visible="@_showContentModal" VisibleChanged="@((visible) => { if (!visible) CloseContentViewer(); })">
+    <ModalContent Size="ModalSize.ExtraLarge" Centered>
+        <ModalHeader>
+            <ModalTitle>
+                @if (_viewingLayer != null)
+                {
+                    <span>
+                        <i class="fa fa-file-code-o me-2"></i>
+                        @_viewingLayer.Id / @_viewingLayer.LayerName
+                    </span>
+                }
+            </ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody Style="max-height: 70vh; overflow: hidden; display: flex; flex-direction: column;">
+            @if (_viewingLayer != null)
+            {
+                @* Content Type Selector *@
+                <div class="d-flex justify-content-between align-items-center mb-2 flex-shrink-0">
+                    <div class="btn-group" role="group">
+                        <button type="button" 
+                                class="btn btn-sm @(IsPublishedSelected ? "btn-success" : "btn-outline-success")"
+                                disabled="@(!HasPublishedContent)"
+                                @onclick="SwitchToPublished">
+                            Published
+                        </button>
+                        <button type="button" 
+                                class="btn btn-sm @(IsDraftSelected ? "btn-warning" : "btn-outline-warning")"
+                                disabled="@(!HasDraftContent)"
+                                @onclick="SwitchToDraft">
+                            Draft
+                        </button>
+                    </div>
+                    <div class="small text-muted">
+                        <span class="badge bg-secondary me-1">@_viewingEnvironment</span>
+                        <span>@_viewingCategory</span>
+                    </div>
+                </div>
+
+                @* Modal Search Bar *@
+                <div class="modal-search-bar mb-2 flex-shrink-0">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text"><i class="fa fa-search"></i></span>
+                                <input type="text" 
+                                       class="form-control" 
+                                       placeholder="Search in content..."
+                                       @bind="_modalSearchText"
+                                       @bind:event="oninput"
+                                       @bind:after="OnModalSearchTextChanged"
+                                       @onkeypress="HandleModalSearchKeyPress" />
+                                @if (!string.IsNullOrEmpty(_modalSearchText))
+                                {
+                                    <button class="btn btn-outline-secondary" type="button" @onclick="ClearModalSearch" title="Clear">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                }
+                                <button class="btn btn-primary" type="button" 
+                                        @onclick="ExecuteModalSearch" 
+                                        disabled="@(string.IsNullOrWhiteSpace(_modalSearchText) || _modalSearchText.Length < 2)">
+                                    Find
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-check form-check-inline mb-0">
+                                <input class="form-check-input" type="checkbox" id="chkModalCaseSensitive" @bind="_modalSearchCaseSensitive">
+                                <label class="form-check-label small" for="chkModalCaseSensitive">Aa</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                @* Match Navigation Bar *@
+                @if (_totalMatchesInContent > 0)
+                {
+                    <div class="match-navigation-bar mb-2 flex-shrink-0">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <button class="btn btn-sm btn-outline-secondary" @onclick="GoToFirstMatch" disabled="@(_currentMatchIndex <= 1)" title="First match">
+                                <i class="fa fa-angle-double-left"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" @onclick="GoToPreviousMatch" disabled="@(_currentMatchIndex <= 1)" title="Previous">
+                                <i class="fa fa-angle-left"></i>
+                            </button>
+                            <span class="match-counter">
+                                <strong>@_currentMatchIndex</strong> / <strong>@_totalMatchesInContent</strong>
+                            </span>
+                            <button class="btn btn-sm btn-outline-secondary" @onclick="GoToNextMatch" disabled="@(_currentMatchIndex >= _totalMatchesInContent)" title="Next">
+                                <i class="fa fa-angle-right"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" @onclick="GoToLastMatch" disabled="@(_currentMatchIndex >= _totalMatchesInContent)" title="Last match">
+                                <i class="fa fa-angle-double-right"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary ms-2" @onclick="JumpToCurrentMatch" title="Jump to current match">
+                                <i class="fa fa-crosshairs"></i> Jump
+                            </button>
+                        </div>
+                    </div>
+                }
+                else if (_hasModalSearched && _totalMatchesInContent == 0)
+                {
+                    <div class="alert alert-warning py-1 mb-2 flex-shrink-0 small">
+                        <i class="fa fa-exclamation-triangle me-1"></i>
+                        No matches found for "<strong>@_modalSearchText</strong>"
+                    </div>
+                }
+                
+                <div class="content-viewer-container flex-grow-1" id="contentViewerContainer" style="overflow: auto;">
+                    <pre class="content-viewer-pre"><code>@((MarkupString)GetHighlightedHtml(_displayedContent, _modalSearchText))</code></pre>
+                </div>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CloseContentViewer">Close</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@* JavaScript for scrolling to matches *@
+<script suppress-error="BL9992">
+    window.scrollToSearchMatch = function(matchNumber) {
+        try {
+            const container = document.getElementById('contentViewerContainer');
+            if (!container) {
+                console.log('scrollToSearchMatch: Container not found');
+                return false;
+            }
+            
+            const allMatches = container.querySelectorAll('.search-match, .search-match-current');
+            if (!allMatches || allMatches.length === 0) {
+                console.log('scrollToSearchMatch: No matches found in DOM');
+                return false;
+            }
+            
+            allMatches.forEach(el => {
+                el.classList.remove('search-match-current');
+                el.classList.add('search-match');
+            });
+            
+            const targetIndex = matchNumber - 1;
+            if (targetIndex >= 0 && targetIndex < allMatches.length) {
+                const targetMatch = allMatches[targetIndex];
+                
+                targetMatch.classList.remove('search-match');
+                targetMatch.classList.add('search-match-current');
+                
+                targetMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return true;
+            }
+            
+            return false;
+        } catch (error) {
+            console.error('scrollToSearchMatch error:', error);
+            return false;
+        }
+    };
+</script>
+
+<style>
+    .content-loading-panel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        margin-top: 1rem;
+    }
+
+    .content-loading-text {
+        margin-left: 0.75rem;
+        color: #6c757d;
+        font-style: italic;
+    }
+
+    .content-search-section {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .content-search-header {
+        color: #495057;
+    }
+
+    .content-search-header:hover {
+        color: #0d6efd;
+    }
+
+    .search-results table {
+        font-size: 0.875rem;
+    }
+
+    .search-results thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 1;
+    }
+
+    .search-result-row:hover {
+        cursor: pointer;
+    }
+
+    .view-content-btn {
+        cursor: pointer;
+        border: none;
+        padding: 0.2rem 0.4rem;
+    }
+
+    .view-content-btn:hover {
+        opacity: 0.8;
+    }
+
+    /* Modal search bar */
+    .modal-search-bar {
+        background-color: #f8f9fa;
+        border-radius: 0.375rem;
+        padding: 0.5rem;
+    }
+
+    /* Content viewer modal styles */
+    .content-viewer-container {
+        background-color: #1e1e1e;
+        border-radius: 0.375rem;
+        padding: 0;
+    }
+
+    .content-viewer-pre {
+        margin: 0;
+        padding: 1rem;
+        background-color: #1e1e1e;
+        color: #d4d4d4;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 12px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow: visible;
+    }
+
+    .content-viewer-pre code {
+        font-family: inherit;
+        color: inherit;
+    }
+
+    /* Search match highlighting */
+    .search-match {
+        background-color: #ffff00;
+        color: #000;
+        padding: 1px 2px;
+        border-radius: 2px;
+        font-weight: bold;
+    }
+
+    .search-match-current {
+        background-color: #ff9800;
+        color: #000;
+        padding: 1px 2px;
+        border-radius: 2px;
+        font-weight: bold;
+        outline: 2px solid #ff5722;
+        animation: pulse-highlight 0.5s ease-in-out;
+    }
+
+    @@keyframes pulse-highlight {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .match-navigation-bar {
+        background-color: #e9ecef;
+        border-radius: 0.375rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .match-counter {
+        min-width: 80px;
+        text-align: center;
+        font-size: 0.875rem;
+    }
+</style>
+
+@code {
+    private bool _searchExpanded = false;
+    private Modal? _contentModal;
+
+    private async Task HandleSearchKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(_searchText) && _searchText.Length >= 2)
+        {
+            await ExecuteSearch();
+        }
+    }
+
+    private async Task HandleModalSearchKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(_modalSearchText) && _modalSearchText.Length >= 2)
+        {
+            await ExecuteModalSearch();
+        }
+    }
+}

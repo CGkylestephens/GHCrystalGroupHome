@@ -1,0 +1,14 @@
+@page "/rma-processing/files-embedded"
+@attribute [Authorize(Policy = AuthorizationPolicies.RMAProcessingAccess)]
+@using CrystalGroupHome.Internal.Authorization
+@layout IframeLayout
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Components
+@using Blazorise
+@using Blazorise.Components
+@inherits FilesEmbeddedPageBase
+
+<PageTitle>RMA Files</PageTitle>
+
+@* This page now serves as a redirect to maintain backward compatibility for embedded usage *@

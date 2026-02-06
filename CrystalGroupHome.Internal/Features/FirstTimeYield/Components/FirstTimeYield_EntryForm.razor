@@ -1,0 +1,205 @@
+﻿@using CrystalGroupHome.Internal.Features.FirstTimeYield.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+@inherits FirstTimeYield_EntryFormBase
+
+<Div style="max-width: 1000px;">
+    @if (IsLoading)
+    {
+        <div class="loading-gradient" style="width: 1000px; height: 400px;"></div>
+    }
+    else
+    {
+        <Column>
+            @if(IsEdit)
+            {
+                <h2>Edit Entry: @Entry?.Id</h2>
+            }
+            else
+            {
+                <h2>Add New Entry</h2>
+            }
+        </Column>
+
+        <EditForm Model="DraftEntry" OnSubmit="HandleSubmit">
+
+            <DataAnnotationsValidator />
+            <Div Style="justify-items: end" Class="mb-3">
+                <ValidationMessage For="@(() => DraftEntry.JobNum)" />
+                <ValidationMessage For="@(() => DraftEntry.QtyTested)" />
+                <ValidationMessage For="@(() => DraftEntry.QtyFailed)" />
+                <ValidationMessage For="@(() => DraftEntry.Area)" />
+                <ValidationMessage For="@(() => DraftEntry.OpCode)" />
+            </Div>
+
+            <!-- Job Details Section -->
+            <Row Class="mb-3">
+                <Column>
+                    <Card Style="height: 100%; padding: 0.5rem; background-color: #e9ecef;">
+                        <p><b>Associated Job Info</b></p>
+                        <p>Part #: @(FoundJob?.PartNum ?? "N/A")</p>
+                        <p>Prod Qty: @Decimal.Round(FoundJob?.ProdQty ?? 0, 0)</p>
+                        <p>Qty Tested from other Entries: @(IsEdit ? TotalTestedQtyForJob - Entry?.QtyTested : TotalTestedQtyForJob)</p>
+                    </Card>
+                </Column>
+
+                <Column>
+
+                    <label for="jobNum">Job #</label>
+                    @* TODO: Replace this input with the shared CustomSearchInput *@
+                    <Div Style="display: flex; flex: 1;" Class="mb-2">
+                        <TextEdit @bind-Text="DraftJobNum" Style="border-radius: 4px 0 0 4px;" Disabled="@(IsEdit && !Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))" id="jobNum" />
+                        <Button ButtonStyle="ButtonStyle.Link" Disabled="DraftEntry.IsValidJobNum || DraftEntry.CurrentJobNumHasBeenSearched || (IsEdit && !Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))"
+                        Style="width: 3rem; border-radius: 0 4px 4px 0;" Color="@StyleHelpers.GetSearchButtonColor(DraftEntry.CurrentJobNumHasBeenSearched, DraftEntry.IsValidJobNum)"
+                        Clicked="() => LoadJobDataAsync(DraftJobNum)">
+                            <span class="@StyleHelpers.GetSearchButtonIcon(DraftEntry.CurrentJobNumHasBeenSearched, DraftEntry.IsValidJobNum)" aria-hidden="true"></span>
+                        </Button>
+                    </Div>
+
+                    <label for="opCodeSelect">Op Code</label>
+                    <Select TValue="int" @bind-SelectedValue="DraftValidJobOperIndex" Disabled="@(ValidJobOpers.Count <= 0 || (IsEdit && !Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser)))" id="opCodeSelect" Class="mb-2">
+                        <SelectItem Value="-1">N/A</SelectItem>
+                        @foreach (var jobOpers in ValidJobOpers)
+                        {
+                            <SelectItem Value="@ValidJobOpers.IndexOf(jobOpers)">[@jobOpers.OprSeq] @jobOpers.OpCode</SelectItem>
+                        }
+                    </Select>
+
+                    <label for="operatorSelect">Operator</label>
+                    <Select TValue="int" @bind-SelectedValue="DraftValidJobEmployeeIndex" Disabled="@(ValidJobEmployees.Count <= 0 || (IsEdit && !Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser)))" id="operatorSelect">
+                        <SelectItem Value="-1">N/A</SelectItem>
+                        @foreach (var jobEmp in ValidJobEmployees)
+                        {
+                            <SelectItem Value="@ValidJobEmployees.IndexOf(jobEmp)">@jobEmp.Name</SelectItem>
+                        }
+                    </Select>
+
+                </Column>
+
+                <Column>
+
+                    <label for="areaSelect">Testing Area</label>
+                    <Select TValue="int?" @bind-SelectedValue="DraftAreaId" Disabled="@(IsEdit && !Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))" id="areaSelect" Class="mb-2">
+                        @foreach (var area in ValidAreas)
+                        {
+                            if (area.Deleted)
+                            {
+                                <SelectItem Value="@area.Id">@area.AreaDescription (Obsolete)</SelectItem>
+                            }
+                            else
+                            {
+                                <SelectItem Value="@area.Id">@area.AreaDescription</SelectItem>
+                            }
+                        }
+                    </Select>
+
+                    <label for="qtyTested">Quantity Tested</label>
+                    <NumericEdit @bind-Value="DraftEntry.QtyTested" Disabled="@(IsEdit && !Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))" id="qtyTested" Class="mb-2" />
+
+                    <label for="qtyFailed">Quantity Failed</label>
+                    <NumericEdit @bind-Value="DraftEntry.QtyFailed" Disabled="@(IsEdit && !Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))" id="qtyFailed" />
+
+                </Column>
+            </Row>
+
+            <!-- You cannot see these fields if you are adding a new Entry (because it will automatically mark you as the EntryUser on the current date) -->
+            <!-- You can see all fields when editing, but you cannot edit them -->
+            <Row Class="mb-3" hidden="@(!IsEdit)">
+                <Column Style="align-content: end;">
+                    <label for="entryUser">Entered By User</label>
+                    <TextEdit Text="@DraftEntry.EntryUser.DisplayName" Disabled="true" id="entryUser" />
+                </Column>
+                <Column Style="align-content: end;">
+                    <label For="entryDate">Date Entered</label>
+                    <DateEdit TValue="DateTime" Date="@DraftEntry.EntryDate" Disabled="true" id="entryDate" />
+                </Column>
+                <Column Style="align-content: end;">
+                    <label for="modifiedUser">Last Modified By User</label>
+                    <TextEdit Text="@DraftEntry.LastModifiedUser.DisplayName" Disabled="true" id="modifiedUser" />
+                </Column>
+                <Column Style="align-content: end;">
+                    <label For="modifiedDate">Last Modified Date</label>
+                    <DateEdit TValue="DateTime" Date="@DraftEntry.LastModifiedDate" Disabled="true" id="modifiedDate" />
+                </Column>
+            </Row>
+
+            <Row Class="mb-3">
+                <Column>
+                    <Label for="notes">Notes</Label>
+                    <MemoEdit @bind-Text="DraftEntry.Notes" Disabled="@(IsEdit && !Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))" id="notes" Rows="3" />
+                </Column>
+            </Row>
+
+            <!-- Divider --> 
+            <hr />
+
+            <!-- Failure Reasons Section -->
+            <Row>
+                <Column>
+                    <h5>Failure Reasons</h5>
+                </Column>
+                <Column Style="text-align: end;" Class="mb-4" hidden="@(IsEdit && !Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))">
+                    <Button Color="Color.Primary" Clicked="OpenAddFailureDialog">
+                        <span class="@($"{NavHelpers.AddCircleIcon} me-2")" aria-hidden="true"></span> Add Failure Reason
+                    </Button>
+                </Column>
+            </Row>
+            <DataGrid TItem="FirstTimeYield_FailureModel" Data="@DraftEntry.Failures" Editable="false" ShowPager="false" Responsive="true" @ref="FailureGrid" Class="mt-3" RowClicked="FailureRowClicked">
+                <DataGridColumns>
+                    @if (Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))
+                    {
+                        <DataGridColumn>
+                            <DisplayTemplate Context="failure">
+                                <Span Class="inline-flex">
+                                    <Span Class="@(failure.IsSelected ? "inline-flex" : "inline-flex visibility-hidden")">
+                                        <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-1" Color="Color.Primary" Clicked="@(() => OpenEditFailureDialog(failure))">
+                                            <span class="@NavHelpers.EditIcon" aria-hidden="true"></span>
+                                        </Button>
+                                    </Span>
+                                </Span>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    }
+                    <DataGridColumn Caption="Failure Reason">
+                        <DisplayTemplate Context="failure">
+                            @failure.FailureReason?.FailureDescription
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="FirstTimeYield_FailureModel" Field="@nameof(FirstTimeYield_FailureModel.Qty)" Caption="Quantity" />
+                    <DataGridColumn Caption="Area of Origin">
+                        <DisplayTemplate Context="failure">
+                            @failure.AreaToBlame?.AreaDescription
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="FirstTimeYield_FailureModel" Field="@nameof(FirstTimeYield_FailureModel.JobNumToBlame)" Caption="Original Job #" />
+                    <DataGridColumn TItem="FirstTimeYield_FailureModel" Field="@nameof(FirstTimeYield_FailureModel.OpCodeToBlame)" Caption="Original Op Code" />
+                    <DataGridColumn Caption="Operator On Job">
+                        <DisplayTemplate Context="failure">
+                            @failure.OperatorToBlame?.Name
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    @if (Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))
+                    {
+                        <DataGridColumn>
+                            <DisplayTemplate Context="failure">
+                                <Span Class="@(failure.IsSelected ? "inline-flex" : "inline-flex visibility-hidden")">
+                                    <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button" Color="Color.Danger" Clicked="@(() => DeleteFailure(failure))">
+                                        <span class="@NavHelpers.TrashIcon" aria-hidden="true"></span>
+                                    </Button>
+                                </Span>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    }
+                </DataGridColumns>
+            </DataGrid>
+
+            <Div class="sticky-footer modal-footer mb-4">
+                <Button Color="Color.Primary" hidden="@(IsEdit && !Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser))" Type="ButtonType.Submit">Save</Button>
+                <Button Color="Color.Secondary" Clicked="NavigateToEntryDataGrid">@((IsEdit && Pages.FirstTimeYield.HasEditPermission(CurrentUser?.ADUser) || !IsEdit) ? "Cancel" : "Back")</Button>
+            </Div>
+
+        </EditForm>
+    }
+</Div>
+
+<!-- Confirmation Modal -->
+<ConfirmationModal @ref="ConfirmationModal" Title="Confirm Deletion" Message="Are you sure you want to delete this failure reason?" OnClose="ConfirmDeletion" />

@@ -1,0 +1,557 @@
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms
+@using CrystalGroupHome.Internal.Features.CMHub.Pages
+@using CrystalGroupHome.Internal.Authorization
+@using Microsoft.AspNetCore.Authorization
+@inherits CMHub_VendorCommsTrackerGridBase
+
+<div style="max-width: 1600px;">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Communication Trackers</h2>
+        <div class="d-flex gap-2 align-items-center">
+
+            <CustomToggleButton Text="Hide Excluded"
+                                @bind-IsChecked="HideExcludedFilter"
+                                Size="Size.Small"
+                                CheckedTooltip="Show all items including excluded parts"
+                                UncheckedTooltip="Hide parts marked as excluded from vendor communications" />
+
+            <CustomToggleButton Text="Awaiting Response"
+                                @bind-IsChecked="AwaitingResponseFilter"
+                                Size="Size.Small"
+                                CheckedTooltip="Show all items"
+                                UncheckedTooltip="Show only items awaiting response from vendor" />
+
+            <CustomToggleButton Text="Awaiting Processing"
+                                @bind-IsChecked="AwaitingProcessingFilter"
+                                Size="Size.Small"
+                                CheckedTooltip="Show all items"
+                                UncheckedTooltip="Show only items with unprocessed survey responses" />
+        </div>
+    </div>
+    
+    <Row Class="mb-2">
+        <Column>
+        <AuthorizeView Policy="@AuthorizationPolicies.CMHubVendorCommsEdit">
+            <Authorized>
+                @{
+                    var overdueCount = GetOverdueCount();
+                    var within15Count = GetWithin15DaysCount();
+                    var within30Count = GetWithin30DaysCount();
+                    var awaitingProcessingCount = GetAwaitingProcessingCount();
+
+                    if (overdueCount > 0 || within15Count > 0 || within30Count > 0 || awaitingProcessingCount > 0)
+                    {
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <span class="fw-bold">Quick Select:</span>
+
+                            @if (overdueCount > 0)
+                            {
+                                <Button Class="btn-status-overdue" Size="Size.Small" Clicked="SelectAllOverdue">
+                                    Overdue (@overdueCount)
+                                </Button>
+                            }
+
+                            @if (within15Count > 0)
+                            {
+                                <Button Class="btn-status-15days" Size="Size.Small" Clicked="SelectAllWithin15Days">
+                                    Due ≤ 15 days (@within15Count)
+                                </Button>
+                            }
+
+                            @if (within30Count > 0)
+                            {
+                                <Button Class="btn-status-30days" Size="Size.Small" Clicked="SelectAllWithin30Days">
+                                    Due ≤ 30 days (@within30Count)
+                                </Button>
+                            }
+
+                            @if (awaitingProcessingCount > 0)
+                            {
+                                <Button Class="btn-status-processing" Size="Size.Small" Clicked="SelectAllAwaitingProcessing">
+                                    Awaiting Processing (@awaitingProcessingCount)
+                                </Button>
+                            }
+
+                            @if (SelectedTrackers.Count > 0)
+                            {
+                                <span class="ms-3 text-muted">(@SelectedTrackers.Count selected)</span>
+                                <Button Color="Color.Secondary" Size="Size.Small" Clicked="ClearAllSelections">
+                                    Clear Selections
+                                </Button>
+                            }
+                        </div>
+                    }
+                }
+            </Authorized>
+        </AuthorizeView>
+        </Column>
+
+        <Column ColumnSize="ColumnSize.Is3.OnDesktop.Is6.OnTablet.Is12.OnMobile" Class="mb-2">
+            <div class="d-flex gap-2">
+                <TextEdit Role="TextRole.Search" @bind-Text="VendorFilter" Placeholder="Filter by vendor..." />
+            </div>
+        </Column>
+    </Row>
+    
+
+    <Row>
+        <LoadingIndicator @bind-Visible="@IsLoading">
+            <DataGrid TItem="CMHub_VendorCommsTrackerModel" Data="@FilteredTrackers"
+                      Responsive
+                      ResponsiveMode="@TableResponsiveMode.Mobile"
+                      Filterable
+                      FilterMethod="DataGridFilterMethod.Contains"
+                      Sortable
+                      ShowPager
+                      ShowPageSizes
+                      PagerPosition="DataGridPagerPosition.TopAndBottom"
+                      @ref="TrackerGrid"
+                      PageChanged="@OnPageChanged"
+                      DetailRowStartsVisible="false"
+                      RowSelectable="e => false"
+                      RowClicked="SelectRow"
+                      RowStyling="@OnRowStyling">
+                <DataGridColumns>
+                    <DataGridColumn Sortable="false" Filterable="false" Width="20px" Caption="">
+                        <DisplayTemplate Context="model">
+                            <div class="status-indicator" style="background-color: @GetStatusColor(model);" title="@GetStatusTooltip(model)"></div>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn Sortable="false" Filterable="false" Width="60px" Caption="Select">
+                        <DisplayTemplate Context="model">
+                            <AuthorizeView Policy="@AuthorizationPolicies.CMHubVendorCommsEdit">
+                                <Authorized>
+                                    @if (CanTrackerBeSelected(model))
+                                    {
+                                        <Check TValue="bool" Checked="@IsTrackerSelected(model)" CheckedChanged="@((value) => OnTrackerSelectionChanged(model, value))" />
+                                    }
+                                    else if (model.IsAwaitingResponse)
+                                    {
+                                        <span class="text-muted" title="This part is still awaiting a response from a previous survey. Please communicate with the vendor and direct them to the existing survey link.">
+                                            <span class="@NavHelpers.InfoIcon" aria-hidden="true"></span>
+                                        </span>
+                                    }
+                                    else if (!model.IsContactNecessary)
+                                    {
+                                        <span class="text-muted" title="This part is EOL and has a Last Time Buy date. No need to contact vendor.">
+                                            <span class="@NavHelpers.InfoIcon" aria-hidden="true"></span>
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted" title="Part communications scheduled for more than 30 days out cannot be selected for a new survey batch.">
+                                            <span class="@NavHelpers.InfoIcon" aria-hidden="true"></span>
+                                        </span>
+                                    }
+                                </Authorized>
+                                <NotAuthorized>
+                                    <span class="text-muted" title="You do not have permission to edit vendor communications.">
+                                        <span class="@NavHelpers.WarningIcon" aria-hidden="true"></span>
+                                    </span>
+                                </NotAuthorized>
+                            </AuthorizeView>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn Sortable="false" Filterable="false" Caption="Edit">
+                        <DisplayTemplate Context="model">
+                            <span class="d-flex align-items-center">
+                                <span class="@(model.IsSelected ? "inline-flex" : "inline-flex visibility-hidden")">
+                                    <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-1" Color="Color.Primary" Clicked="@(() => NavigateToEditTracker(model))" title="Edit tracker">
+                                        <span class="@NavHelpers.EditIcon" aria-hidden="true"></span>
+                                    </Button>
+                                </span>
+                            </span>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_VendorCommsTrackerModel" Field="@nameof(CMHub_VendorCommsTrackerModel.PartNum)" Caption="Part Num" Sortable="true" Filterable="true">
+                        <DisplayTemplate>
+                            <div class="part-num-container">
+                                <div class="crystal-part-num fw-bold">
+                                    @context.PartNum
+                                </div>
+                                @if (!string.IsNullOrEmpty(context.PartEolt?.VendorPartNum))
+                                {
+                                    <div class="vendor-part-num text-muted small">
+                                        <span class="part-label">Vendor:</span> @context.PartEolt.VendorPartNum
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(context.PartEolt?.MfgPartNum))
+                                {
+                                    <div class="mfg-part-num text-muted small">
+                                        <span class="part-label">Mfg:</span> @context.PartEolt.MfgPartNum
+                                    </div>
+                                }
+                            </div>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_VendorCommsTrackerModel" Field="@nameof(CMHub_VendorCommsTrackerModel.PartDescription)" Caption="Description" Sortable="true" Filterable="true" />
+                    <DataGridColumn TItem="CMHub_VendorCommsTrackerModel" Field="@nameof(CMHub_VendorCommsTrackerModel.VendorName)" Caption="Vendor" Sortable="true" Filterable="false">
+                        <DisplayTemplate>
+                            <span class="d-flex align-items-center">
+                                <span class="@(context.IsSelected ? "inline-flex" : "inline-flex visibility-hidden")">
+                                    @{
+                                        var isCurrentlyFiltered = !string.IsNullOrEmpty(VendorFilter) && VendorFilter.Equals(context.VendorName, StringComparison.OrdinalIgnoreCase);
+                                    }
+                                    <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-2" Color="Color.Primary" Clicked="@(() => FilterByVendor(context.VendorName))" title="@(isCurrentlyFiltered ? "Clear vendor filter" : "Filter by vendor")">
+                                        <span class="@(isCurrentlyFiltered? NavHelpers.XIcon: NavHelpers.FilterIcon)" aria-hidden="true"></span>
+                                    </Button>
+                                </span>
+                                @context.VendorName
+                            </span>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_VendorCommsTrackerModel" Field="LatestSurveyResponseDate" Caption="Last Response" DisplayFormat="{0:MM/dd/yyyy}" Filterable="false" Sortable="true" TextAlignment="TextAlignment.Center">
+                        <DisplayTemplate>
+                            @if (context.IsNew || context.PartEolt.LastContactDate == null)
+                            {
+                                <span class="text-warning" aria-hidden="true">
+                                    <InfoHoverIcon HoverText="There is no record of contact with this vendor concerning this part." />
+                                </span>
+                            }
+                            else if (context.IsAwaitingResponse)
+                            {
+                                <span class="text-warning" aria-hidden="true">
+                                    <InfoHoverIcon HoverText="No response received yet from vendor." />
+                                </span>
+                            }
+                            else
+                            {
+                                @context.LatestSurveyResponseDate?.ToString("MM/dd/yyyy")
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_VendorCommsTrackerModel" Field="@nameof(CMHub_VendorCommsTrackerModel.NextContactDate)" Caption="Next Contact" DisplayFormat="{0:MM/dd/yyyy}" Filterable="false" Sortable="true" TextAlignment="TextAlignment.Center">
+                        <DisplayTemplate>
+                            @context.NextContactDate?.ToString("MM/dd/yyyy")
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_VendorCommsTrackerModel" Field="@nameof(CMHub_VendorCommsTrackerModel.LastTimeBuyDate)" Caption="Last Time Buy" DisplayFormat="{0:MM/dd/yyyy}" Filterable="false" Sortable="true" TextAlignment="TextAlignment.Center">
+                        <DisplayTemplate>
+                            @context.LastTimeBuyDate?.ToString("MM/dd/yyyy")
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridCommandColumn TItem="CMHub_VendorCommsTrackerModel">
+                    </DataGridCommandColumn>
+                </DataGridColumns>
+            </DataGrid>
+        </LoadingIndicator>
+    </Row>
+
+    @if (SelectedTrackers.Count > 0)
+    {
+        <Row Class="mt-4">
+            <Column>
+                <div class="selected-items-container crystal-blue-highlight border border-2 rounded-3">
+                    <div class="selected-items-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <h4 class="mb-0 me-3">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    Selected Items
+                                </h4>
+                                <span class="badge bg-light text-dark fs-6 px-3 py-2">
+                                    @SelectedTrackers.Count Total
+                                </span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                @{
+                                    var vendorGroups = SelectedTrackers
+                                        .Where(t => t.Vendor != null)
+                                        .GroupBy(t => t.Vendor!.VendorNum)
+                                        .ToList();
+                                    var vendorGroupsContainsBypassVendor = vendorGroups.Count == 1 && vendorGroups.Any(g => g.Key == SurveyService.GetAllowedVendorExceptionNum());
+                                }
+                                @if (vendorGroups.Count > 0)
+                                {
+                                    @if (IsPreparingSurvey)
+                                    {
+                                        <Button Color="Color.Primary" Size="Size.Medium" Disabled="true" Class="fw-bold">
+                                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                            <span>@PreparingSurveyMessage</span>
+                                        </Button>
+                                    }
+                                    else if (!SurveyService.IsSurveySendingEnabled(vendorGroupsContainsBypassVendor ? SurveyService.GetAllowedVendorExceptionNum() : null))
+                                    {
+                                        <span class="text-muted" title="@(SurveyService.GetSurveyDisabledMessage() ?? "Survey sending is currently disabled")">
+                                            <i class="fas fa-ban me-2"></i>
+                                            Survey Sending Disabled
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <Button Color="Color.Primary" Size="Size.Medium" Clicked="OpenSurveyDialog" Class="fw-bold">
+                                            <i class="fas fa-paper-plane me-1"></i> 
+                                            Create Survey@(vendorGroups.Count > 1 ? "s" : "")
+                                            @if (vendorGroups.Count > 1)
+                                            {
+                                                <span class="ms-1">(@vendorGroups.Count vendors)</span>
+                                            }
+                                        </Button>
+                                    }
+                                }
+                                <Button Color="Color.Secondary" Size="Size.Medium" Clicked="ClearAllSelections" Class="fw-bold" Disabled="@IsPreparingSurvey">
+                                    <i class="fas fa-times me-1"></i> Clear All
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        @{
+                            var groupedByVendor = SelectedTrackers
+                            .Where(t => !string.IsNullOrEmpty(t.VendorName))
+                            .GroupBy(t => t.VendorName)
+                            .OrderBy(g => g.Key);
+                        }
+
+                        @foreach (var vendorGroup in groupedByVendor)
+                        {
+                            <div class="vendor-group-card hover-card border rounded-3 mb-4 overflow-hidden">
+                                <div class="vendor-header p-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-building me-2 fs-5"></i>
+                                            <h5 class="mb-0 fw-bold">@vendorGroup.Key</h5>
+                                            <span class="badge ms-3 px-3 py-2">
+                                                @vendorGroup.Count() item@(vendorGroup.Count() == 1 ? "" : "s")
+                                            </span>
+                                        </div>
+                                        <Button Color="Color.Secondary" Size="Size.Medium" Clicked="@(() => RemoveVendorSelection(vendorGroup.Key))"
+                                                title="Remove all items for this vendor" Class="fw-bold" Disabled="@IsPreparingSurvey">
+                                            <i class="fas fa-trash me-1"></i> Remove All
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <div class="vendor-items p-3">
+                                    <div class="row g-3">
+                                        @foreach (var tracker in vendorGroup.OrderBy(t => t.Tracker.PartNum))
+                                        {
+                                            <div class="col-xl-4 col-lg-6 col-md-6">
+                                                <div class="item-card border rounded-3 p-3 h-100 position-relative">
+                                                    <Button Color="Color.Danger" Size="Size.Small"
+                                                            Clicked="@(() => RemoveSelection(tracker))"
+                                                            title="Remove this item"
+                                                            Class="position-absolute top-0 end-0 m-2 rounded-circle"
+                                                            Style="width: 30px; height: 30px; padding: 0;"
+                                                            Disabled="@IsPreparingSurvey">
+                                                        <span class="@NavHelpers.XIcon" aria-hidden="true"></span>
+                                                    </Button>
+
+                                                    <div class="pe-4">
+                                                        <div class="fw-bold fs-6 mb-2" style="color: var(--crystal-blue);">
+                                                            <i class="fas fa-cube me-1"></i>
+                                                            @tracker.Tracker.PartNum
+                                                        </div>
+                                                        @if (!string.IsNullOrEmpty(tracker.PartDescription))
+                                                        {
+                                                            <div class="text-muted small lh-base">
+                                                                @tracker.PartDescription
+                                                            </div>
+                                                        }
+                                                        <div class="small text-muted">
+                                                            <i class="fas fa-calendar me-1"></i>
+                                                            <strong>Last Contact: </strong>
+                                                            @if (tracker.IsNew || tracker.PartEolt.LastContactDate == null)
+                                                            {
+                                                                <span class="text-warning fw-bold">Never contacted</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>@tracker.PartEolt.LastContactDate?.ToString("MM/dd/yyyy")</span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        @{
+                            var itemsWithoutVendor = SelectedTrackers.Where(t => string.IsNullOrEmpty(t.VendorName));
+                        }
+                        @if (itemsWithoutVendor.Any())
+                        {
+                            <div class="vendor-group-card hover-card border rounded-3 mb-4 overflow-hidden warning-highlight">
+                                <div class="vendor-header p-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-exclamation-triangle me-2 fs-5"></i>
+                                            <h5 class="mb-0 fw-bold">Unknown Vendor</h5>
+                                            <span class="badge ms-3 px-3 py-2" style="background-color: var(--dark-gray); color: white;">
+                                                @itemsWithoutVendor.Count() item@(itemsWithoutVendor.Count() == 1 ? "" : "s")
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="vendor-items p-3">
+                                    <div class="row g-3">
+                                        @foreach (var tracker in itemsWithoutVendor.OrderBy(t => t.Tracker.PartNum))
+                                        {
+                                            <div class="col-xl-4 col-lg-6 col-md-6">
+                                                <div class="item-card border rounded-3 p-3 h-100 position-relative">
+                                                    <Button Color="Color.Danger" Size="Size.Small"
+                                                            Clicked="@(() => RemoveSelection(tracker))"
+                                                            title="Remove this item"
+                                                            Class="position-absolute top-0 end-0 m-2 rounded-circle"
+                                                            Style="width: 30px; height: 30px; padding: 0;"
+                                                            Disabled="@IsPreparingSurvey">
+                                                        <span class="@NavHelpers.XIcon" aria-hidden="true"></span>
+                                                    </Button>
+
+                                                    <div class="pe-4">
+                                                        <div class="fw-bold fs-6 mb-2" style="color: var(--orange);">
+                                                            <i class="fas fa-cube me-1"></i>
+                                                            @tracker.Tracker.PartNum
+                                                        </div>
+                                                        @if (!string.IsNullOrEmpty(tracker.PartDescription))
+                                                        {
+                                                            <div class="text-muted small lh-base">
+                                                                @tracker.PartDescription
+                                                            </div>
+                                                        }
+                                                        <div class="small text-muted">
+                                                            <i class="fas fa-calendar me-1"></i>
+                                                            <strong>Last Contact: </strong>
+                                                            @if (tracker.IsNew || tracker.PartEolt.LastContactDate == null)
+                                                            {
+                                                                <span class="text-warning fw-bold">Never contacted</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>@tracker.PartEolt.LastContactDate?.ToString("MM/dd/yyyy")</span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </Column>
+        </Row>
+    }
+</div>
+
+<CMHub_VendorCommsSurveyDialog @ref="surveyDialog" OnSurveysCreated="OnSurveysCreated" />
+
+<style>
+    .status-indicator {
+        width: 12px;
+        height: 100%;
+        min-height: 3rem;
+        border-radius: 2px;
+        margin: auto;
+    }
+
+    /* DataGrid vertical centering for all table cells */
+    .table td,
+    .table th,
+    .b-table-data td,
+    .b-table-data th {
+        vertical-align: middle !important;
+    }
+
+    /* Additional targeting for Blazorise DataGrid specifically */
+    .b-datagrid .table td,
+    .b-datagrid .table th {
+        vertical-align: middle !important;
+    }
+
+    .selected-items-container {
+        border-color: var(--crystal-blue) !important;
+        background-color: white;
+    }
+
+    .selected-items-header {
+        background-color: var(--crystal-blue);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 0.375rem 0.375rem 0 0;
+    }
+
+    .vendor-group-card {
+        background-color: white;
+        border-color: var(--aluminum) !important;
+    }
+
+    .vendor-header {
+        background-color: var(--crystal-blue);
+        color: white;
+        border-bottom: 2px solid var(--light-crystal-blue);
+    }
+
+        .vendor-header .badge {
+            background-color: var(--light-crystal-blue) !important;
+            color: var(--dark-gray) !important;
+        }
+
+    .vendor-items {
+        background-color: var(--light-crystal-blue);
+    }
+
+    .item-card {
+        background-color: white;
+        border-color: var(--aluminum) !important;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+        .item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+    /* Override warning highlight styling for unknown vendor section */
+    .vendor-group-card.warning-highlight .vendor-header {
+        background-color: var(--orange);
+        color: white;
+    }
+
+    .vendor-group-card.warning-highlight .vendor-items {
+        background-color: var(--bs-warning-highlight);
+    }
+
+    .part-num-container {
+        line-height: 1.3;
+    }
+
+    .crystal-part-num {
+        color: var(--crystal-blue);
+        font-size: 0.95rem;
+    }
+
+    .vendor-part-num,
+    .mfg-part-num {
+        font-size: 0.75rem;
+        margin-top: 2px;
+        white-space: nowrap;
+    }
+
+    .part-label {
+        font-weight: 600;
+        color: var(--dark-gray);
+    }
+
+    .btn-status-processing {
+        background-color: var(--status-blue);
+        border-color: var(--status-blue);
+        color: white;
+    }
+
+    .btn-status-processing:hover {
+        background-color: var(--status-blue);
+        border-color: var(--status-blue);
+        opacity: 0.8;
+    }
+</style>

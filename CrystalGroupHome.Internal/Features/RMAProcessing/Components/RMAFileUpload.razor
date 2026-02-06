@@ -1,0 +1,407 @@
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using Blazorise
+@using Blazorise.Components
+@inherits RMAFileUploadBase
+
+@* File Conflict Resolution Modal *@
+<Modal @bind-Visible="@ShowConflictModal">
+    <ModalContent Centered Size="ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>
+                <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                File Conflict Detected
+            </ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Alert Color="Color.Warning" Visible="true">
+                <p class="mb-2">
+                    <strong>@ConflictingFileNames.Count file(s) already exist:</strong>
+                </p>
+                <ul class="mb-0">
+                    @foreach (var fileName in ConflictingFileNames)
+                    {
+                        <li><code>@fileName</code></li>
+                    }
+                </ul>
+            </Alert>
+
+            <p class="mb-3">How would you like to proceed?</p>
+
+            <div class="d-grid gap-3">
+                <Card @onclick="@(() => OnConflictResolutionChanged("overwrite"))"
+                      Style="cursor: pointer;"
+                      Class="@GetConflictCardClass("overwrite")">
+                    <CardBody>
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 mt-1">
+                                <i class="fas fa-sync-alt fa-2x text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="mb-2">
+                                    Overwrite Existing Files
+                                </h5>
+                                <p class="mb-1 text-muted">
+                                    Replace the existing files with your new versions. The file record will be updated with new upload information.
+                                </p>
+                                <small class="text-info">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Previous version information will be preserved in the file history log.
+                                </small>
+                            </div>
+                        </div>
+                    </CardBody>
+                </Card>
+
+                <Card @onclick="@(() => OnConflictResolutionChanged("rename"))"
+                      Style="cursor: pointer;"
+                      Class="@GetConflictCardClass("rename")">
+                    <CardBody>
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 mt-1">
+                                <i class="fas fa-copy fa-2x text-success"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="mb-2">
+                                    Keep Both (Auto-Rename)
+                                </h5>
+                                <p class="mb-1 text-muted">
+                                    Upload your files with automatically generated names to keep both versions.
+                                </p>
+                                <small class="text-info">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Files will be renamed using Windows-style numbering (e.g., <code>Invoice (1).pdf</code>, <code>Invoice (2).pdf</code>)
+                                </small>
+                            </div>
+                        </div>
+                    </CardBody>
+                </Card>
+
+                <Card @onclick="@(() => OnConflictResolutionChanged("skip"))"
+                      Style="cursor: pointer;"
+                      Class="@GetConflictCardClass("skip")">
+                    <CardBody>
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 mt-1">
+                                <i class="fas fa-ban fa-2x text-secondary"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="mb-2">
+                                    Skip Conflicting Files
+                                </h5>
+                                <p class="mb-1 text-muted">
+                                    Only upload files that don't already exist. Files with conflicts will be skipped.
+                                </p>
+                                <small class="text-info">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Non-conflicting files will still be uploaded normally.
+                                </small>
+                            </div>
+                        </div>
+                    </CardBody>
+                </Card>
+            </div>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CancelConflictResolution">
+                <i class="fas fa-times me-1"></i>
+                Cancel Upload
+            </Button>
+            <Button Color="Color.Primary" 
+                    Clicked="@(() => HandleConflictResolution(SelectedConflictResolution!))"
+                    Disabled="@(string.IsNullOrEmpty(SelectedConflictResolution))">
+                <i class="fas fa-check me-1"></i>
+                Proceed with Upload
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<style>
+    .conflict-card-selected {
+        border: 2px solid #0d6efd !important;
+        background-color: #e7f1ff;
+    }
+    
+    .conflict-card-unselected {
+        border: 2px solid #dee2e6;
+    }
+    
+    .conflict-card-unselected:hover {
+        border-color: #adb5bd;
+        background-color: #f8f9fa;
+    }
+</style>
+
+<Card>
+    <CardBody>
+        @* NEW: Permission denied warning *@
+        @if (!CanUploadFiles)
+        {
+            <Alert Color="Color.Warning" Visible="true" Class="mb-4">
+                <div class="d-flex align-items-start">
+                    <i class="fas fa-exclamation-triangle fa-2x me-3 mt-1"></i>
+                    <div>
+                        <h5 class="alert-heading mb-2">Upload Access Restricted</h5>
+                        <p class="mb-0">
+                            You do not have permission to upload files to this RMA system. 
+                            File upload functionality is restricted to <strong>Technical Services</strong> users.
+                        </p>
+                        <small class="text-muted d-block mt-2">
+                            If you need access, please contact your system administrator or Technical Services team.
+                        </small>
+                    </div>
+                </div>
+            </Alert>
+        }
+
+        @if (RecentUploadResults.Any(r => r.Success))
+        {
+            <Alert Color="Color.Success" Visible="true" Class="mb-4">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="flex-grow-1">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Upload Complete!
+                        </h5>
+                        <p class="mb-2">
+                            Successfully uploaded <strong>@RecentUploadResults.Count(r => r.Success)</strong>
+                            file(s) to <strong>@GetSelectedCategoryDisplayName()</strong>
+                            @if (IsLineMode())
+                            {
+                                <text> for Line <strong>@SelectedLineNumber</strong></text>
+                                @if (!string.IsNullOrEmpty(UploadModel.SerialNumber))
+                                {
+                                    <text>, Serial <strong>@UploadModel.SerialNumber</strong></text>
+                                }
+                            }
+                            else
+                            {
+                                <text> (RMA Header)</text>
+                            }
+                        </p>
+                        <details class="mb-2">
+                            <summary style="cursor:pointer" class="text-decoration-underline">View uploaded files</summary>
+                            <ul class="mt-2 mb-0">
+                                @foreach (var result in RecentUploadResults.Where(r => r.Success))
+                                {
+                                    <li>@result.FileName</li>
+                                }
+                            </ul>
+                        </details>
+                        
+                        <div class="d-flex gap-2 mt-3">
+                            <Button Color="Color.Success" Size="Size.Small" Clicked="@HandleViewFiles">
+                                <i class="fas fa-list me-1"></i>
+                                View All Files
+                            </Button>
+                            <Button Color="Color.Primary" Size="Size.Small" Clicked="@PrepareForNextUpload" Disabled="@(!CanUploadFiles)">
+                                <i class="fas fa-upload me-1"></i>
+                                Upload More Files
+                            </Button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" @onclick="ClearUploadResults" aria-label="Close"></button>
+                </div>
+            </Alert>
+        }
+
+        @if (RecentUploadResults.Any(r => !r.Success))
+        {
+            <Alert Color="Color.Danger" Visible="true" Class="mb-4">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="flex-grow-1">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Upload Failed!
+                        </h5>
+                        <p class="mb-2">
+                            <strong>@RecentUploadResults.Count(r => !r.Success)</strong> file(s) failed to upload.
+                            @if (RecentUploadResults.Any(r => r.Success))
+                            {
+                                <text>(@RecentUploadResults.Count(r => r.Success) file(s) uploaded successfully)</text>
+                            }
+                        </p>
+                        <details class="mb-2">
+                            <summary style="cursor:pointer" class="text-decoration-underline">View error details</summary>
+                            <ul class="mt-2 mb-0">
+                                @foreach (var result in RecentUploadResults.Where(r => !r.Success))
+                                {
+                                    <li class="text-break">
+                                        <strong>@result.FileName</strong>: @result.ErrorMessage
+                                    </li>
+                                }
+                            </ul>
+                        </details>
+                        
+                        <div class="d-flex gap-2 mt-3">
+                            @if (RecentUploadResults.Any(r => r.Success))
+                            {
+                                <Button Color="Color.Success" Size="Size.Small" Clicked="@HandleViewFiles">
+                                    <i class="fas fa-list me-1"></i>
+                                    View Uploaded Files
+                                </Button>
+                            }
+                            <Button Color="Color.Primary" Size="Size.Small" Clicked="@PrepareForNextUpload" Disabled="@(!CanUploadFiles)">
+                                <i class="fas fa-redo me-1"></i>
+                                Try Again
+                            </Button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" @onclick="ClearUploadResults" aria-label="Close"></button>
+                </div>
+            </Alert>
+        }
+
+        <NetworkStorageInfo StorageInfo="@StorageInfo" />
+
+        <EditForm Model="UploadModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <Row class="mb-3">
+                <Column>
+                    <label for="rmaNumber" class="form-label">RMA Number</label>
+                    <TextEdit @bind-Text="UploadModel.RmaNumber" id="rmaNumber" class="form-control" Readonly />
+                    <ValidationMessage For="@(() => UploadModel.RmaNumber)" />
+                </Column>
+            </Row>
+
+            <Row class="mb-3">
+                <Column>
+                    <label for="lineSelect" class="form-label">Upload Scope</label>
+                    <Select TValue="string"
+                            SelectedValue="@SelectedLineNumber"
+                            SelectedValueChanged="OnLineChanged"
+                            id="lineSelect"
+                            Disabled="@(!CanUploadFiles)">
+                        <SelectItem TValue="string" Value="@null">RMA Header</SelectItem>
+                        @foreach (var line in RmaLines)
+                        {
+                            <SelectItem TValue="string" Value="@line.LineNumber.ToString()">
+                                Line @line.LineNumber - @GetLineDisplay(line)
+                            </SelectItem>
+                        }
+                    </Select>
+                    @if (IsLineMode() && SelectedLineSummary != null && SelectedLineSummary.Serials.Count > 1)
+                    {
+                        <div class="form-text">
+                            Multiple Serials: @string.Join(", ", SelectedLineSummary.Serials)
+                        </div>
+                    }
+                </Column>
+            </Row>
+
+            @if (IsLineMode() && !string.IsNullOrEmpty(UploadModel.SerialNumber))
+            {
+                <Row class="mb-3">
+                    <Column>
+                        <label for="serialNumber" class="form-label">Serial Number</label>
+                        <TextEdit @bind-Text="UploadModel.SerialNumber" id="serialNumber" class="form-control" Readonly />
+                    </Column>
+                </Row>
+            }
+
+            <Row class="mb-3">
+                <Column>
+                    <label for="fileCategory" class="form-label">File Category <span class="text-danger">*</span></label>
+                    <Select TValue="string"
+                            SelectedValue="@UploadModel.SelectedCategoryShortName"
+                            SelectedValueChanged="OnCategoryChanged"
+                            id="fileCategory"
+                            Disabled="@(!CanUploadFiles)">
+                        <SelectItem TValue="string" Value="@null">Select a category...</SelectItem>
+                        @foreach (var category in CurrentCategoryList)
+                        {
+                            <SelectItem TValue="string" Value="@category.ShortName">@category.DisplayValue</SelectItem>
+                        }
+                    </Select>
+                    <ValidationMessage For="@(() => UploadModel.SelectedCategoryShortName)" />
+
+                    @if (!string.IsNullOrEmpty(UploadModel.SelectedCategoryShortName))
+                    {
+                        var selectedCategory = CurrentCategoryList.FirstOrDefault(c => c.ShortName == UploadModel.SelectedCategoryShortName);
+                        if (selectedCategory != null && selectedCategory.AcceptedFileTypes != "*")
+                        {
+                            <div class="form-text text-info mt-1">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Only @selectedCategory.AcceptedFileTypes files are allowed.
+                            </div>
+                        }
+                    }
+                </Column>
+            </Row>
+
+            <Row class="mb-3">
+                <Column>
+                    <label for="fileSelection" class="form-label">Select Files <span class="text-danger">*</span></label>
+                    <FileEdit Multiple
+                              Changed="OnFileSelected"
+                              id="fileSelection"
+                              Accept="@GetAcceptAttribute()"
+                              Disabled="@(!CanUploadFiles)"
+                              @key="@($"file-input-{UploadModel.SelectedCategoryShortName}-{SelectedLineNumber}")" />
+                    <ValidationMessage For="@(() => UploadModel.Files)" />
+
+                    @if (UploadModel.Files.Any())
+                    {
+                        <div class="mt-2">
+                            <Button Color="Color.Light" Size="Size.Small" Clicked="ToggleFilesReadyCollapse" Class="p-2 mb-2" Disabled="@(!CanUploadFiles)">
+                                <i class="fas @(IsFilesReadyHidden ? "fa-chevron-right" : "fa-chevron-down") me-2"></i>
+                                Files ready for upload (@UploadModel.Files.Count)
+                            </Button>
+                            <div class="alert alert-info py-2 @(IsFilesReadyHidden ? "d-none" : "")">
+                                <ul class="mb-0">
+                                    @foreach (var file in UploadModel.Files)
+                                    {
+                                        <li>@file.Name (@($"{file.Size / 1024:N0} KB"))</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+
+                    @if (HasInvalidFiles())
+                    {
+                        <div class="alert alert-warning mt-2 py-2">
+                            <i class="fas fa-exclamation-triangle me-1"></i>
+                            Some selected files do not match the required file types and cannot be uploaded.
+                        </div>
+                    }
+                </Column>
+            </Row>
+
+            <Row class="mb-3">
+                <Column>
+                    <Button Color="Color.Primary" 
+                            Type="ButtonType.Submit" 
+                            Disabled="@(IsUploading || !CanUploadFiles)" 
+                            Class="me-2"
+                            title="@GetUploadButtonTooltip()">
+                        @if (IsUploading)
+                        {
+                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            <text>Uploading...</text>
+                        }
+                        else
+                        {
+                            <span class="fas fa-upload me-2" aria-hidden="true"></span>
+                            <text>Upload Files</text>
+                        }
+                    </Button>
+                    @if (UploadModel.Files.Any())
+                    {
+                        <Button Color="Color.Secondary" 
+                                Clicked="ClearSelectedFiles" 
+                                Disabled="@(IsUploading || !CanUploadFiles)">
+                            <span class="fas fa-times me-2" aria-hidden="true"></span>
+                            Clear Selection
+                        </Button>
+                    }
+                    <Button Color="Color.Info" Clicked="@HandleViewFiles" Disabled="@IsUploading" Class="ms-2">
+                        <span class="fas fa-list me-2"></span> View Files
+                    </Button>
+                </Column>
+            </Row>
+        </EditForm>
+    </CardBody>
+</Card>

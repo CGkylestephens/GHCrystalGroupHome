@@ -1,0 +1,104 @@
+﻿@using CrystalGroupHome.Internal.Features.FirstTimeYield.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+@inherits FirstTimeYield_FailureDialogBase
+
+<ModalHeader>
+    <ModalTitle>@Title</ModalTitle>
+    <CloseButton />
+</ModalHeader>
+
+<EditForm Model="DraftFailure" OnValidSubmit="HandleValidSubmit">
+
+    <ModalBody>
+
+        <DataAnnotationsValidator />
+
+        <Row>
+            <Column>
+                <Label for="failureSelect">Failure Description</Label>
+                <Select T="int?" @bind-SelectedValue="DraftFailureReasonId" @key="ValidFailureReasons.Count" id="failureSelect">
+                    @foreach (var fr in ValidFailureReasons)
+                    {
+                        if (fr.Deleted)
+                        {
+                            <SelectItem Value="@fr.Id">@fr.FailureDescription (Obsolete)</SelectItem>
+                        }
+                        else
+                        {
+                            <SelectItem Value="@fr.Id">@fr.FailureDescription</SelectItem>
+                        }
+                    }
+                </Select>
+            </Column>
+        </Row>
+
+        <Row class="mt-3">
+            <Column md="6">
+                <label for="Qty">Quantity</label>
+                <NumericEdit @bind-Value="DraftFailure.Qty" id="Qty" />
+                <ValidationMessage For="@(() => DraftFailure.Qty)" />
+            </Column>
+        </Row>
+
+        <Row class="mt-3">
+            <Column>
+                <label for="areaToBlameSelect">Area of Origin</label>
+                <Select TValue="int?" @bind-SelectedValue="DraftAreaToBlameId" id="areaToBlameSelect">
+                    @foreach (var area in ValidAreasToBlame)
+                    {
+                        if (area.Deleted)
+                        {
+                            <SelectItem Value="@area.Id">@area.AreaDescription (Obsolete)</SelectItem>
+                        }
+                        else
+                        {
+                            <SelectItem Value="@area.Id">@area.AreaDescription</SelectItem>
+                        }
+                    }
+                </Select>
+                <ValidationMessage For="@(() => DraftFailure.AreaToBlame)" />
+            </Column>
+            <Column>
+                <label for="jobNumToBlameSelect">Original Job #</label>
+                @* TODO: Replace this input with the shared CustomSearchInput *@
+                <Div Style="display: flex; flex: 1;">
+                    <TextEdit @bind-Text="DraftJobNumToBlame" Style="border-radius: 4px 0 0 4px;" id="jobNumToBlameSelect" />
+                    <Button ButtonStyle="ButtonStyle.Link" Disabled="DraftFailure.JobNumToBlameIsValid || CurrentJobNumHasBeenSearched" Style="width: 3rem; border-radius: 0 4px 4px 0;" Color="@StyleHelpers.GetSearchButtonColor(CurrentJobNumHasBeenSearched, DraftFailure.JobNumToBlameIsValid)" Clicked="() => LoadJobDataAsync(DraftJobNumToBlame)">
+                        <span class="@StyleHelpers.GetSearchButtonIcon(CurrentJobNumHasBeenSearched, DraftFailure.JobNumToBlameIsValid)" aria-hidden="true"></span>
+                    </Button>
+                </Div>
+                <ValidationMessage For="@(() => DraftFailure.JobNumToBlame)" />
+            </Column>
+        </Row>
+
+        <Row class="mt-3">
+            <Column>
+                <label for="opCodeToBlameSelect">Original Op Code</label>
+                <Select TValue="int" @bind-SelectedValue="DraftValidJobOperIndex" Disabled="@(ValidJobOpers.Count <= 0)" id="opCodeToBlameSelect">
+                    <SelectItem Value="-1">N/A</SelectItem>
+                    @foreach (var jobOpers in ValidJobOpers)
+                    {
+                        <SelectItem Value="@ValidJobOpers.IndexOf(jobOpers)">[@jobOpers.OprSeq] @jobOpers.OpCode</SelectItem>
+                    }
+                </Select>
+            </Column>
+            <Column>
+                <label for="operatorToBlameSelect">Operator On Job</label>
+                <Select TValue="int" @bind-SelectedValue="DraftValidJobEmployeeIndex" Disabled="@(ValidJobEmployees.Count <= 0)" id="operatorToBlameSelect">
+                    <SelectItem Value="-1">N/A</SelectItem>
+                    @foreach (var jobEmp in ValidJobEmployees)
+                    {
+                        <SelectItem Value="@ValidJobEmployees.IndexOf(jobEmp)">@jobEmp.Name</SelectItem>
+                    }
+                </Select>
+            </Column>
+        </Row>
+
+    </ModalBody>
+
+    <ModalFooter>
+        <Button Color="Color.Primary" Type="ButtonType.Submit" class="me-2">Submit</Button>
+        <Button Color="Color.Secondary" Clicked="Cancel">Cancel</Button>
+    </ModalFooter>
+
+</EditForm>

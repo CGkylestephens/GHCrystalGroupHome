@@ -1,0 +1,60 @@
+﻿@using Blazorise
+@using CrystalGroupHome.Internal.Features.CMHub.VendorComms.Data
+@inject IModalService Modal
+@using CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms
+@using CrystalGroupHome.SharedRCL.Helpers
+
+<Modal @bind-Visible="IsVisible" Centered>
+    <ModalContent Size="ModalSize.Large">
+        <ModalHeader>
+            @Title
+        </ModalHeader>
+        <ModalBody Style="max-height: 80%; overflow-y: auto;">
+            @if (TrackerLogs == null || !TrackerLogs.Any())
+            {
+                <p>No logs found for this tracker.</p>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var log in TrackerLogs)
+                    {
+                        <li>
+                            <Div Style="display: flex; flex-direction: row; align-items: center; margin-top: 0.5rem;">
+                                <strong>@log.LogDate.ToLocalTime()</strong>
+                                <div style="font-size: 0.85rem; color: var(--gray); margin-left: 0.5rem;">
+                                    @log.Employee?.DisplayName
+                                </div>
+                            </Div>
+                            <div style="white-space: pre-wrap;">@((MarkupString)HtmlHelpers.ConvertUrlsToLinks(log.LogMessage))</div>
+                        </li>
+                    }
+                </ul>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="Close">Close</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public List<CMHub_VendorCommsTrackerLogModel> TrackerLogs { get; set; } = [];
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public string Title { get; set; } = string.Empty;
+
+    private async Task Close()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync();
+    }
+
+    public void Show(string title, List<CMHub_VendorCommsTrackerLogModel> logs)
+    {
+        Title = title;
+        TrackerLogs = logs;
+        IsVisible = true;
+        StateHasChanged();
+    }
+}

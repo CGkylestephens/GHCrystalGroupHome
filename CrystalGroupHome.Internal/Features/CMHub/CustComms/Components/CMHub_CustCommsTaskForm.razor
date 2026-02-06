@@ -1,0 +1,141 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.CustComms.Components
+@using CrystalGroupHome.Internal.Features.CMHub.CMDex.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.Internal.Features.CMHub.Pages
+@inherits CMHub_CustCommsTaskFormBase
+
+<Div style="max-width: 900px;">
+    <Div Style="display: flex; margin-bottom: 0.5rem;">
+        <h2 style="flex-grow: 1; margin: 0;">Part Change Task Details</h2>
+        <Button Color="Color.Secondary" Clicked="NavigateToTracker" hidden="@IsLoading">
+            <span class="@($"{NavHelpers.BackCircleIcon} me-2")" aria-hidden="true"></span> Back to Part Change Tracker for @TaskModel?.TrackerPartNum
+        </Button>
+    </Div>
+    @if (IsLoading)
+    {
+        <div class="loading-gradient" style="height: 200px;"></div>
+    }
+    else if (TaskModel != null)
+    {
+        <Divider />
+        <Column>
+            <Div Style="display: flex; align-items: center; justify-items: center;">
+                <h3 style="margin: 0; margin-right: 1rem;">@TaskModel.ImpactedPartNum</h3>
+                <h4 style="margin: 0; margin-right: 1rem; white-space: nowrap; color: var(--gray)">
+                    @(string.IsNullOrEmpty(TaskModel.ImpactedPartRev) ? " " : $"(Rev {TaskModel.ImpactedPartRev})")
+                </h4>
+                <PartIcons Part="@TaskModel.CMDexPart?.Part" />
+                <Div Style="flex-grow: 1;"></Div>
+                <Button Color="@(string.IsNullOrEmpty(TaskModel.ECNNumber) ? Color.Primary : Color.Success)" Class="me-2" Clicked="() => ShowECNModal(TaskModel)" Disabled="@(!CMHub.HasCustCommsTaskStatusEditPermission(CurrentUser?.ADUser))">
+                    <span class="@($"{NavHelpers.EditIcon} me-2")" aria-hidden="true"></span> @(string.IsNullOrEmpty(TaskModel.ECNNumber) ? "Enter ECN" : $"ECN: {TaskModel.ECNNumber}")
+                </Button>
+                <Select Style="max-width: 20rem; margin-right: -0.5rem;"
+                        TValue="int?"
+                        SelectedValue="TaskModel.StatusId"
+                        id="taskStatusSelect"
+                        SelectedValueChanged="@(value => HandleStatusChange(TaskModel, value))"
+                        Disabled="@(!CMHub.HasCustCommsTaskStatusEditPermission(CurrentUser?.ADUser))">
+                    @foreach (var status in Statuses)
+                    {
+                        <SelectItem Value="@status.Id">@status.Description</SelectItem>
+                    }
+                </Select>
+            </Div>
+            @* Primary PM *@
+            @if (TaskModel.CMDexPart != null && (TaskModel.CMDexPart.PartEmployees.Count > 0 || TaskModel.CMDexPart.PartCustomerContacts.Count > 0))
+            {
+                <Divider />
+                <Row>
+                    <Column Style="flex-grow: 0; min-width: fit-content;">
+                        <Button Color="Color.Secondary" Clicked="() => CMDexService.OpenCMDexPartInNewTabAsync(TaskModel.ImpactedPartNum)" title="Open in CM Dex">
+                            <span class="@NavHelpers.CMHub_CMDexIcon" aria-hidden="true"></span>
+                        </Button>
+                    </Column>
+                    <Column>
+                        @if (TaskModel.CMDexPart?.PartEmployees?.Any(e => e.Type == 1 && (e.IsPrimary ?? false)) == true)
+                        {
+                            <Div>Primary PM: <i style="color: var(--gray)">@(TaskModel.CMDexPart.HasPrimary ? TaskModel.CMDexPart.PrimaryPMName : "None Selected")</i></Div>
+                            if (TaskModel.CMDexPart.HasOwner)
+                            {
+                                <Div>Owner Customer Contact: <i style="color: var(--gray)">@TaskModel.CMDexPart.OwnerCustName - @TaskModel.CMDexPart.OwnerConName</i></Div>
+                            }
+                            else
+                            {
+                                <Div>Owner Customer Contact: <i style="color: var(--gray)">None Selected</i></Div>
+                            }
+                        }
+                    </Column>
+                </Row>
+            }
+            <Divider />
+            <Div>@TaskModel.ImpactedPartDesc</Div>
+        </Column>
+
+        <Divider />
+
+        @* Impact *@
+        @if (TaskModel.QtyPer > 0)
+        {
+            <p><strong>Impact:</strong> Changes to @TaskModel.TrackerPartNum (@TaskModel.QtyPer.ToString("G29")x) have impacted @TaskModel.ImpactedPartNum</p>
+        }
+
+        @* Owner Customer Contact *@
+        @if (TaskModel.CMDexPart?.PartCustomerContactModels?.Any() == true)
+        {
+            var ownerContact = TaskModel.CMDexPart.PartCustomerContactModels.FirstOrDefault(c => c.PartCustomerContact.IsOwner == true)?.DisplayContact;
+            if (ownerContact != null)
+            {
+                <p><strong>Owner Contact:</strong> @ownerContact.CustName - @ownerContact.ConName</p>
+            }
+        }
+
+        @* Sort/Relationship *@
+        @if (!string.IsNullOrEmpty(TaskModel.Sort))
+        {
+            var sortFormatted = TaskModel.Sort.Replace("\\", " > ");
+            <p><strong>Relationship:</strong> @sortFormatted</p>
+        }
+
+        <Divider />
+
+        @* Logs *@
+        <Column>
+            <Row>
+                <Column>
+                    <h4>Task Logs</h4>
+                </Column>
+                <Column Style="flex-grow: 0; min-width: fit-content;">
+                    <Button Color="Color.Primary" Clicked="() => ShowAddLogModalForTask(TaskModel)">
+                        <span class="@($"{NavHelpers.AddIcon} me-1")" aria-hidden="true"></span> Add Task Log
+                    </Button>
+                </Column>
+            </Row>
+        </Column>
+        
+        @if (TaskModel.Logs != null && TaskModel.Logs.Count > 0)
+        {
+            foreach (var log in TaskModel.Logs.OrderByDescending(l => l.LogDate))
+            {
+                <Div style="margin-bottom: 1rem;">
+                    <div><i>@log.LogDate.ToLocalTime().ToString("g")</i> - <strong>@log.Employee?.DisplayName</strong></div>
+                    <div style="color: var(--gray); white-space: pre-wrap;">@((MarkupString)HtmlHelpers.ConvertUrlsToLinks(log.LogMessage))</div>
+                </Div>
+            }
+        }
+        else
+        {
+            <p><i>No logs recorded yet.</i></p>
+        }
+    }
+</Div>
+
+<!-- Confirmation Modals -->
+<ConfirmationModal @ref="ErrorModal" Title="Something Went Wrong" Message="@ErrorMessage" />
+
+<!-- Record Log Modal -->
+<CMHub_CustCommsNewLogModal @ref="RecordLogModal"
+                               OnLogSubmitted="HandleNewLogSubmitted"
+                               OnClose="@(async () => { await InvokeAsync(StateHasChanged); })" />
+
+<!-- ECN Modal -->
+<CMHub_CustCommsECNModal @ref="ECNModal" OnECNSaved="HandleECNSaved" />

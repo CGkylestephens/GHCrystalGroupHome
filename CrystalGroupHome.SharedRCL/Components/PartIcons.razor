@@ -1,0 +1,31 @@
+﻿@using CrystalGroupHome.SharedRCL.Data.Parts
+@using CrystalGroupHome.SharedRCL.Helpers
+@typeparam TPart
+
+@if (Part != null)
+{
+    if (IsDeprecatedOrInactive)
+    {
+        <span title="Deprecated Part" class="icon-warning">
+            <span class="@NavHelpers.DeprecatedPartIcon" aria-hidden="true"></span>
+        </span>
+    }
+
+    if (IsCMManaged)
+    {
+        <span title="CM Managed Part" class="icon-managed">
+            <span class="@NavHelpers.ConfigurationManagedIcon" aria-hidden="true"></span>
+        </span>
+    }
+}
+
+@code {
+    [Parameter] public TPart? Part { get; set; }
+
+    private bool IsDeprecatedOrInactive =>
+        Part?.GetType().GetProperty(nameof(PartDTO_Base.Deprecated_c))?.GetValue(Part) as bool? == true ||
+        Part?.GetType().GetProperty(nameof(PartDTO_Base.InActive))?.GetValue(Part) as bool? == true;
+
+    private bool IsCMManaged =>
+        Part?.GetType().GetProperty(nameof(PartDTO_Base.CMManaged_c))?.GetValue(Part) as bool? == true;
+}

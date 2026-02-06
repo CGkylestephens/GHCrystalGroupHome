@@ -1,0 +1,159 @@
+@using CrystalGroupHome.Internal.Features.CMHub.CMDex.Models
+@using Microsoft.AspNetCore.Components.Web
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.SharedRCL.Components
+@inherits CMHub_CMDexPartGridBase
+
+<div style="max-width: 1600px;">
+    <Row>
+        <Column>
+            <h2>Part Relations</h2>
+        </Column>
+        <Column Style="max-width: 300px;">
+            <label for="primaryPm">Filter by Primary PM</Label>
+            <Select id="primaryPm" TValue="string" SelectedValue="@SelectedPrimaryPm" SelectedValueChanged="@OnChangePMFilter">
+                <SelectItem Value="@("all")">All</SelectItem>
+                @foreach (var employee in PrimaryPMsForFilter)
+                {
+                    <SelectItem Value="@employee.EmployeeNumber">@employee.DisplayName</SelectItem>
+                }
+            </Select>
+        </Column>
+    </Row>
+
+    <Row>
+        <Column>
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 8px 0;">
+                <CustomToggleButton Text="Include Deprecated Parts"
+                                    @bind-IsChecked="IncludeInactiveParts"
+                                    Size="Size.Small"
+                                    CheckedTooltip="Hide deprecated parts"
+                                    UncheckedTooltip="Show deprecated parts" />
+                
+                <CustomToggleButton Text="Show Only Parts with Missing Data"
+                                    @bind-IsChecked="ShowMissingDataParts"
+                                    Size="Size.Small"
+                                    CheckedTooltip="Show all parts"
+                                    UncheckedTooltip="Filter to only parts with missing data" />
+                
+                <CustomToggleButton Text="Show Only CM Managed Parts"
+                                    @bind-IsChecked="ShowCMManagedParts"
+                                    Size="Size.Small"
+                                    CheckedTooltip="Show all parts"
+                                    UncheckedTooltip="Filter to only CM managed parts" />
+            </div>
+        </Column>
+    </Row>
+
+    <Row>
+        <LoadingIndicator @bind-Visible="@IsLoading">
+            <DataGrid TItem="CMHub_CMDexPartModel" Data="@FilteredParts"
+                      Responsive
+                      ResponsiveMode="@TableResponsiveMode.Mobile"
+                      Filterable
+                      FilterMethod="DataGridFilterMethod.Contains"
+                      FilteredDataChanged="@OnFilteredDataChanged"
+                      Sortable
+                      ShowPager
+                      ShowPageSizes
+                      PagerPosition="DataGridPagerPosition.TopAndBottom"
+                      @ref="PartGrid"
+                      DetailRowStartsVisible="false"
+                      RowSelectable="e => false"
+                      RowClicked="DetailRowToggle"
+                      RowStyling="@OnRowStyling">
+                <DataGridColumns>
+                    <DataGridColumn Sortable="false" Filterable="false">
+                        <DisplayTemplate Context="model">
+                            <span class="inline-flex">
+                                <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-1" Color="Color.Primary">
+                                    <span class="@StyleHelpers.GetExpandableToggleIcon(model.IsDetailExpanded)" aria-hidden="true"></span>
+                                </Button>
+                                <span 
+                                    title="ctrl+click to open in a new tab"
+                                    class="@(model.IsDetailExpanded ? "inline-flex" : "inline-flex visibility-hidden")">
+                                  <Button
+                                    ButtonStyle="ButtonStyle.Link"
+                                    Class="action-icon-button me-1"
+                                    Color="Color.Primary"
+                                    Clicked="@(async (MouseEventArgs e) => await OnEditPartRelationClick(e, model))">
+                                    <span class="@NavHelpers.EditIcon" aria-hidden="true"></span>
+                                  </Button>
+                                </span>
+                            </span>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CMDexPartModel" Field="Part.PartNum" Caption="Part #" Sortable>
+                        <DisplayTemplate Context="model">
+                            @(model.Part?.PartNum)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CMDexPartModel" Field="Part.RevisionNum" Caption="Rev" Sortable>
+                        <DisplayTemplate Context="model">
+                            @(model.Part?.RevisionNum)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn Sortable="false" Filterable="false">
+                        <DisplayTemplate Context="model">
+                            <Div style="display: flex; flex-wrap: nowrap;">
+                                <PartIcons Part="@model.Part" />
+                            </Div>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CMDexPartModel" Field="Part.PartDescription" Caption="Part Desc" Sortable>
+                        <DisplayTemplate Context="model">
+                            <div title="@(model.Part?.PartDescription)" 
+                                style="max-width: 40vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                @(model.Part?.PartDescription)
+                            </div>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CMDexPartModel" Field="PMEmployeesCount" Caption="PMs" Sortable>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CMDexPartModel" Field="SAEmployeesCount" Caption="SAs" Sortable>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CMDexPartModel" Field="PartCustomerContactsCount" Caption="CCs" Sortable>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CMDexPartModel" Field="MissingData" Caption="Missing Data" Sortable>
+                        <DisplayTemplate Context="model">
+                            <div style="min-width: 5rem; font-size: 0.75rem;">
+                                @model.MissingData
+                            </div>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+
+                @* Detail Row Template *@
+                <DetailRowTemplate Context="model">
+                    <Row>
+                        <Column Class="detail-row-highlight"></Column>
+                        <Column>
+                            <Card Class="active-row mb-2">
+                                <CardHeader>
+                                    @if (model.HasPrimary)
+                                    {
+                                        <div>Primary PM: @model.PrimaryPMName (@model.CustConsAssociatedWithPrimaryPM.Count() Customer Contacts)</div>
+                                    }
+                                    else
+                                    {
+                                        <div>No Primary PM Selected</div>
+                                    }
+                                </CardHeader>
+                                <CardBody>
+                                    @if (model.HasOwner)
+                                    {
+                                        <div>Owner Customer Contact: @model.OwnerCustName - @model.OwnerConName</div>
+                                    }
+                                    else
+                                    {
+                                        <div>No Owner Customer Contact Selected</div>
+                                    }
+                                </CardBody>
+                            </Card>
+                        </Column>
+                    </Row>
+                </DetailRowTemplate>
+            </DataGrid>
+        </LoadingIndicator>
+    </Row>
+</div>

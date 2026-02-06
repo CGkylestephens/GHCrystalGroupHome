@@ -1,0 +1,263 @@
+@using CrystalGroupHome.Internal.Features.CMHub.CMDex.Models
+@using CrystalGroupHome.Internal.Features.CMHub.Pages
+@using CrystalGroupHome.SharedRCL.Helpers
+@inherits CMHub_CMDexPartFormBase
+
+<NavigationLock OnBeforeInternalNavigation="ConfirmNavigationAsync" />
+
+<Div style="max-width: 1200px;">
+    @if (IsLoading)
+    {
+        <div class="loading-gradient" style="width: 100%; height: 48px;"></div>
+    }
+    else if (PartModel != null)
+    {
+        <h2>Part Relation Details</h2>
+        <Divider />
+        <Div Style="display: flex; align-items: center; justify-items: center;">
+            <h3 style="margin: 0; margin-right: 1rem;">@PartModel.Part.PartNum</h3>
+            <h4 style="margin: 0; margin-right: 1rem; white-space: nowrap; color: var(--gray)">
+                @(string.IsNullOrEmpty(PartModel.Part.RevisionNum) ? " " : $"(Rev {PartModel.Part.RevisionNum})")
+            </h4>
+            <PartIcons Part="@PartModel.Part" />
+            @* CM Managed Flag *@
+            <Div hidden="@(!EditMode)">
+                <Check TValue="bool"
+                       Checked="@PartModel.Part.CMManaged_c"
+                       CheckedChanged="OnCMManagedChanged">
+                    Configuration Managed
+                </Check>
+            </Div>
+            @* Enable Edits *@
+            <Div hidden="@(!CMHub.HasCMDexEditPermission(CurrentUser?.ADUser))" Style="flex-grow: 1; justify-items: end;">
+                <Check TValue="bool" @bind-Checked="@EditMode">
+                    Enable Edits
+                </Check>
+            </Div>
+        </Div>
+        <Row>
+            @* CM Origination Date *@
+            <Column Style="max-width: 14rem; margin-top: 0.5rem; margin-bottom: 1rem;" hidden="@(!@PartModel.Part.CMManaged_c)">
+                <label for="cmOriginationDate">CM Origination Date</label>
+                <DateEdit TValue="DateTime?" Date="@PartModel.Part.CMOrignationDate_c" id="cmOriginationDate" DateChanged="@(value => OnChangeOriginationDate(value))" Disabled="@(!EditMode)" />
+            </Column>
+            <Column Style="max-width: 14rem; margin-top: 0.5rem; margin-bottom: 1rem;">
+                <label for="lastQuoted">Last Quoted</label>
+                <DateEdit TValue="DateTime?" Date="@PartModel.PartActivity?.LastQuoted" id="lastQuoted" Disabled=true />
+            </Column>
+            <Column Style="max-width: 14rem; margin-top: 0.5rem; margin-bottom: 1rem;">
+                <label for="lastSold">Last Sold</label>
+                <DateEdit TValue="DateTime?" Date="@PartModel.PartActivity?.LastSold" id="lastSold" Disabled=true />
+            </Column>
+        </Row>
+        <Div>@PartModel.Part.PartDescription</Div>
+    } else {
+        <Div>Part not found</Div>
+    }
+
+    @if (IsLoading)
+    {
+        <div class="loading-gradient" style="width: 100%; height: 200px;"></div>
+    }
+    else if (PartModel != null)
+    {
+        <Divider />
+
+        <!-- PM Section -->
+        <Div Style="display: flex; align-items: center; justify-items: center; margin-bottom: 0.5rem;">
+            <h3 style="margin: 0; margin-right: 1rem; width: 3rem;">PMs</h3>
+            <Button Color="Color.Primary"
+                    Clicked="() => OpenPartEmployeeDialog(PartEmployeeType.PM)"
+                    hidden="@(!EditMode)"
+                    Style="margin-top: -0.5rem;">
+                <span class="fa fa-circle-plus me-2" aria-hidden="true"></span> Add
+            </Button>
+        </Div>
+
+        foreach (var pm in PartModel.PartEmployees.Where(pe => pe.Type == (int)PartEmployeeType.PM))
+        {
+            <Card Style="@CardStyle((pm.IsPrimary.HasValue && pm.IsPrimary.Value) ? "PrimaryPM" : "")">
+                <CardHeader>
+                    <Div Style="display: flex; align-items: center; justify-items: center;">
+                        <Button ButtonStyle="ButtonStyle.Link"
+                                Style="margin-left: -0.6rem; margin-right: 0.5rem; margin-top: -0.5rem; margin-bottom: -0.5rem;"
+                                Class="action-icon-button"
+                                Color="Color.Danger"
+                                Clicked="@(() => DeletePartEmployee(pm))"
+                                hidden="@(!EditMode)">
+                            <span class="@NavHelpers.TrashIcon" aria-hidden="true"></span>
+                        </Button>
+                        <strong style="margin-right: 1rem;">@PartModel.GetADUserForEmployee(pm)?.DisplayName</strong>
+                        <Div Style="margin-right: auto; margin-left: auto; flex-grow: 1;">
+                            <Check TValue="bool?"
+                                   Disabled="@(!EditMode)"
+                                   Checked="@pm.IsPrimary"
+                                   CheckedChanged="@(value => OnPrimaryPMCheckedChanged(value, pm))">
+                                Primary PM
+                            </Check>
+                        </Div>
+                        <Button Color="Color.Primary"
+                                Clicked="() => OpenCustomerContactDialog(pm)"
+                                hidden="@(!EditMode)"
+                                Style="margin-top: -0.5rem; margin-bottom: -0.5rem; margin-right: -0.75rem;">
+                            <span class="@($"{NavHelpers.AddCircleIcon} me-2")" aria-hidden="true"></span> Add Customer Contact
+                        </Button>
+                    </Div>
+                </CardHeader>
+                <CardBody>
+                    <Row>
+                        <Column>
+                            <Div>Email: <i>@PartModel.GetADUserForEmployee(pm)?.Mail</i></Div>
+                            <Div>Account Name: <i>@PartModel.GetADUserForEmployee(pm)?.SAMAccountName</i></Div>
+                            <Div>Employee ID: <i>@PartModel.GetADUserForEmployee(pm)?.EmployeeNumber</i></Div>
+                        </Column>
+                    </Row>
+
+                    <!-- Customer Contacts for PM -->
+                    @{
+                        var relevantContacts = PartModel.PartCustomerContactModels
+                        .Where(vc => vc.PartCustomerContact.PartEmployeeId == pm.Id)
+                        .OrderByDescending(vc => vc.PartCustomerContact.IsOwner ?? false)
+                        .ToList();
+                        int totalContacts = relevantContacts.Count;
+                        int currentIndex = 0;
+                    }
+                    @if (relevantContacts.Any())
+                    {
+                        <Div style="margin-top: 0.5rem; margin-bottom: 0.25rem; font-weight: bold;">Customers</Div>
+                    }
+                    @foreach (var viewModel in relevantContacts)
+                    {
+                        currentIndex++;
+                        bool isLastCard = currentIndex == totalContacts;
+                        string cardStyle = CardStyle((viewModel.PartCustomerContact.IsOwner.HasValue && viewModel.PartCustomerContact.IsOwner.Value) ? "Owner" : "");
+                        if (isLastCard)
+                        {
+                            cardStyle += " margin-bottom: 0;";
+                        }
+                        <Card Style="@cardStyle">
+                            <CardHeader>
+                                <Div Style="display: flex; align-items: center; justify-items: center;">
+                                    <Button ButtonStyle="ButtonStyle.Link"
+                                            Style="margin-left: -0.6rem; margin-right: 0.5rem; margin-top: -0.5rem; margin-bottom: -0.5rem;"
+                                            Class="action-icon-button"
+                                            Color="Color.Danger"
+                                            Clicked="@(() => DeletePartCustomerContact(viewModel.PartCustomerContact))"
+                                            hidden="@(!EditMode)">
+                                        <span class="@NavHelpers.TrashIcon" aria-hidden="true"></span>
+                                    </Button>
+                                    <strong style="margin-right: 1rem;">
+                                        @viewModel.DisplayContact.CustName - @viewModel.DisplayContact.ConName
+                                    </strong>
+                                    @if (pm.IsPrimary.HasValue && pm.IsPrimary.Value)
+                                    {
+                                        <Div Style="margin-right: auto; margin-left: auto; flex-grow: 1;">
+                                            <Check TValue="bool?"
+                                                   Disabled="@(!EditMode)"
+                                                   Checked="@viewModel.PartCustomerContact.IsOwner"
+                                                   CheckedChanged="@(value => OnCustomerOwnerCheckedChanged(value, viewModel.PartCustomerContact))">
+                                                Owner
+                                            </Check>
+                                        </Div>
+                                    }
+                                </Div>
+                            </CardHeader>
+                            <CardBody>
+                                <Row>
+                                    <Column>
+                                        <Div>Email: <i>@viewModel.DisplayContact.EMailAddress</i></Div>
+                                        <Div>Phone: <i>@viewModel.DisplayContact.PhoneNum</i></Div>
+                                        <Div>
+                                            Location: <i>
+                                                @(string.IsNullOrEmpty(viewModel.DisplayContact.City) ? "" : viewModel.DisplayContact.City + ",")
+                                                @(string.IsNullOrEmpty(viewModel.DisplayContact.State) ? "" : viewModel.DisplayContact.State + ",")
+                                                @viewModel.DisplayContact.Country
+                                            </i>
+                                        </Div>
+                                    </Column>
+                                    @* TODO: Currently hiding these until we implement Tiers for CM parts *@
+                                    @* <Column>
+                                        <Check TValue="bool?" Disabled="@(!EditMode)"
+                                               Checked="@viewModel.PartCustomerContact.ECNChangeNotice"
+                                               CheckedChanged="@(value => { viewModel.PartCustomerContact.ECNChangeNotice = value; HasUnsavedChanges = true; })">
+                                            ECN Change Notify
+                                        </Check>
+                                        <Check TValue="bool?" Disabled="@(!EditMode)"
+                                               Checked="@viewModel.PartCustomerContact.ECNImplementationNotice"
+                                               CheckedChanged="@(value => { viewModel.PartCustomerContact.ECNImplementationNotice = value; HasUnsavedChanges = true; })">
+                                            ECN Implementation Notify
+                                        </Check>
+                                        <Check TValue="bool?" Disabled="@(!EditMode)"
+                                               Checked="@viewModel.PartCustomerContact.ECNAlwaysNotify"
+                                               CheckedChanged="@(value => { viewModel.PartCustomerContact.ECNAlwaysNotify = value; HasUnsavedChanges = true; })">
+                                            ECN Always Notify
+                                        </Check>
+                                    </Column> *@
+                                </Row>
+                            </CardBody>
+                        </Card>
+                    }
+                </CardBody>
+            </Card>
+        }
+    }
+
+    @if (IsLoading)
+    {
+        <div class="loading-gradient" style="width: 100%; height: 200px;"></div>
+    }
+    else if (PartModel != null)
+    {
+        <Divider />
+
+        <!-- SA Section -->
+        <Div Style="display: flex; align-items: center; justify-items: center; margin-bottom: 0.5rem;">
+            <h3 style="margin: 0; margin-right: 1rem; width: 3rem;">SAs</h3>
+            <Button Color="Color.Primary"
+                    Clicked="() => OpenPartEmployeeDialog(PartEmployeeType.SA)"
+                    hidden="@(!EditMode)"
+                    Style="margin-top: -0.5rem;">
+                <span class="fa fa-circle-plus me-2" aria-hidden="true"></span> Add
+            </Button>
+        </Div>
+
+        foreach (var sa in PartModel.PartEmployees.Where(pe => pe.Type == (int)PartEmployeeType.SA))
+        {
+            <Card Style="margin-bottom: 1rem;">
+                <CardHeader>
+                    <Div Style="display: flex; align-items: center; justify-items: center;">
+                        <Button ButtonStyle="ButtonStyle.Link"
+                                Style="margin-left: -0.6rem; margin-right: 0.5rem; margin-top: -0.5rem; margin-bottom: -0.5rem;"
+                                Class="action-icon-button"
+                                Color="Color.Danger"
+                                Clicked="@(() => DeletePartEmployee(sa))"
+                                hidden="@(!EditMode)">
+                            <span class="@NavHelpers.TrashIcon" aria-hidden="true"></span>
+                        </Button>
+                        <strong style="margin-right: 1rem; flex-grow: 1;">@PartModel.GetADUserForEmployee(sa)?.DisplayName</strong>
+                    </Div>
+                </CardHeader>
+                <CardBody>
+                    <Row>
+                        <Column>
+                            <Div>Email: <i>@PartModel.GetADUserForEmployee(sa)?.Mail</i></Div>
+                            <Div>Account Name: <i>@PartModel.GetADUserForEmployee(sa)?.SAMAccountName</i></Div>
+                            <Div>Employee ID: <i>@PartModel.GetADUserForEmployee(sa)?.EmployeeNumber</i></Div>
+                        </Column>
+                    </Row>
+                </CardBody>
+            </Card>
+        }
+    }
+</Div>
+
+<!-- Sticky Save Button -->
+<div class="sticky-save-button @(HasUnsavedChanges ? "visible" : "hidden")" @onclick="SaveChanges">
+    <Button Color="Color.Success" Size="Size.Large">
+        <span class="@($"{NavHelpers.SaveIcon} me-2")" aria-hidden="true"></span> Save Changes
+    </Button>
+</div>
+
+<!-- Confirmation Modals -->
+<ConfirmationModal @ref="DeleteEmployeeConfirmationModal" Title="Confirm Removal of Part Employee Relationship" Message="@DeleteConfirmationMessage" OnClose="ConfirmDeletePartEmployee" />
+<ConfirmationModal @ref="DeleteCustomerContactConfirmationModal" Title="Confirm Removal of Customer Contact Relationship" Message="@DeleteConfirmationMessage" OnClose="ConfirmDeletePartCustomerContact" />

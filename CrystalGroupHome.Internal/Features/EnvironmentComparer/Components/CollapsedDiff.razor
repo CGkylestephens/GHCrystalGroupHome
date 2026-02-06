@@ -1,0 +1,371 @@
+@using DiffPlex.DiffBuilder.Model
+
+<div class="collapsed-diff-container">
+    @if (_isProcessing)
+    {
+        <div class="diff-loading">
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+            Processing diff...
+        </div>
+    }
+    else if (_diffChunks.Count == 0 && !string.IsNullOrEmpty(OldText) && !string.IsNullOrEmpty(NewText))
+    {
+        <div class="alert alert-success">
+            <i class="fa fa-check-circle me-2"></i>
+            No differences found - content is identical.
+        </div>
+    }
+    else
+    {
+        <div class="diff-toolbar mb-2">
+            <span class="badge bg-secondary me-2">@_totalChanges changes in @_diffChunks.Count section(s)</span>
+            <div class="btn-group me-2" role="group">
+                <button type="button" class="btn btn-sm @(_viewMode == DiffViewMode.Unified ? "btn-primary" : "btn-outline-secondary")" @onclick="@(() => SetViewMode(DiffViewMode.Unified))" title="Unified view">
+                    <i class="fa fa-align-left"></i>
+                </button>
+                <button type="button" class="btn btn-sm @(_viewMode == DiffViewMode.SideBySide ? "btn-primary" : "btn-outline-secondary")" @onclick="@(() => SetViewMode(DiffViewMode.SideBySide))" title="Side-by-side view">
+                    <i class="fa fa-columns"></i>
+                </button>
+            </div>
+            <Button Size="Size.Small" Color="Color.Light" Clicked="@ToggleFullDiff" Disabled="@_isExpandingFullDiff">
+                @if (_isExpandingFullDiff)
+                {
+                    <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                    <span>Loading...</span>
+                }
+                else
+                {
+                    <i class="fa @(_showFullDiff ? "fa-compress" : "fa-expand") me-1"></i>
+                    @(_showFullDiff ? "Collapse" : "Expand All")
+                }
+            </Button>
+        </div>
+
+        @if (_isExpandingFullDiff)
+        {
+            <div class="diff-loading">
+                <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                Expanding full diff view...
+            </div>
+        }
+        else if (_showFullDiff)
+        {
+            <BlazorTextDiff.TextDiff OldText="@OldText" NewText="@NewText" />
+        }
+        else if (_viewMode == DiffViewMode.SideBySide)
+        {
+            @* Side-by-side view - unchanged *@
+            <div class="collapsed-diff side-by-side">
+                @foreach (var chunk in _sideBySideChunks)
+                {
+                    <div class="diff-chunk">
+                        <div class="chunk-header">
+                            <span class="chunk-location">
+                                @@ -@chunk.OldStartLine,@chunk.OldLineCount +@chunk.NewStartLine,@chunk.NewLineCount @@
+                            </span>
+                        </div>
+                        <div class="side-by-side-container">
+                            <table class="diff-table-sbs">
+                                <colgroup>
+                                    <col class="col-linenum" />
+                                    <col class="col-content" />
+                                    <col class="col-linenum" />
+                                    <col class="col-content" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th class="sbs-header sbs-header-left" colspan="2">@OldTextLabel</th>
+                                        <th class="sbs-header sbs-header-right" colspan="2">@NewTextLabel</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var row in chunk.Rows)
+                                    {
+                                        <tr>
+                                            <td class="ln sbs-ln @GetSbsLineClass(row.OldType)">@(row.OldLineNumber > 0 ? row.OldLineNumber.ToString() : "")</td>
+                                            <td class="code sbs-code-left @GetSbsLineClass(row.OldType)">@row.OldText</td>
+                                            <td class="ln sbs-ln @GetSbsLineClass(row.NewType)">@(row.NewLineNumber > 0 ? row.NewLineNumber.ToString() : "")</td>
+                                            <td class="code sbs-code-right @GetSbsLineClass(row.NewType)">@row.NewText</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    @if (chunk != _sideBySideChunks.Last())
+                    {
+                        <div class="chunk-separator">
+                            <span class="separator-text">???</span>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            @* Unified view - unchanged *@
+            <div class="collapsed-diff">
+                @foreach (var chunk in _diffChunks)
+                {
+                    <div class="diff-chunk">
+                        <div class="chunk-header">
+                            <span class="chunk-location">
+                                @if (chunk.OldStartLine > 0 && chunk.NewStartLine > 0)
+                                {
+                                    <text>@@ -@chunk.OldStartLine,@chunk.OldLineCount +@chunk.NewStartLine,@chunk.NewLineCount @@</text>
+                                }
+                            </span>
+                        </div>
+                        <table class="diff-table">
+                            <tbody>
+                                @foreach (var line in chunk.Lines)
+                                {
+                                    <tr class="@GetLineClass(line.Type)">
+                                        <td class="line-number old">@(line.OldLineNumber > 0 ? line.OldLineNumber.ToString() : "")</td>
+                                        <td class="line-number new">@(line.NewLineNumber > 0 ? line.NewLineNumber.ToString() : "")</td>
+                                        <td class="line-prefix">@GetLinePrefix(line.Type)</td>
+                                        <td class="line-content">@line.Text</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (chunk != _diffChunks.Last())
+                    {
+                        <div class="chunk-separator">
+                            <span class="separator-text">???</span>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    }
+</div>
+
+<style>
+    .collapsed-diff-container {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 11px;
+    }
+
+    .diff-loading {
+        padding: 2rem;
+        text-align: center;
+        color: #6c757d;
+    }
+
+    .diff-toolbar {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem 0.25rem 0 0;
+    }
+
+    .collapsed-diff {
+        border: 1px solid #dee2e6;
+        border-top: none;
+        border-radius: 0 0 0.25rem 0.25rem;
+        overflow: hidden;
+    }
+
+    .diff-chunk {
+        background-color: #fff;
+    }
+
+    .chunk-header {
+        background-color: #f1f8ff;
+        padding: 0.25rem 0.5rem;
+        border-bottom: 1px solid #dee2e6;
+        color: #6c757d;
+        font-weight: 500;
+        font-size: 10px;
+    }
+
+    .chunk-separator {
+        background-color: #f8f9fa;
+        padding: 0.25rem;
+        text-align: center;
+        border-top: 1px solid #dee2e6;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .separator-text {
+        color: #6c757d;
+        font-weight: bold;
+        letter-spacing: 0.25em;
+    }
+
+    .diff-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .diff-table td {
+        padding: 0 0.25rem;
+        vertical-align: top;
+        line-height: 1.3;
+    }
+
+    .line-number {
+        width: 35px;
+        min-width: 35px;
+        max-width: 35px;
+        text-align: right;
+        color: #6c757d;
+        background-color: #f8f9fa;
+        border-right: 1px solid #dee2e6;
+        user-select: none;
+        font-size: 10px;
+        padding-right: 4px !important;
+    }
+
+    .line-number.old {
+        border-right: none;
+    }
+
+    .line-prefix {
+        width: 14px;
+        min-width: 14px;
+        max-width: 14px;
+        text-align: center;
+        user-select: none;
+        font-weight: bold;
+    }
+
+    .line-content {
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    .diff-line-context {
+        background-color: #fff;
+    }
+
+    .diff-line-deleted {
+        background-color: #ffebe9;
+    }
+
+    .diff-line-deleted .line-prefix {
+        color: #cf222e;
+    }
+
+    .diff-line-deleted .line-number {
+        background-color: #ffebe9;
+    }
+
+    .diff-line-inserted {
+        background-color: #e6ffec;
+    }
+
+    .diff-line-inserted .line-prefix {
+        color: #1a7f37;
+    }
+
+    .diff-line-inserted .line-number {
+        background-color: #e6ffec;
+    }
+
+    .diff-line-modified {
+        background-color: #fff8c5;
+    }
+
+    .diff-line-modified .line-prefix {
+        color: #9a6700;
+    }
+
+    .diff-line-modified .line-number {
+        background-color: #fff8c5;
+    }
+
+    .side-by-side-container {
+        overflow-x: auto;
+    }
+
+    .diff-table-sbs {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .diff-table-sbs .col-linenum {
+        width: 28px;
+    }
+
+    .diff-table-sbs .col-content {
+        width: calc(50% - 28px);
+    }
+
+    .diff-table-sbs th.sbs-header {
+        background-color: #f1f8ff;
+        padding: 0.2rem 0.25rem;
+        text-align: center;
+        border-bottom: 1px solid #dee2e6;
+        font-weight: 600;
+        color: #495057;
+        font-size: 11px;
+    }
+
+    .diff-table-sbs th.sbs-header-left {
+        border-right: 2px solid #adb5bd;
+    }
+
+    .diff-table-sbs td.ln {
+        width: 28px;
+        min-width: 28px;
+        max-width: 28px;
+        padding: 0 2px;
+        text-align: right;
+        color: #6c757d;
+        user-select: none;
+        background-color: #f8f9fa;
+        font-size: 9px;
+        line-height: 1.3;
+        vertical-align: top;
+    }
+
+    .diff-table-sbs td.code {
+        padding: 0 4px;
+        vertical-align: top;
+        line-height: 1.3;
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .diff-table-sbs td.sbs-code-left {
+        border-right: 2px solid #adb5bd;
+    }
+
+    .sbs-deleted {
+        background-color: #ffebe9 !important;
+    }
+
+    .sbs-inserted {
+        background-color: #e6ffec !important;
+    }
+
+    .sbs-unchanged {
+        background-color: #fff;
+    }
+
+    .sbs-empty {
+        background-color: #f8f9fa !important;
+    }
+
+    td.ln.sbs-deleted {
+        background-color: #ffd7d5 !important;
+    }
+
+    td.ln.sbs-inserted {
+        background-color: #ccffd8 !important;
+    }
+
+    td.ln.sbs-empty {
+        background-color: #f0f0f0 !important;
+    }
+</style>

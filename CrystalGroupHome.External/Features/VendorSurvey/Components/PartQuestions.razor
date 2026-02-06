@@ -1,0 +1,248 @@
+﻿@using CrystalGroupHome.External.Features.VendorSurvey.Models
+@using CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms
+@using static CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms.CMHub_VendorCommsSurveyDTOs
+@inherits ComponentBase
+
+<Card Shadow="Shadow.None" Border="Border.Is1">
+    <CardBody>
+        <Heading Size="HeadingSize.Is5">Part Information</Heading>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                @if (!string.IsNullOrWhiteSpace(Part.PartEolt?.VendorPartNum))
+                {
+                <Field>
+                    
+                        <FieldLabel>Vendor Part Number</FieldLabel>
+                        <Strong>@Part.PartEolt.VendorPartNum</Strong>
+                </Field>
+                }
+                <Field>
+                    <FieldLabel Margin="Margin.Is2.FromTop">Crystal Part Number</FieldLabel>
+                    <Small TextColor="TextColor.Muted">@Part.Tracker.PartNum</Small>
+                </Field>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is6.OnDesktop">
+                <Field>
+                    <FieldLabel>Description</FieldLabel>
+                    <Text>@(Part.PartEolt?.PartDescription ?? "N/A")</Text>
+                </Field>
+            </Column>
+        </Row>
+
+        <Divider Margin="Margin.Is4.FromTop.Is4.FromBottom" />
+
+        <Heading Size="HeadingSize.Is5">Survey Questions</Heading>
+
+        @foreach (var question in Questions.OrderBy(q => q.DisplayOrder))
+        {
+            var response = GetOrCreateResponse(Part.Tracker.Id, question.Id);
+
+            <Field Margin="Margin.Is3.FromBottom">
+                <FieldLabel>
+                    @GetQuestionDisplayText(question)
+                    @if (question.IsRequired)
+                    {
+                        <span class="text-danger">*</span>
+                    }
+                </FieldLabel>
+
+                @switch (question.QuestionType.ToLower())
+                {
+                    case "text":
+                        <Validation Validator="@(e => ValidateRequired(e, question.IsRequired))">
+                            <TextEdit Text="@response.ResponseValue"
+                                      TextChanged="@(value => UpdateResponse(response, value))"
+                                      Placeholder="Enter your response">
+                                <Feedback>
+                                    <ValidationError>This field is required.</ValidationError>
+                                </Feedback>
+                            </TextEdit>
+                        </Validation>
+                        break;
+
+                    case "number":
+                        <Validation Validator="@(e => ValidateRequired(e, question.IsRequired))">
+                            <NumericEdit TValue="decimal?"
+                                         Value="@GetNumericValue(response.ResponseValue)"
+                                         ValueChanged="@(value => UpdateResponse(response, value?.ToString() ?? string.Empty))"
+                                         Placeholder="Enter a number">
+                                <Feedback>
+                                    <ValidationError>This field is required.</ValidationError>
+                                </Feedback>
+                            </NumericEdit>
+                        </Validation>
+                        break;
+
+                    case "date":
+                        <Validation Validator="@(e => ValidateRequired(e, question.IsRequired))">
+                            <DateEdit TValue="DateTime?"
+                                      Date="@GetDateValue(response.ResponseValue)"
+                                      DateChanged="@(date => UpdateResponse(response, date?.ToString("yyyy-MM-dd") ?? string.Empty))">
+                                <Feedback>
+                                    <ValidationError>This field is required.</ValidationError>
+                                </Feedback>
+                            </DateEdit>
+                        </Validation>
+                        break;
+
+                    case "boolean":
+                        <Validation Validator="@(e => ValidateRequired(e, question.IsRequired))">
+                            <Select TValue="string"
+                                    SelectedValue="@response.ResponseValue"
+                                    SelectedValueChanged="@(value => UpdateResponse(response, value))">
+                                <ChildContent>
+                                    <SelectItem Value="@("")">-- Select an option --</SelectItem>
+                                    <SelectItem Value="@("true")">Yes</SelectItem>
+                                    <SelectItem Value="@("false")">No</SelectItem>
+                                </ChildContent>
+                                <Feedback>
+                                    <ValidationError>This field is required.</ValidationError>
+                                </Feedback>
+                            </Select>
+                        </Validation>
+                        break;
+
+                    case "textoptions":
+                        <Validation Validator="@(e => ValidateRequired(e, question.IsRequired))">
+                            <Select TValue="string"
+                                    SelectedValue="@response.ResponseValue"
+                                    SelectedValueChanged="@(value => UpdateResponse(response, value))">
+                                <ChildContent>
+                                    <SelectItem Value="@("")">-- Select an option --</SelectItem>
+                                    @foreach (var option in GetTextOptions(question.QuestionText))
+                                    {
+                                        <SelectItem Value="@option">@option</SelectItem>
+                                    }
+                                </ChildContent>
+                                <Feedback>
+                                    <ValidationError>This field is required.</ValidationError>
+                                </Feedback>
+                            </Select>
+                        </Validation>
+                        break;
+
+                    default:
+                        <MemoEdit Text="@response.ResponseValue"
+                                  TextChanged="@(value => UpdateResponse(response, value))"
+                                  Rows="3"
+                                  Placeholder="Enter your response" />
+                        break;
+                }
+
+                @if (GetFieldHelp(question) is string help && !string.IsNullOrEmpty(help))
+                {
+                    <FieldHelp>@help</FieldHelp>
+                }
+            </Field>
+        }
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter, EditorRequired] public CMHub_VendorCommsTrackerModel Part { get; set; } = default!;
+    [Parameter, EditorRequired] public List<CMHub_SurveyQuestionDTO> Questions { get; set; } = default!;
+    [Parameter] public EventCallback OnResponseChanged { get; set; }
+    [Parameter] public bool IsReadOnly { get; set; } = false;
+    [CascadingParameter] public Dictionary<string, CMHub_VendorCommsSurveyResponseModel>? ParentResponses { get; set; }
+
+    private Dictionary<string, CMHub_VendorCommsSurveyResponseModel> Responses => ParentResponses ?? new();
+
+    private CMHub_VendorCommsSurveyResponseModel GetOrCreateResponse(int trackerId, int questionId)
+    {
+        var key = $"{trackerId}_{questionId}";
+        if (!Responses.ContainsKey(key))
+        {
+            Responses[key] = new CMHub_VendorCommsSurveyResponseModel
+            {
+                PartTrackerId = trackerId,
+                QuestionId = questionId,
+                ResponseValue = string.Empty
+            };
+        }
+        return Responses[key];
+    }
+
+    private async Task UpdateResponse(CMHub_VendorCommsSurveyResponseModel response, string value)
+    {
+        response.ResponseValue = value;
+        if (OnResponseChanged.HasDelegate)
+        {
+            await OnResponseChanged.InvokeAsync();
+        }
+    }
+
+    private void ValidateRequired(ValidatorEventArgs e, bool isRequired)
+    {
+        if (isRequired)
+        {
+            e.Status = string.IsNullOrWhiteSpace(e.Value?.ToString())
+                ? ValidationStatus.Error
+                : ValidationStatus.Success;
+        }
+        else
+        {
+            e.Status = ValidationStatus.Success;
+        }
+    }
+
+    private decimal? GetNumericValue(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return null;
+
+        if (decimal.TryParse(value, out var result))
+            return result;
+        return null;
+    }
+
+    private DateTime? GetDateValue(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return null;
+
+        if (DateTime.TryParse(value, out var result))
+            return result;
+        return null;
+    }
+
+    private string? GetFieldHelp(CMHub_SurveyQuestionDTO question)
+    {
+        return question.QuestionType.ToLower() switch
+        {
+            "number" => "Please enter a numeric value",
+            _ => null
+        };
+    }
+
+    private List<string> GetTextOptions(string questionText)
+    {
+        var options = new List<string>();
+        
+        // Look for {Options: Option 1, Option 2, Option 3} pattern
+        var optionsPattern = @"\{Options:\s*([^}]+)\}";
+        var match = System.Text.RegularExpressions.Regex.Match(questionText, optionsPattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        
+        if (match.Success)
+        {
+            var optionsText = match.Groups[1].Value;
+            options = optionsText.Split(',')
+                                .Select(opt => opt.Trim())
+                                .Where(opt => !string.IsNullOrWhiteSpace(opt))
+                                .ToList();
+        }
+        
+        return options;
+    }
+
+    private string GetQuestionDisplayText(CMHub_SurveyQuestionDTO question)
+    {
+        // For textoptions, remove the {Options: ...} part from the display text
+        if (question.QuestionType.ToLower() == "textoptions")
+        {
+            var optionsPattern = @"\{Options:\s*[^}]+\}";
+            return System.Text.RegularExpressions.Regex.Replace(question.QuestionText, optionsPattern, "", System.Text.RegularExpressions.RegexOptions.IgnoreCase).Trim();
+        }
+        
+        return question.QuestionText;
+    }
+}

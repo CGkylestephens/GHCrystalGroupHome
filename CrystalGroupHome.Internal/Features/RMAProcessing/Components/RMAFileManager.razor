@@ -1,0 +1,34 @@
+﻿@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using Blazorise
+@using Blazorise.Components
+@inherits RMAFileManagerBase
+
+<NotificationProvider />
+
+<Tabs SelectedTab="@selectedTab" SelectedTabChanged="@OnSelectedTabChanged">
+    <Items>
+        <Tab Name="upload">Upload Files</Tab>
+        <Tab Name="files">Files</Tab>
+    </Items>
+    <Content>
+        <TabPanel Name="files" Visible="@(selectedTab == "files")">
+            <RMAFileList RmaNumber="@RmaNumber"
+                         RmaLineNumber="@RmaLineNumber"
+                         SerialNumber="@SerialNumber"
+                         ShowAllFiles="@ShowAllFiles"
+                         AvailableCategories="@availableCategories"
+                         OnGoToUpload="@(() => OnSelectedTabChanged("upload"))"
+                         OnLineSerialFilterChanged="@HandleLineSerialFilterChanged" />
+        </TabPanel>
+        <TabPanel Name="upload">
+            <RMAFileUpload RmaNumber="@RmaNumber"
+                           RmaLineNumber="@RmaLineNumber"
+                           SerialNumber="@SerialNumber"
+                           InitialCategory="@Category"
+                           AvailableCategories="@availableCategories"
+                           OnUploadComplete="@OnUploadComplete"
+                           OnViewFiles="@(() => OnSelectedTabChanged("files"))" />
+        </TabPanel>
+    </Content>
+</Tabs>

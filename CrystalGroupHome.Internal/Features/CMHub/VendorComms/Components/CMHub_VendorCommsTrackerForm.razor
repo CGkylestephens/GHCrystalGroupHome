@@ -1,0 +1,300 @@
+@using CrystalGroupHome.SharedRCL.Data.Vendor.VendorComms
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.SharedRCL.Components
+@inherits CMHub_VendorCommsTrackerFormBase
+
+<NavigationLock OnBeforeInternalNavigation="ConfirmNavigationAsync" />
+
+@if (TrackerModel != null)
+{
+    <Div Style="max-width: 1200px;">
+        <h2>Vendor Comms Tracker Details</h2>
+
+        <Row Style="align-items: end;">
+            <Column>
+                <Div Style="display: flex; align-items: center; justify-content: start;">
+                    <h3 style="margin: 0; margin-right: 1rem;">@TrackerModel.Tracker.PartNum</h3>
+                </Div>
+                <Div>@TrackerModel.PartDescription</Div>
+            </Column>
+            <Column Style="flex-grow: 0; min-width: fit-content;">
+                <Div Style="display: flex; flex-direction: row; gap: 0.5rem;">
+                    <Button Color="Color.Secondary" 
+                            Class="me-2" 
+                            Clicked="@(async () => await ShowAllLogsAsync())" 
+                            hidden="@(TrackerModel.TrackerLogs.Count <= 0)"
+                            Disabled="@FormDisabled">
+                        <span class="@($"{NavHelpers.ClockIcon} me-1")" aria-hidden="true"></span> View All Logs
+                    </Button>
+                    <Button Color="Color.Primary" 
+                            Class="me-2" 
+                            Clicked="ShowAddLogModal"
+                            Disabled="@FormDisabled">
+                        <span class="@($"{NavHelpers.AddIcon} me-1")" aria-hidden="true"></span> Add Log
+                    </Button>
+                </Div>
+            </Column>
+        </Row>
+
+        <Divider />
+
+        @if (ShowValidationSummary)
+        {
+            <Alert Color="Color.Danger" Visible>
+                <AlertMessage>
+                    <strong>Cannot Save: Invalid Date</strong>
+                </AlertMessage>
+                <AlertDescription>
+                    One or more dates are invalid. All dates must be between 1/1/1900 and 12/31/9999.
+                </AlertDescription>
+            </Alert>
+        }
+
+        <EditForm Model="TrackerModel" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <div class="grid-container-2-col-1fr">
+                <div class="grid-item">
+                    <Card Style="margin-bottom: 1rem;">
+                        <CardHeader Style="display: flex; justify-content: space-between; align-items: center;">
+                            <h5 style="margin: 0;">@TrackerModel.VendorName</h5>
+                            <Check TValue="bool"
+                                   Checked="@TrackerModel.PartEolt.ExcludeVendorComms"
+                                   CheckedChanged="@( (bool v) => OnExcludeVendorCommsChanged(v) )"
+                                   CheckedExpression="@(() => TrackerModel.PartEolt.ExcludeVendorComms)"
+                                   Disabled="@FormDisabled">
+                                Exclude from Vendor Communications
+                            </Check>
+                            <ValidationMessage For="@(() => TrackerModel.PartEolt.ExcludeVendorComms)" />
+                        </CardHeader>
+
+                        <CardBody>
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                <Field style="flex: 0.5; margin-bottom: 0;">
+                                    <FieldLabel>Contact Interval (Days)</FieldLabel>
+                                    <NumericEdit TValue="int?"
+                                                 Value="@TrackerModel.PartEolt.NotifyIntervalDays"
+                                                 ValueChanged="@( (int? v) => OnContactIntervalChanged(v) )"
+                                                 ValueExpression="@(() => TrackerModel.PartEolt.NotifyIntervalDays)"
+                                                 Disabled="@FormDisabled" />
+                                    <ValidationMessage For="@(() => TrackerModel.PartEolt.NotifyIntervalDays)" />
+                                </Field>
+
+                                <Field style="flex: 1; margin-bottom: 0;">
+                                    <FieldLabel>Last Contact</FieldLabel>
+                                    <DateEdit TValue="DateTime?"
+                                              Date="@TrackerModel.PartEolt.LastContactDate"
+                                              DateChanged="@( (DateTime? d) => OnLastContactDateChanged(d) )"
+                                              DateExpression="@(() => TrackerModel.PartEolt.LastContactDate)"
+                                              Min="new DateTime(1900, 1, 1)"
+                                              Max="new DateTime(9999, 12, 31)"
+                                              Disabled="@FormDisabled" />
+                                    <ValidationMessage For="@(() => TrackerModel.PartEolt.LastContactDate)" />
+                                </Field>
+
+                                <Field style="flex: 1; margin-bottom: 0;">
+                                    <FieldLabel>Last Processed Survey</FieldLabel>
+                                    <DateEdit TValue="DateTime?"
+                                              Date="@TrackerModel.PartEolt.LastProcessedSurveyResponseDate"
+                                              DateChanged="@( (DateTime? d) => OnLastResponseDateChanged(d) )"
+                                              DateExpression="@(() => TrackerModel.PartEolt.LastProcessedSurveyResponseDate)"
+                                              Min="new DateTime(1900, 1, 1)"
+                                              Max="new DateTime(9999, 12, 31)"
+                                              Disabled="@FormDisabled" />
+                                    <ValidationMessage For="@(() => TrackerModel.PartEolt.LastProcessedSurveyResponseDate)" />
+                                </Field>
+                            </div>
+
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                <Field style="flex: 1; margin-bottom: 0;">
+                                    <FieldLabel>EOL Date</FieldLabel>
+                                    <DateEdit TValue="DateTime?"
+                                              Date="@TrackerModel.PartEolt.EolDate"
+                                              DateChanged="@( (DateTime? d) => OnEolDateChanged(d) )"
+                                              DateExpression="@(() => TrackerModel.PartEolt.EolDate)"
+                                              Min="new DateTime(1900, 1, 1)"
+                                              Max="new DateTime(9999, 12, 31)"
+                                              Disabled="@FormDisabled" />
+                                    <ValidationMessage For="@(() => TrackerModel.PartEolt.EolDate)" />
+                                </Field>
+
+                                <Field style="flex: 1; margin-bottom: 0;">
+                                    <FieldLabel>Last Time Buy</FieldLabel>
+                                    <div style="display: flex; gap: 0.5rem; align-items: end;">
+                                        <div style="flex: 1;">
+                                            <DateEdit TValue="DateTime?"
+                                                      Date="@TrackerModel.PartEolt.LastTimeBuyDate"
+                                                      DateChanged="@( (DateTime? d) => OnLastTimeBuyDateChanged(d) )"
+                                                      DateExpression="@(() => TrackerModel.PartEolt.LastTimeBuyDate)"
+                                                      Min="new DateTime(1900, 1, 1)"
+                                                      Max="new DateTime(9999, 12, 31)"
+                                                      Disabled="@FormDisabled" />
+                                            <ValidationMessage For="@(() => TrackerModel.PartEolt.LastTimeBuyDate)" />
+                                        </div>
+                                        @if (TrackerModel.PartEolt.LastTimeBuyDate.HasValue)
+                                        {
+                                            <div style="flex: 0 0 auto; min-width: 120px;">
+                                                <Select TValue="bool"
+                                                        SelectedValue="@TrackerModel.PartEolt.LastTimeBuyDateConfirmed"
+                                                        SelectedValueChanged="@( (bool v) => OnLastTimeBuyDateConfirmedChanged(v) )"
+                                                        SelectedValueExpression="@(() => TrackerModel.PartEolt.LastTimeBuyDateConfirmed)"
+                                                        Disabled="@FormDisabled">
+                                                    <SelectItem TValue="bool" Value="false">Projected</SelectItem>
+                                                    <SelectItem TValue="bool" Value="true">Confirmed</SelectItem>
+                                                </Select>
+                                                <ValidationMessage For="@(() => TrackerModel.PartEolt.LastTimeBuyDateConfirmed)" />
+                                            </div>
+                                        }
+                                    </div>
+                                </Field>
+                            </div>
+
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                <Field style="flex: 1; margin-bottom: 0;">
+                                    <FieldLabel>Replacement Part #</FieldLabel>
+                                    <CustomSearchInput @ref="ReplacementPartNumSearchInput"
+                                                       TextValue="@TrackerModel.PartEolt.ReplacementPartNum"
+                                                       OnTextValueChanged="OnReplacementPartNumTextValueChanged"
+                                                       OnSearch="OnSearchReplacementPartNum"
+                                                       Disabled="@FormDisabled" />
+                                    <ValidationMessage For="@(() => TrackerModel.PartEolt.ReplacementPartNum)" />
+                                    @if (!string.IsNullOrEmpty(TrackerModel.PartEolt.ReplacementPartNum) && ReplacementPartNumSearchInput != null && ReplacementPartNumSearchInput.CurrentInputHasBeenSearched && !ReplacementPartNumSearchInput.CurrentInputIsValid)
+                                    {
+                                        <div style="color: orange; font-size: 0.875rem; margin-top: 0.25rem;">
+                                            <i class="fa fa-exclamation-triangle me-1"></i>
+                                            Part number not found in Epicor. You can still save, but verify this part exists.
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(ReplacementPartDescription))
+                                    {
+                                        <div style="color: var(--gray); font-size: 0.875rem; margin-top: 0.25rem;">
+                                            <i>@ReplacementPartDescription</i>
+                                        </div>
+                                    }
+                                </Field>
+                            </div>
+
+                            <Field Style="margin-bottom: 0;">
+                                <FieldLabel>Tech Notes</FieldLabel>
+                                <MemoEdit Value="@TrackerModel.PartEolt.TechNotes"
+                                          ValueChanged="@( (string v) => OnTechNotesChanged(v) )"
+                                          ValueExpression="@(() => TrackerModel.PartEolt.TechNotes)"
+                                          Rows="4"
+                                          Disabled="@FormDisabled" />
+                                <ValidationMessage For="@(() => TrackerModel.PartEolt.TechNotes)" />
+                            </Field>
+
+                        </CardBody>
+                    </Card>
+                </div>
+            </div>
+
+            @* Recent Logs Section *@
+            @if (TrackerModel.TrackerLogs.Any())
+            {
+                <Divider />
+                
+                <h4 style="margin-bottom: 1rem;">Recent Logs</h4>
+                
+                @foreach (var log in TrackerModel.TrackerLogs.Take(3).OrderByDescending(l => l.LogDate))
+                {
+                    <Card Class="mb-3">
+                        <CardHeader>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong>@(log.Employee?.DisplayName ?? "Unknown User")</strong>
+                                </div>
+                                <small style="color: var(--gray);">@log.LogDate.ToLocalTime().ToString("g")</small>
+                            </div>
+                        </CardHeader>
+                        <CardBody>
+                            <p style="margin: 0; white-space: pre-wrap;">@((MarkupString)HtmlHelpers.ConvertUrlsToLinks(log.LogMessage))</p>
+                        </CardBody>
+                    </Card>
+                }
+                
+                @if (TrackerModel.TrackerLogs.Count > 3)
+                {
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <Button Color="Color.Secondary" 
+                                Clicked="@(async () => await ShowAllLogsAsync())"
+                                Disabled="@FormDisabled">
+                            View All @TrackerModel.TrackerLogs.Count Logs
+                        </Button>
+                    </div>
+                }
+            }
+
+            @* Survey History Section *@
+            <Divider />
+            
+            <Row Style="align-items: center; margin-bottom: 1rem;">
+                <Column>
+                    <h4 style="margin: 0;">Survey History</h4>
+                </Column>
+                <Column Style="flex-grow: 0; min-width: fit-content;">
+                    @if (TrackerModel.Tracker.Id > 0)
+                    {
+                        <Badge Color="Color.Info">
+                            <i class="fas fa-poll me-1"></i>
+                            Part included in surveys
+                        </Badge>
+                    }
+                </Column>
+            </Row>
+            
+            @if (TrackerModel.Tracker.Id > 0)
+            {
+                <CMHub_VendorCommsPartSurveyHistory TrackerId="@TrackerModel.Tracker.Id" />
+            }
+            else
+            {
+                <Alert Color="Color.Info" Visible>
+                    Save this tracker first to view survey history.
+                </Alert>
+            }
+
+        </EditForm>
+
+        <div style="height:120px;"></div>
+    </Div>
+
+    <!-- Sticky Save/Undo Button -->
+    <div class="sticky-save-button @(HasUnsavedChanges ? "visible" : "hidden")">
+        <Button Color="Color.Success" 
+                Size="Size.Large" 
+                @onclick="HandleValidSubmit" 
+                style="margin-right: 0.5rem;"
+                Disabled="@FormDisabled">
+            @if (IsSaving)
+            {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <span>Saving...</span>
+            }
+            else
+            {
+                <span class="@($"{NavHelpers.SaveIcon} me-2")" aria-hidden="true"></span>
+                <span>Save Changes</span>
+            }
+        </Button>
+        <Button Color="Color.Secondary" 
+                Size="Size.Large" 
+                @onclick="ReloadTracker"
+                Disabled="@FormDisabled">
+            <span class="@($"{NavHelpers.UndoIcon} me-2")" aria-hidden="true"></span>
+            Undo
+        </Button>
+    </div>
+}
+else
+{
+    <LoadingIndicator Visible />
+}
+
+<!-- Log Modals -->
+<CMHub_VendorCommsNewLogModal @ref="NewLogModal"
+                              OnLogSubmitted="HandleNewLogSubmitted"
+                              OnClose="@(async () => { await InvokeAsync(StateHasChanged); })" />
+
+<CMHub_VendorCommsLogsModal @ref="LogsModal"
+                            OnClose="@(async () => { await InvokeAsync(StateHasChanged); })" />

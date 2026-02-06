@@ -1,0 +1,20 @@
+@page "/rma-processing/files-embedded/upload"
+@attribute [Authorize(Policy = AuthorizationPolicies.RMAProcessingAccess)]
+@using CrystalGroupHome.Internal.Authorization
+@layout IframeLayout
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Components
+@using Blazorise
+@using Blazorise.Components
+@inherits FilesEmbeddedUploadPageBase
+
+<PageTitle>Upload RMA Files</PageTitle>
+
+<RMAFileUpload RmaNumber="@RmaNumber"
+               RmaLineNumber="@RmaLineNumber"
+               SerialNumber="@SerialNumber" 
+               InitialCategory="@Category"
+               AvailableCategories="@AvailableCategories"
+               OnUploadComplete="@OnUploadComplete"
+               OnViewFilesWithScope="@NavigateToListWithScope" />

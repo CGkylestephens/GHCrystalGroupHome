@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<!-- Base version - increment Major/Minor manually for releases -->
+		<VersionPrefix>1.0</VersionPrefix>
+	</PropertyGroup>
+
+	<!-- Git-based versioning: runs BEFORE assembly info is generated -->
+	<Target Name="SetVersionFromGit" BeforeTargets="GenerateAssemblyInfo;GetAssemblyVersion;Pack">
+		<Exec Command="git rev-list --count HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" ContinueOnError="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitCount" />
+			<Output TaskParameter="ExitCode" PropertyName="GitExitCode" />
+		</Exec>
+		<Exec Command="git rev-parse --short HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" ContinueOnError="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="GitCommitId" />
+		</Exec>
+		<PropertyGroup>
+			<!-- If git command failed, use 0 as fallback -->
+			<GitCommitCount Condition="'$(GitExitCode)' != '0' Or '$(GitCommitCount)' == ''">0</GitCommitCount>
+			<GitCommitId Condition="'$(GitCommitId)' == ''">unknown</GitCommitId>
+			<!-- Build the version: Major.Minor.CommitCount.0 -->
+			<Version>$(VersionPrefix).$(GitCommitCount).0</Version>
+			<AssemblyVersion>$(Version)</AssemblyVersion>
+			<FileVersion>$(Version)</FileVersion>
+			<!-- Informational version includes git hash for debugging -->
+			<InformationalVersion>$(Version)+$(GitCommitId)</InformationalVersion>
+		</PropertyGroup>
+		<Message Importance="high" Text="Building version: $(Version) ($(InformationalVersion))" />
+	</Target>
+
+	<ItemGroup>
+		<PackageReference Include="Blazorise" Version="1.8.2" />
+		<PackageReference Include="Blazorise.Bootstrap5" Version="1.8.2" />
+		<PackageReference Include="Blazorise.DataGrid" Version="1.8.2" />
+		<PackageReference Include="Blazorise.LoadingIndicator" Version="1.8.2" />
+		<PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.8.2" />
+		<PackageReference Include="Blazorise.Snackbar" Version="1.8.2" />
+		<PackageReference Include="BlazorTextDiff" Version="2025.8.7.33170" />
+		<PackageReference Include="Dapper" Version="2.1.66" />
+		<PackageReference Include="DiffPlex" Version="1.9.0" />
+		<PackageReference Include="EpicorRESTAPICore" Version="3.0.0" />
+		<PackageReference Include="itext" Version="9.3.0" />
+		<PackageReference Include="itext.bouncy-castle-adapter" Version="9.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
+		<PackageReference Include="System.DirectoryServices.AccountManagement" Version="9.0.9" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\images\splashes\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\CrystalGroupHome.SharedRCL\CrystalGroupHome.SharedRCL.csproj" />
+	</ItemGroup>
+
+</Project>

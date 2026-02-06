@@ -1,0 +1,62 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.CustComms.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+@inherits CMHub_CustCommsTaskGridBase
+
+<div style="max-width: 1600px;">
+    <Row>
+        <Column>
+            <h2>Part Change Tasks</h2>
+        </Column>
+        <Column Style="display: flex; gap: 0.5rem; justify-content: end; flex-wrap: wrap-reverse;" Class="mb-2">
+            <Select TValue="string" SelectedValue="@SelectedPM" SelectedValueChanged="OnSelectedPMChanged" Style="min-width: 160px;">
+                <SelectItem Value="string.Empty">All PMs</SelectItem>
+                <SelectItem Value="@TechServicesAssignee">@TechServicesAssignee</SelectItem>
+                @foreach (var pm in PrimaryPMs)
+                {
+                    <SelectItem Value="@pm">@pm</SelectItem>
+                }
+            </Select>
+        </Column>
+    </Row>
+
+    <Row>
+        <LoadingIndicator @bind-Visible="@IsLoading">
+            <DataGrid TItem="CMHub_CustCommsPartChangeTaskModel" Data="@Tasks"
+                      Responsive
+                      ResponsiveMode="@TableResponsiveMode.Mobile"
+                      Filterable
+                      FilterMethod="DataGridFilterMethod.Contains"
+                      Sortable
+                      ShowPager
+                      ShowPageSizes
+                      @ref="TaskGrid"
+                      RowSelectable="e => false">
+                <DataGridColumns>
+                    <DataGridColumn Filterable="false">
+                        <DisplayTemplate Context="model">
+                            <Button Color="Color.Primary" Clicked="@(() => NavigateToTask(model.Id))">
+                                <span class="@NavHelpers.ViewIcon" aria-hidden="true"></span>
+                            </Button>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn Field="@nameof(CMHub_CustCommsPartChangeTaskModel.ImpactedPartNum)" Caption="Part Number" />
+                    <DataGridColumn Field="@nameof(CMHub_CustCommsPartChangeTaskModel.ECNNumber)" Caption="ECN" />
+                    <DataGridColumn TItem="CMHub_CustCommsPartChangeTaskModel" Field="@nameof(CMHub_CustCommsPartChangeTaskModel.LastUpdated)" Caption="Last Updated">
+                        <DisplayTemplate Context="model">
+                            @if (model.LastUpdated != DateTime.MinValue)
+                            {
+                                @model.LastUpdated.ToString("M/d/yyyy")
+                            }
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn Field="@nameof(CMHub_CustCommsPartChangeTaskModel.StatusDescription)" Caption="Status" />
+                    <DataGridColumn TItem="CMHub_CustCommsPartChangeTaskModel" Caption="Assigned To" Filterable="false">
+                        <DisplayTemplate Context="model">
+                            @GetAssignedToDisplay(model)
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+            </DataGrid>
+        </LoadingIndicator>
+    </Row>
+</div>

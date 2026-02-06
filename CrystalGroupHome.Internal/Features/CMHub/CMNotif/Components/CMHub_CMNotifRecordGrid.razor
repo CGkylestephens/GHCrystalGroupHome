@@ -1,0 +1,115 @@
+﻿@using CrystalGroupHome.Internal.Features.CMHub.CMNotif.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+@inherits CMHub_CMNotifRecordGridBase
+
+<div style="max-width: 1600px;">
+    <Row>
+        <Column>
+            <h2>Notification Records</h2>
+        </Column>
+    </Row>
+
+    <Row>
+        <Column>
+            <label>ECN Number</label>
+            <TextEdit @bind-Text="SelectedECNNumber" Placeholder="Enter ECN Number" />
+        </Column>
+        <Column>
+            <label>Part Number</label>
+            <TextEdit @bind-Text="SelectedPartNum" Placeholder="Enter Part Number" />
+        </Column>
+        <Column Style="max-width: 18rem;">
+            <label>Primary PM</label>
+            <Select @bind-SelectedValue="SelectedPM" TValue="string">
+                @foreach (var name in ValidPrimaryPMs)
+                {
+                    <SelectItem Value="@name">@name</SelectItem>
+                }
+            </Select>
+        </Column>
+        <Column Style="max-width: 12rem;">
+            <label>Status</label>
+            <Select @bind-SelectedValue="SelectedStatus" TValue="string">
+                <SelectItem Value=@("All")>All</SelectItem>
+                <SelectItem Value=@("New")>New</SelectItem>
+                <SelectItem Value=@("In Progress")>In Progress</SelectItem>
+                <SelectItem Value=@("Incomplete")>Incomplete</SelectItem>
+                <SelectItem Value=@("Completed")>Completed</SelectItem>
+            </Select>
+        </Column>
+    </Row>
+
+    <Row Style="margin-top: 1rem;">
+        <LoadingIndicator @bind-Visible="@IsLoading">
+            <DataGrid TItem="CMHub_CMNotifECNGroupedRecordModel" Data="@GetFilteredGroups()"
+                      Responsive
+                      ResponsiveMode="@TableResponsiveMode.Mobile"
+                      Sortable
+                      ShowPager
+                      ShowPageSizes
+                      PagerPosition="DataGridPagerPosition.TopAndBottom"
+                      @ref="ECNMatchedGroupedRecordGrid"
+                      PageChanged="@OnPageChanged"
+                      DetailRowStartsVisible="false"
+                      RowSelectable="e => false"
+                      RowClicked="ToggleDetailRow"
+                      RowStyling="@OnRowStyling">
+                <DataGridColumns>
+                    <DataGridColumn Sortable="false">
+                        <DisplayTemplate Context="model">
+                            <span class="inline-flex">
+                                <span class="@(model.IsDetailExpanded ? "inline-flex" : "inline-flex visibility-hidden")">
+                                    <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-1" Color="Color.Primary" Clicked="@(() => NavigateToEditNotifRecord(model))">
+                                        <span class="@NavHelpers.EditIcon" aria-hidden="true"></span>
+                                    </Button>
+                                </span>
+                            </span>
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CMNotifECNGroupedRecordModel" Field="@nameof(CMHub_CMNotifECNGroupedRecordModel.ECNNumber)" Caption="ECN Number" />
+                    <DataGridColumn TItem="CMHub_CMNotifECNGroupedRecordModel" Caption="Part Changes Required" TextAlignment="TextAlignment.Center">
+                        <DisplayTemplate>
+                            @context.AllRecords.Count
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                    <DataGridColumn TItem="CMHub_CMNotifECNGroupedRecordModel" Caption="Status" TextAlignment="TextAlignment.Center">
+                        <DisplayTemplate>
+                            @context.Status
+                        </DisplayTemplate>
+                    </DataGridColumn>
+                </DataGridColumns>
+
+                <DetailRowTemplate Context="group">
+                    <Row>
+                        <Column Class="detail-row-highlight"></Column>
+                        <Column>
+                            <Card Class="active-row mb-2">
+                                <CardBody>
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Part Number</th>
+                                            <th>Part Description</th>
+                                            <th>Primary PM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var part in group.AllRecords[0].ECNParts.Select(p => p.PartNum).Distinct())
+                                        {
+                                            <tr>
+                                                <td style="white-space: nowrap;">@part</td>
+                                                <td>@group.AllRecords[0].ECNParts.Where(p => p.PartNum == part).Select(p => p.PartDescription).FirstOrDefault()</td>
+                                                <td style="white-space: nowrap;">@group.AllRecords[0].PrimaryPMName</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                </CardBody>
+                            </Card>
+                        </Column>
+                    </Row>
+                </DetailRowTemplate>
+            </DataGrid>
+        </LoadingIndicator>
+    </Row>
+</div>

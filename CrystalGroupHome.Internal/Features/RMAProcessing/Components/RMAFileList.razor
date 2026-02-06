@@ -1,0 +1,409 @@
+﻿@using CrystalGroupHome.Internal.Features.RMAProcessing.Models
+@using CrystalGroupHome.Internal.Features.RMAProcessing.Components.Modals
+@using Blazorise
+@using Blazorise.DataGrid
+@inherits RMAFileListBase
+
+<Card>
+    <CardBody>
+        <!-- File List Header with Upload Button and History Button -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <CardTitle class="d-flex align-items-center">
+                    Files for RMA @RmaNumber
+                    <Button Color="Color.Info" Size="Size.Small" Class="ms-2" 
+                            Clicked="ViewRMAHistory">
+                        <span class="fas fa-history me-1" aria-hidden="true"></span>
+                        File History
+                    </Button>
+                    @* UPDATED: Show Print Test Logs button when any test logs are available for current scope *@
+                    @if (HasTestLogFiles())
+                    {
+                        <Button Color="Color.Success" Size="Size.Small" Class="ms-2" 
+                                Clicked="OpenPrintTestLogsModal"
+                                title="@GetPrintTestLogsButtonTooltip()">
+                            <span class="fas fa-print me-1" aria-hidden="true"></span>
+                            Print Test Logs
+                        </Button>
+                    }
+                </CardTitle>
+            </div>
+            <div>
+                <Button Color="Color.Primary" Size="Size.Small" Clicked="@NavigateToUpload" Class="me-2">
+                    <span class="fas fa-upload me-1" aria-hidden="true"></span>
+                    Upload Files
+                </Button>
+                <Button Color="Color.Secondary" Size="Size.Small" Clicked="RefreshFileList">
+                    <span class="fas fa-sync me-1" aria-hidden="true"></span>
+                    Refresh
+                </Button>
+            </div>
+        </div>
+
+        @* Network Storage Information - Using Reusable Component *@
+        <NetworkStorageInfo StorageInfo="@StorageInfo" />
+
+        @* Multi-File Selection Actions Bar *@
+        @if (SelectedFiles.Any())
+        {
+            <Alert Color="Color.Primary" Visible="true" Class="mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-check-square me-2"></i>
+                        <strong>@SelectedFiles.Count</strong> file(s) selected
+                        <small class="text-muted ms-2">
+                            (@FormatTotalFileSize(SelectedFiles.Sum(f => f.FileSize)))
+                        </small>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <Button Color="Color.Warning" Size="Size.Small" 
+                                Clicked="@OpenEditMetadataModal"
+                                title="Edit metadata for selected files">
+                            <i class="fas fa-edit me-1"></i>
+                            Edit Metadata (@SelectedFiles.Count)
+                        </Button>
+                        <Button Color="Color.Success" Size="Size.Small" 
+                                Clicked="@DownloadSelectedFiles"
+                                title="Download selected files as ZIP">
+                            <i class="fas fa-download me-1"></i>
+                            Download (@SelectedFiles.Count)
+                        </Button>
+                        @if (CanDeleteFiles && SelectedFiles.Any())
+                        {
+                            <Button Color="Color.Danger" Size="Size.Small" 
+                                    Clicked="@ConfirmDeleteSelectedFiles"
+                                    title="Delete selected files">
+                                <i class="fas fa-trash me-1"></i>
+                                Delete (@SelectedFiles.Count)
+                            </Button>
+                        }
+                        <Button Color="Color.Secondary" Size="Size.Small" 
+                                Clicked="@ClearSelection"
+                                title="Clear selection">
+                            <i class="fas fa-times me-1"></i>
+                            Clear
+                        </Button>
+                    </div>
+                </div>
+            </Alert>
+        }
+
+        <!-- Scope & Category Filter Row -->
+        <Row class="mb-3">
+            <Column md="6">
+                <label class="form-label">Scope</label>
+                <select class="form-select"
+                        value="@GetCurrentFilterValue()"
+                        @onchange="OnScopeChanged">
+                    <option value="all">All RMA Files</option>
+                    <option value="header">RMA Header Files Only</option>
+                    @foreach (var opt in GetLineFilterOptions())
+                    {
+                        <option value="@opt.value">@opt.label</option>
+                    }
+                </select>
+
+                @if (ShowMultiSerialContext && SelectedLineSummary != null)
+                {
+                    <div class="card shadow-sm border-info mt-2" style="max-width:310px;">
+                        <div class="card-header py-1 px-2 bg-info text-white">
+                            Line @SelectedLineSummary.LineNumber Serials
+                        </div>
+                        <div class="card-body py-2 px-2">
+                            <ul class="mb-0 small">
+                                @foreach (var sn in SelectedLineSummary.Serials)
+                                {
+                                    <li>@sn</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </Column>
+            <Column md="6">
+                <label class="form-label">Filter by Category</label>
+                <Select TValue="string"
+                        SelectedValue="@CategoryFilter"
+                        SelectedValueChanged="@OnCategoryFilterChanged">
+                    <SelectItem TValue="string" Value="@(string.Empty)">All Categories</SelectItem>
+                    @foreach (var category in GetFilteredAvailableCategories())
+                    {
+                        <SelectItem TValue="string" Value="@category.ShortName">@category.DisplayValue</SelectItem>
+                    }
+                </Select>
+            </Column>
+        </Row>
+
+        <!-- Compact Files Summary -->
+        @if (TrackedFiles.Any())
+        {
+            <div class="alert alert-info py-1 mb-2">
+                <i class="fas fa-info-circle me-2"></i>
+                <small>
+                    <strong>@TrackedFiles.Count</strong> file(s) found
+                    @if (!string.IsNullOrEmpty(CategoryFilter))
+                    {
+                        <text> in category <strong>@(GetCategoryDisplayName(CategoryFilter))</strong></text>
+                    }
+                    <text> for <strong>@GetCurrentFilterDisplayText()</strong></text>
+                </small>
+            </div>
+        }
+
+        @if (TrackedFiles.Any())
+        {
+            <Table Size="TableSize.Small" Striped="true" Hoverable="true">
+                <TableHeader>
+                    <TableRow>
+                        <TableHeaderCell Style="width: 40px; text-align: center;">
+                            <input type="checkbox" 
+                                   class="form-check-input"
+                                   checked="@IsAllFilesSelected()"
+                                   @onchange="@OnSelectAllChanged"
+                                   title="Select/Deselect All Files" />
+                        </TableHeaderCell>
+                        
+                        <TableHeaderCell Style="cursor: pointer; user-select: none;" 
+                                         @onclick="@(async () => await OnColumnHeaderClicked("FileName"))"
+                                         title="@GetSortTitle("File Name")">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>File Name</span>
+                                <i class="@GetSortIcon("FileName")"></i>
+                            </div>
+                        </TableHeaderCell>
+                        
+                        <TableHeaderCell Style="cursor: pointer; user-select: none;" 
+                                         @onclick="@(async () => await OnColumnHeaderClicked("Category"))"
+                                         title="@GetSortTitle("Category")">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Category</span>
+                                <i class="@GetSortIcon("Category")"></i>
+                            </div>
+                        </TableHeaderCell>
+                        
+                        @if (ShouldShowLineSerialColumns())
+                        {
+                            <TableHeaderCell Style="cursor: pointer; user-select: none;" 
+                                             @onclick="@(async () => await OnColumnHeaderClicked("RMALineNumber"))"
+                                             title="@GetSortTitle("Line")">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Line</span>
+                                    <i class="@GetSortIcon("RMALineNumber")"></i>
+                                </div>
+                            </TableHeaderCell>
+                            
+                            <TableHeaderCell Style="cursor: pointer; user-select: none;" 
+                                             @onclick="@(async () => await OnColumnHeaderClicked("SerialNumber"))"
+                                             title="@GetSortTitle("Serial Number")">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Serial Number</span>
+                                    <i class="@GetSortIcon("SerialNumber")"></i>
+                                </div>
+                            </TableHeaderCell>
+                        }
+                        
+                        <TableHeaderCell Style="cursor: pointer; user-select: none;" 
+                                         @onclick="@(async () => await OnColumnHeaderClicked("UploadedDate"))"
+                                         title="@GetSortTitle("Uploaded Date")">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Uploaded</span>
+                                <i class="@GetSortIcon("UploadedDate")"></i>
+                            </div>
+                        </TableHeaderCell>
+                        
+                        <TableHeaderCell Style="width: 80px; text-align: center;">Actions</TableHeaderCell>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    @foreach (var file in TrackedFiles)
+                    {
+                        <TableRow Class="@(IsFileSelected(file) ? "table-primary" : "")">
+                            <TableRowCell Style="text-align: center;">
+                                <input type="checkbox" 
+                                       class="form-check-input"
+                                       checked="@IsFileSelected(file)"
+                                       @onchange="@((ChangeEventArgs e) => OnFileSelectionChanged(file, (bool)(e.Value ?? false)))"
+                                       title="Select this file" />
+                            </TableRowCell>
+                            <TableRowCell>
+                                <a href="@GetDownloadUrl(file)" 
+                                   download="@file.FileName"
+                                   class="text-decoration-none fw-bold" 
+                                   title="@GetDownloadTooltip(file.FileName)">
+                                    @file.FileName
+                                </a>
+                                @if (!ShouldShowLineSerialColumns() && file.RMALineNumber.HasValue)
+                                {
+                                    <br><small class="text-muted">Line @file.RMALineNumber</small>
+                                }
+                                <br><small class="text-muted">@FormatFileSize(file.FileSize)</small>
+                            </TableRowCell>
+                            <TableRowCell>
+                                <span class="badge bg-secondary">@(file.Category?.DisplayValue ?? "Unknown")</span>
+                            </TableRowCell>
+                            @if (ShouldShowLineSerialColumns())
+                            {
+                                <TableRowCell>
+                                    @if (file.RMALineNumber.HasValue)
+                                    {
+                                        <span class="badge bg-info">@file.RMALineNumber</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Header</span>
+                                    }
+                                </TableRowCell>
+                                <TableRowCell>
+                                    @if (!string.IsNullOrEmpty(file.SerialNumber))
+                                    {
+                                        <span class="badge bg-primary">@file.SerialNumber</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </TableRowCell>
+                            }
+                            <TableRowCell>
+                                <small class="text-muted">
+                                    @file.UploadedDate.ToString("MM/dd/yyyy hh:mm tt")<br>(@file.UploadedByUsername)
+                                </small>
+                            </TableRowCell>
+                            <TableRowCell Style="text-align: center;">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="@GetDownloadUrl(file)" 
+                                       download="@file.FileName"
+                                       class="btn btn-primary btn-sm" 
+                                       title="@GetDownloadTooltip(file.FileName)">
+                                        <span class="fas fa-download" aria-hidden="true"></span>
+                                    </a>
+                                    <Button Color="Color.Warning" Size="Size.Small"
+                                            Clicked="@(() => OpenSingleFileEditMetadataModal(file))"
+                                            title="Edit metadata for this file">
+                                        <span class="fas fa-edit" aria-hidden="true"></span>
+                                    </Button>
+                                    @if (CanDeleteFiles)
+                                    {
+                                        <Button Color="Color.Danger" Size="Size.Small"
+                                                Clicked="@(() => ConfirmDeleteFile(file))"
+                                                title="@GetDeleteTooltip(file.FileName)">
+                                            <span class="fas fa-trash" aria-hidden="true"></span>
+                                        </Button>
+                                    }
+                                    else
+                                    {
+                                        <Button Color="Color.Secondary" Size="Size.Small" Disabled="true"
+                                                title="Delete permission required (Technical Services Coordinators only)">
+                                            <span class="fas fa-trash" aria-hidden="true"></span>
+                                        </Button>
+                                    }
+                                </div>
+                            </TableRowCell>
+                        </TableRow>
+                    }
+                </TableBody>
+            </Table>
+        }
+        else
+        {
+            <div class="text-center py-4">
+                <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                <CardText>
+                    <small>
+                        No files found
+                        @if (!string.IsNullOrEmpty(CategoryFilter))
+                        {
+                            <text> in the selected category</text>
+                        }
+                        <text> for <strong>@GetCurrentFilterDisplayText()</strong>.</text>
+                    </small>
+                </CardText>
+                <Button Color="Color.Primary" Size="Size.Medium" Clicked="@NavigateToUpload" Class="mt-2">
+                    <span class="fas fa-upload me-2"></span>
+                    Upload Files for @GetCurrentFilterDisplayText()
+                </Button>
+            </div>
+        }
+    </CardBody>
+</Card>
+
+@* Update the modal declarations to use proper event handlers *@
+<PrintTestLogsModal IsVisible="@ShowPrintTestLogsModal"
+                    IsVisibleChanged="@OnPrintTestLogsModalVisibilityChanged"
+                    RmaNumber="@RmaNumber"
+                    RmaLineNumber="@GetPrintModalLineNumber()"
+                    SerialNumber="@SerialNumber"
+                    AvailableTestLogFiles="@AvailableTestLogFiles" />
+
+<RMAFileHistoryModal IsVisible="@ShowRMAHistoryModal"
+                     IsVisibleChanged="@OnRMAHistoryModalVisibilityChanged"
+                     RmaNumber="@RmaNumber"
+                     RmaLineNumber="@RmaLineNumber"
+                     SerialNumber="@SerialNumber" />
+
+<EditMetadataModal IsVisible="@ShowEditMetadataModal"
+                   IsVisibleChanged="@OnEditMetadataModalVisibilityChanged"
+                   FilesToEdit="@FilesToEditMetadata"
+                   AvailableCategories="@AllAvailableCategories"
+                   OnMetadataUpdated="@OnEditMetadataResult" />
+
+@* Multi-File Delete Confirmation Modal *@
+<ConfirmationModal @ref="MultiDeleteConfirmationModal" 
+                   Title="Delete Multiple Files" 
+                   Message="@GetMultiDeleteConfirmationMessage()" 
+                   OnClose="OnMultiDeleteConfirmation" />
+
+@* DELETE CONFIRMATION MODAL *@
+<ConfirmationModal @ref="DeleteConfirmationModal" 
+                   Title="Delete File" 
+                   Message="@GetDeleteConfirmationMessage()" 
+                   OnClose="OnDeleteConfirmation" />
+
+@* ACCESS DENIED MODAL *@
+<ConfirmationModal @ref="AccessDeniedModal" 
+                   Title="Access Denied" 
+                   Message="@GetAccessDeniedMessage()" 
+                   OnClose="OnAccessDeniedModalClose" />
+
+@code {
+    private string GetDeleteConfirmationMessage()
+    {
+        if (FileToDelete != null)
+        {
+            return $"Are you sure you want to delete '<strong>{FileToDelete.FileName}</strong>'?<br/><br/>This action cannot be undone.";
+        }
+        return "Are you sure you want to delete this file?";
+    }
+
+    private string GetMultiDeleteConfirmationMessage()
+    {
+        if (SelectedFiles.Any())
+        {
+            var fileList = string.Join("<br/>", SelectedFiles.Select(f => $"• {f.FileName}"));
+            return $"Are you sure you want to delete the following <strong>{SelectedFiles.Count}</strong> file(s)?<br/><br/>{fileList}<br/><br/>This action cannot be undone.";
+        }
+        return "Are you sure you want to delete the selected files?";
+    }
+
+    // NEW: Helper method for print button tooltip
+    private string GetPrintTestLogsButtonTooltip()
+    {
+        var testLogCount = _scopeValue switch
+        {
+            "all" => AllTrackedFiles.Count(f => IsTestLogFile(f)),
+            "header" => AllTrackedFiles.Count(f => !f.RMALineNumber.HasValue && IsTestLogFile(f)),
+            var line when int.TryParse(line, out var lineNumber) => AllTrackedFiles.Count(f => f.RMALineNumber == lineNumber && IsTestLogFile(f)),
+            _ => 0
+        };
+
+        var scopeDescription = _scopeValue switch
+        {
+            "all" => "across entire RMA",
+            "header" => "at header level",
+            var line when int.TryParse(line, out _) => $"for Line {line}",
+            _ => ""
+        };
+
+        return $"Print {testLogCount} test/burn-in log file(s) {scopeDescription}";
+    }
+}

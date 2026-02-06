@@ -1,0 +1,241 @@
+﻿@using CrystalGroupHome.Internal.Features.FirstTimeYield.Models
+@using CrystalGroupHome.SharedRCL.Helpers
+@inherits FirstTimeYield_AdminToolsBase
+
+<Div style="max-width: 1600px;">
+    @if (IsLoading)
+    {
+        <div class="loading-gradient" style="width: 100%; height: 400px;"></div>
+    }
+    else
+    {
+        <Row>
+            <Column>
+                <h2>Admin Tools</h2>
+            </Column>
+        </Row>
+
+        <Row>
+            <Column>
+                <h3>Failure Reason Editor</h3>
+            </Column>
+            <Column Style="display: flex; gap: 0.5rem; justify-content: end; flex-wrap: wrap-reverse;" Class="mb-2">
+
+                @* Add Failure Reason Button *@
+                <Button Color="Color.Primary" Clicked="@(() => ShowAddFailureReasonModal())">
+                    <span class="@($"{NavHelpers.AddCircleIcon} me-2")" aria-hidden="true"></span> Add Failure Reason
+                </Button>
+            </Column>
+        </Row>
+
+        @* Failure Reasons DataGrid *@
+        <DataGrid TItem="FirstTimeYield_AreaFailureReasonModel"
+        Data="@AreaFailureReasonModels"
+        Editable="false"
+        Hoverable
+        Responsive
+        Sortable
+        PageSize="@AreaFailureReasonModels.Count()"
+        DetailRowStartsVisible="false"
+        RowSelectable="e => false"
+        @ref="AFRGrid"
+        RowClicked="DetailRowToggle"
+        RowStyling="@OnRowStyling"
+        SortMode="DataGridSortMode.Single">
+            <DataGridColumns>
+                <DataGridColumn>
+                    <DisplayTemplate Context="model">
+                        <Span Class="inline-flex">
+                            <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-1" Color="Color.Primary">
+                                <span class="@StyleHelpers.GetExpandableToggleIcon(model.IsDetailExpanded)" aria-hidden="true"></span>
+                            </Button>
+                            <Span Class="@(model.IsDetailExpanded ? "inline-flex" : "inline-flex visibility-hidden")">
+                                <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-1" Color="Color.Primary" Clicked="@(() => EditFailureReason(model))">
+                                    <span class="@NavHelpers.EditIcon" aria-hidden="true"></span>
+                                </Button>
+                            </Span>
+                        </Span>
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn Caption="ID">
+                    <DisplayTemplate Context="model">
+                        @model.FailureReason.Id
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn Caption="Description">
+                    <DisplayTemplate Context="model">
+                        <Strong>@model.FailureReason.FailureDescription</Strong>
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn Caption="Associated Areas">
+                    <DisplayTemplate Context="model">
+                        @model.Areas.Where(_ => _.Id != 0).Count()
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn Caption="Status">
+                    <DisplayTemplate Context="model">
+                        <Div>@(model.FailureReason.Deleted ? "Deprecated" : "Active")</Div>
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn Caption="Last Modified" Sortable>
+                    <DisplayTemplate>
+                        @context.FailureReason.LastModifiedDate.ToString("MM/dd/yyyy")
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn Caption="Last Modified User" Sortable>
+                    <DisplayTemplate>
+                        @(AllEmployees.FirstOrDefault(_ => _.EmployeeNumber == context.FailureReason.LastModifiedUser)?.DisplayName ?? "")
+                    </DisplayTemplate>
+                </DataGridColumn>
+                @* 
+                        
+                        <DataGridColumn Field="@nameof(FirstTimeYield_AreaFailureReasonModel.FailureReason.LastModifiedUser)"
+                                        Caption="Modified By"
+                                        Sortable />
+                         *@
+            </DataGridColumns>
+
+            <DetailRowTemplate>
+                @{
+                    var model = context as FirstTimeYield_AreaFailureReasonModel;
+                }
+                <Row>
+                    <Column Class="detail-row-highlight"></Column>
+                    <Column>
+                        <Card Class="active-row mb-2">
+                            <CardHeader>
+                                <CardTitle>
+                                    <Row>
+                                        <Column>
+                                            Associated Areas
+                                        </Column>
+                                        <Column Style="display: flex; justify-content: end;">
+                                            <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button" Style="margin-top: -0.25rem; margin-bottom: -0.25rem; margin-right: -0.75rem;" Color="Color.Primary" Clicked="@(() => ShowAddAreaModal(model))">
+                                                <span class="@NavHelpers.AddIcon" aria-hidden="true"></span>
+                                            </Button>
+                                        </Column>
+                                    </Row>
+                                </CardTitle>
+                            </CardHeader>
+                            <CardBody>
+                            @if (model.Areas.Where(_ => _.Id != 0).Any())
+                            {
+                                <DataGrid TItem="FirstTimeYield_AreaDTO"
+                                            Data="@model.Areas"
+                                            Responsive
+                                            ShowPager="false"
+                                            Editable="false">
+                                    <DataGridColumns>
+                                        <DataGridColumn Field="Id"
+                                                        Caption="ID"
+                                                        Sortable />
+                                        <DataGridColumn Field="AreaDescription"
+                                                        Caption="Area Description"
+                                                        Sortable />
+                                        <DataGridColumn Field="Deleted"
+                                                        Caption="Status"
+                                                        Sortable>
+                                            <DisplayTemplate Context="area">
+                                                <Div>@(area.Deleted ? "Deprecated" : "Active")</Div>
+                                            </DisplayTemplate>
+                                        </DataGridColumn>
+                                        <DataGridColumn Caption="Remove">
+                                            <DisplayTemplate Context="area">
+                                                <Button ButtonStyle="ButtonStyle.Link" Class="action-icon-button me-1" Color="Color.Danger" Clicked="@(() => RemoveArea(model, area))">
+                                                    <span class="@NavHelpers.CloseIcon" aria-hidden="true"></span>
+                                                </Button>
+                                            </DisplayTemplate>
+                                        </DataGridColumn>
+                                    </DataGridColumns>
+                                </DataGrid>
+                            }
+                            else
+                            {
+                                <Div>No Areas Assigned</Div>
+                            }
+                            </CardBody>
+                        </Card>
+                    </Column>
+                </Row>
+            </DetailRowTemplate>
+        </DataGrid>
+    }
+</Div>
+
+@* Add Failure Reason Modal *@
+<Modal @ref="addFailureReasonModal">
+    <ModalContent Size="ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>Add Failure Reason</ModalTitle>
+            <CloseButton Clicked="@CloseAddFailureReasonModal" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Description</FieldLabel>
+                <TextEdit @bind-Text="@newFailureReason.FailureDescription" Placeholder="Enter description..." />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CloseAddFailureReasonModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@SaveNewFailureReason">Save</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@* Add Area Modal *@
+<Modal @ref="addAreaModal">
+    <ModalContent Size="ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>Add Area</ModalTitle>
+            <CloseButton Clicked="@CloseAddAreaModal" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Select Area</FieldLabel>
+                <Select TValue="int" @bind-SelectedValue="@selectedAreaId">
+                    <SelectItem Value="0">-- Select Area --</SelectItem>
+                    @foreach (var area in AvailableAreas)
+                    {
+                        <SelectItem Value="@area.Id">@area.AreaDescription</SelectItem>
+                    }
+                </Select>
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CloseAddAreaModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@AddAreaToFailureReason">Add</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@* Edit Failure Reason Modal *@
+<Modal @ref="editFailureReasonModal">
+    <ModalContent Size="ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>Edit Failure Reason</ModalTitle>
+            <CloseButton Clicked="@CloseEditFailureReasonModal" />
+        </ModalHeader>
+        <ModalBody>
+            @if (editingFailureReason != null) {
+                <Field>
+                    <FieldLabel>Description</FieldLabel>
+                    <TextEdit @bind-Text="@editingFailureReason.FailureReason.FailureDescription" Placeholder="Enter description..." />
+                </Field>
+                <Field>
+                    <FieldLabel>Status</FieldLabel>
+                    <Check @bind-Checked="@editingFailureReason.FailureReason.Deleted">Deprecated</Check>
+                </Field>
+                <Button ButtonStyle="ButtonStyle.Link" Color="Color.Danger" Clicked="@(() => DeleteFailureReason())">
+                    <span class="@NavHelpers.TrashIcon" aria-hidden="true"></span> DELETE
+                </Button>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@CloseEditFailureReasonModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@SaveFailureReasonChanges">Save Changes</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<!-- Confirmation Modal -->
+<ConfirmationModal @ref="ConfirmationModal" Title="Confirm Deletion" Message="Are you sure you want to delete this Failure Reason?" OnClose="ConfirmDeleteFailureReason" />

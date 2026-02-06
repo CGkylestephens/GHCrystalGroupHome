@@ -1,0 +1,20 @@
+.page {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.main {
+    overflow: auto;
+    display: flex;
+    width: 100%;
+}
+
+@media (min-width: 641px) {
+    .page {
+        flex-direction: row;
+        overflow: hidden;
+    }
+}

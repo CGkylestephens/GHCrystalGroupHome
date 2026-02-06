@@ -1,0 +1,294 @@
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.SharedRCL.Models
+@using CrystalGroupHome.SharedRCL.Services
+@using Blazorise
+
+@inject DebugModeService DebugService
+@inject IWebHostEnvironment Environment
+
+<Modal @ref="_modal" Closing="@OnModalClosing">
+    <ModalContent Centered Size="ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>Select Impersonation Persona</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <p class="text-muted mb-3">
+                Select a persona to simulate viewing the application as that user type. 
+                This is useful for testing permission-based UI without switching accounts.
+            </p>
+            
+            <div class="persona-grid">
+                @foreach (var category in GetPersonasByCategory())
+                {
+                    <div class="persona-category-section">
+                        <h6 class="category-title">@category.Key</h6>
+                        <div class="persona-cards">
+                            @foreach (var persona in category)
+                            {
+                                <div class="persona-card @(IsSelected(persona) ? "selected" : "")" 
+                                     @onclick="() => SelectPersona(persona)">
+                                    @if (IsSelected(persona))
+                                    {
+                                        <div class="selected-indicator">
+                                            <i class="fa fa-check"></i>
+                                            <span class="selected-text">SELECTED</span>
+                                        </div>
+                                    }
+                                    <div class="persona-card-header">
+                                        <span class="persona-name">@persona.Name</span>
+                                    </div>
+                                    <p class="persona-desc">@persona.Description</p>
+                                    <div class="persona-roles-preview">
+                                        @if (persona.Roles.Count == 0)
+                                        {
+                                            <span class="role-chip no-roles">No roles</span>
+                                        }
+                                        else
+                                        {
+                                            @foreach (var role in persona.Roles.Take(3))
+                                            {
+                                                <span class="role-chip @(IsSelected(persona) ? "selected" : "")">@GetShortRoleName(role)</span>
+                                            }
+                                            @if (persona.Roles.Count > 3)
+                                            {
+                                                <span class="role-chip more">+@(persona.Roles.Count - 3) more</span>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@StartImpersonation" Disabled="@(_selectedPersona == null)">
+                Start Impersonating
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<style>
+    .persona-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .persona-category-section {
+        border-bottom: 1px solid var(--bs-border-color);
+        padding-bottom: 1rem;
+    }
+
+    .persona-category-section:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .category-title {
+        color: var(--bs-primary);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.75rem;
+    }
+
+    .persona-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .persona-card {
+        border: 2px solid var(--bs-border-color);
+        border-radius: 8px;
+        padding: 0.75rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        background: var(--bs-body-bg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .persona-card:hover {
+        border-color: var(--bs-primary);
+        background: rgba(13, 110, 253, 0.05);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .persona-card.selected {
+        border-color: #198754;
+        border-width: 3px;
+        background: rgba(25, 135, 84, 0.1);
+        box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.2);
+    }
+
+    .persona-card.selected:hover {
+        border-color: #198754;
+        background: rgba(25, 135, 84, 0.15);
+    }
+
+    .selected-indicator {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: #198754;
+        color: white;
+        padding: 0.2rem 0.5rem 0.2rem 0.75rem;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border-bottom-left-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .selected-checkmark {
+        font-size: 0.75rem;
+    }
+
+    .persona-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.25rem;
+    }
+
+    .persona-card.selected .persona-card-header {
+        margin-top: 0.25rem;
+    }
+
+    .persona-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .persona-card.selected .persona-name {
+        color: #198754;
+    }
+
+    .persona-desc {
+        color: var(--bs-secondary);
+        font-size: 0.8rem;
+        margin: 0.25rem 0 0.5rem 0;
+        line-height: 1.3;
+    }
+
+    .persona-roles-preview {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+
+    .role-chip {
+        background: var(--bs-primary);
+        color: white;
+        padding: 0.125rem 0.5rem;
+        border-radius: 10px;
+        font-size: 0.65rem;
+        white-space: nowrap;
+    }
+
+    .role-chip.selected {
+        background: #198754;
+    }
+
+    .role-chip.no-roles {
+        background: var(--bs-secondary);
+    }
+
+    .role-chip.more {
+        background: var(--bs-gray-500);
+    }
+</style>
+
+@code {
+    private Modal? _modal;
+    private ImpersonationPersona? _selectedPersona;
+
+    public async Task ShowAsync()
+    {
+        // Initialize with the currently active persona if one exists
+        if (DebugService.Impersonation.IsImpersonating && DebugService.Impersonation.ActivePersona != null)
+        {
+            _selectedPersona = DebugService.Impersonation.ActivePersona;
+        }
+        else
+        {
+            _selectedPersona = null;
+        }
+        
+        if (_modal != null)
+        {
+            await _modal.Show();
+        }
+    }
+
+    public async Task HideModal()
+    {
+        if (_modal != null)
+        {
+            await _modal.Hide();
+        }
+    }
+
+    private Task OnModalClosing(ModalClosingEventArgs e)
+    {
+        // Allow closing
+        return Task.CompletedTask;
+    }
+
+    private void SelectPersona(ImpersonationPersona persona)
+    {
+        _selectedPersona = persona;
+    }
+
+    private bool IsSelected(ImpersonationPersona persona)
+    {
+        return _selectedPersona?.Id == persona.Id;
+    }
+
+    private async Task StartImpersonation()
+    {
+        if (_selectedPersona != null)
+        {
+            DebugService.StartImpersonation(_selectedPersona.Id, Environment.IsProduction());
+            await HideModal();
+        }
+    }
+
+    private IEnumerable<IGrouping<string, ImpersonationPersona>> GetPersonasByCategory()
+    {
+        return DebugService.Impersonation.AvailablePersonas
+            .GroupBy(p => p.Category)
+            .OrderBy(g => GetCategoryOrder(g.Key));
+    }
+
+    private int GetCategoryOrder(string category)
+    {
+        return category switch
+        {
+            "Baseline" => 0,
+            "CM Hub" => 1,
+            "Combined" => 2,
+            "RMA Processing" => 3,
+            "IT" => 4,
+            _ => 99
+        };
+    }
+
+    private string GetShortRoleName(string role)
+    {
+        return role
+            .Replace("Crystal ", "")
+            .Replace("CG EOLT ", "")
+            .Replace(" SG", "");
+    }
+}

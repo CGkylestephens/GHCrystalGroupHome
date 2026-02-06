@@ -1,0 +1,185 @@
+@using CrystalGroupHome.External.Features.VendorSurvey.Data
+@inherits ComponentBase
+
+<div class="confirmation-code-container">
+    <Card Class="confirmation-card">
+        <CardHeader Class="confirmation-header">
+            <CardTitle Size="3">
+                <i class="fa fa-lock" style="margin-right: 0.5rem;"></i>
+                Survey Access Verification
+            </CardTitle>
+        </CardHeader>
+        <CardBody>
+            <div class="text-center mb-4">
+                <i class="fa fa-shield-halved" style="font-size: 3rem; color: #0d6efd;"></i>
+            </div>
+            
+            <Paragraph Class="text-center mb-4">
+                Please enter the 6-digit confirmation code from your survey email to access the survey.
+            </Paragraph>
+
+            <div class="code-input-container">
+                <Field>
+                    <FieldLabel>Confirmation Code</FieldLabel>
+                    <TextEdit @bind-Text="@ConfirmationCode"
+                              Placeholder="Enter 6-digit code"
+                              MaxLength="6"
+                              Class="code-input"
+                              Disabled="@IsValidating"
+                              @onkeypress="OnKeyPress" />
+                </Field>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <Alert Color="Color.Danger" Visible="true" Class="mt-3">
+                    <AlertMessage>Invalid Code</AlertMessage>
+                    <AlertDescription>@ErrorMessage</AlertDescription>
+                </Alert>
+            }
+
+            <div class="d-flex justify-content-center mt-4">
+                <Button Color="Color.Primary" 
+                        Size="Size.Large"
+                        Clicked="@ValidateCode"
+                        Disabled="@(IsValidating || string.IsNullOrWhiteSpace(ConfirmationCode))">
+                    @if (IsValidating)
+                    {
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <text>Verifying...</text>
+                    }
+                    else
+                    {
+                        <i class="fa fa-check me-2"></i>
+                        <text>Verify & Continue</text>
+                    }
+                </Button>
+            </div>
+
+            <Paragraph Class="text-center text-muted mt-4" Style="font-size: 0.875rem;">
+                <i class="fa fa-info-circle me-1"></i>
+                Can't find your code? Check the email from Crystal Group with the subject "Part Status Update Request".
+            </Paragraph>
+        </CardBody>
+    </Card>
+</div>
+
+@code {
+    [Parameter] public int BatchId { get; set; }
+    [Parameter] public EventCallback OnCodeVerified { get; set; }
+    
+    [Inject] private IVendorSurveyService VendorSurveyService { get; set; } = default!;
+
+    private string ConfirmationCode { get; set; } = string.Empty;
+    private string? ErrorMessage { get; set; }
+    private bool IsValidating { get; set; }
+    private int FailedAttempts { get; set; }
+
+    private async Task OnKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(ConfirmationCode))
+        {
+            await ValidateCode();
+        }
+    }
+
+    private async Task ValidateCode()
+    {
+        ErrorMessage = null;
+        
+        if (string.IsNullOrWhiteSpace(ConfirmationCode))
+        {
+            ErrorMessage = "Please enter your confirmation code.";
+            return;
+        }
+
+        if (ConfirmationCode.Trim().Length != 6)
+        {
+            ErrorMessage = "The confirmation code must be exactly 6 digits.";
+            return;
+        }
+
+        IsValidating = true;
+        StateHasChanged();
+
+        try
+        {
+            var isValid = await VendorSurveyService.ValidateConfirmationCodeAsync(BatchId, ConfirmationCode.Trim());
+            
+            if (isValid)
+            {
+                if (OnCodeVerified.HasDelegate)
+                {
+                    await OnCodeVerified.InvokeAsync();
+                }
+            }
+            else
+            {
+                FailedAttempts++;
+                
+                if (FailedAttempts >= 3)
+                {
+                    ErrorMessage = "The code you entered is incorrect. You have made multiple failed attempts. Please check your email carefully and try again, or contact Crystal Group for assistance.";
+                }
+                else
+                {
+                    ErrorMessage = "The code you entered is incorrect. Please check your email and try again.";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "An error occurred while verifying your code. Please try again.";
+            Console.Error.WriteLine($"Error validating confirmation code: {ex.Message}");
+        }
+        finally
+        {
+            IsValidating = false;
+            StateHasChanged();
+        }
+    }
+}
+
+<style>
+    .confirmation-code-container {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .confirmation-card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+    }
+
+    .confirmation-header {
+        background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+        color: white;
+        border-radius: 12px 12px 0 0;
+        padding: 1.5rem;
+    }
+
+    .confirmation-header .card-title {
+        color: white;
+        margin-bottom: 0;
+    }
+
+    .code-input-container {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .code-input {
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        letter-spacing: 0.5rem;
+        font-family: monospace;
+        padding: 1rem;
+    }
+
+    .code-input::placeholder {
+        font-size: 1rem;
+        letter-spacing: normal;
+        font-weight: normal;
+    }
+</style>

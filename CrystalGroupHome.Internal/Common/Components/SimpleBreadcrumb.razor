@@ -1,0 +1,80 @@
+﻿@using CrystalGroupHome.Internal.Common.Data.Labor
+
+@inject NavigationManager Navigation
+
+<nav aria-label="breadcrumb">
+    <Div class="breadcrumb">
+        @foreach (var crumb in Breadcrumbs)
+        {
+            if (crumb.IsActive)
+            {
+                <li class="breadcrumb-item active" aria-current="page">@crumb.Text</li>
+            }
+            else
+            {
+                <li class="breadcrumb-item">
+                    <a href="@crumb.Url">@crumb.Text</a>
+                </li>
+            }
+        }
+        <Div Style="flex-grow: 1; text-align: end; color: var(--light-gray); margin-right: 0.25rem;">
+            @(string.IsNullOrEmpty(CurrentUser?.DBUser.SAMAccountName.ToUpper()) ? "Retrieving Login..." : "Logged in as: " + CurrentUser?.DBUser.SAMAccountName.ToUpper())
+        </Div>
+    </Div>
+</nav>
+
+
+@code {
+    private List<BreadcrumbData> Breadcrumbs = new();
+
+    [CascadingParameter] public ADUserModel? CurrentUser { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // Subscribe to navigation events
+        Navigation.LocationChanged += OnLocationChanged;
+
+        // Initialize breadcrumbs for the current URL
+        UpdateBreadcrumbs();
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        // Update breadcrumbs when the location changes
+        UpdateBreadcrumbs();
+        InvokeAsync(StateHasChanged); // Trigger UI update
+    }
+
+    private void UpdateBreadcrumbs()
+    {
+        var uri = new Uri(Navigation.Uri);
+        var segments = uri.AbsolutePath.Trim('/').Split('/');
+        Breadcrumbs = new List<BreadcrumbData>();
+        var path = "/";
+
+        for (int i = 0; i < segments.Length; i++)
+        {
+            path += segments[i];
+            Breadcrumbs.Add(new BreadcrumbData
+            {
+                Text = segments[i],
+                Url = path,
+                IsActive = i == segments.Length - 1
+            });
+            path += "/";
+        }
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe from navigation events
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+
+    private class BreadcrumbData
+    {
+        public string Text { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
+        public bool IsActive { get; set; }
+    }
+}

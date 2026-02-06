@@ -1,0 +1,435 @@
+parameters:
+- name: forceRebuildInternal
+  displayName: 'Force rebuild Internal project'
+  type: boolean
+  default: false
+- name: forceRebuildExternal
+  displayName: 'Force rebuild External project'  
+  type: boolean
+  default: false
+- name: forceRebuildAll
+  displayName: 'Force rebuild all projects'
+  type: boolean
+  default: false
+
+variables:
+- name: BuildParameters.RestoreBuildProjects
+  value: '**/*.csproj'
+- name: BuildParameters.TestProjects
+  value: '**/*Tests/*.csproj'
+
+name: $(Date:yyyy).$(Date:MM).$(Date:dd)$(Rev:.rr)
+
+trigger:
+  branches:
+    include:
+    - refs/heads/master
+    - refs/heads/feature/*
+    - refs/heads/bugfix/*
+  batch: true
+
+resources:
+ repositories:
+   - repository: templates
+     name: Crystal Git/CGPipelines
+     type: git
+     ref: refs/heads/master     
+
+pool: CGPrimary
+
+stages: 
+  - stage: Build
+    jobs:
+    - job: BuildAndPackage
+      displayName: Build and Package
+      cancelTimeoutInMinutes: 1
+      pool:
+        name: CGPrimary
+      variables:
+        semanticBuildNumber: ''
+      steps:
+      - checkout: self
+        fetchDepth: 2
+      
+      # Set semantic version build number
+      - task: PowerShell@2
+        displayName: 'Set Semantic Build Number'
+        name: 'setBuildNumber'
+        inputs:
+          targetType: 'inline'
+          script: |
+            # Get the base build number (date-based portion)
+            $baseBuildNumber = "$(Build.BuildNumber)"
+            Write-Host "Base build number: $baseBuildNumber"
+            
+            # Get branch name from source branch
+            $sourceBranch = "$(Build.SourceBranch)"
+            Write-Host "Source branch: $sourceBranch"
+            
+            # Get requested by (for diagnostics)
+            $requestedBy = "$(Build.RequestedFor)"
+            Write-Host "Build requested by: $requestedBy"
+            
+            # Function to sanitize strings for SemVer compliance
+            function Sanitize-SemVerString {
+              param(
+                [string]$inputString,
+                [int]$maxLength = 50
+              )
+              
+              if ([string]::IsNullOrWhiteSpace($inputString)) {
+                Write-Host "  Sanitize input is null or empty"
+                return ""
+              }
+              
+              Write-Host "  Sanitizing: '$inputString' (length: $($inputString.Length))"
+              
+              # Convert to lowercase
+              $output = $inputString.ToLower()
+              Write-Host "  After lowercase: '$output'"
+              
+              # Replace spaces and special characters with dashes
+              $output = $output -replace '[^a-z0-9-]', '-'
+              Write-Host "  After character replacement: '$output'"
+              
+              # Remove consecutive dashes
+              $output = $output -replace '-+', '-'
+              Write-Host "  After dash consolidation: '$output'"
+              
+              # Trim dashes from start and end
+              $output = $output.Trim('-')
+              Write-Host "  After trimming: '$output'"
+              
+              # Limit length
+              if ($output.Length -gt $maxLength) {
+                $output = $output.Substring(0, $maxLength).TrimEnd('-')
+                Write-Host "  After length limit ($maxLength): '$output'"
+              }
+              
+              Write-Host "  Final result: '$output'"
+              return $output
+            }
+            
+            # Extract branch type and name
+            $branchType = ""
+            $branchName = ""
+            
+            if ($sourceBranch -match '^refs/heads/master$') {
+              # Master branch - no suffix
+              $semanticVersion = $baseBuildNumber
+              Write-Host "Master branch detected - no suffix will be added"
+            } else {
+              if ($sourceBranch -match '^refs/heads/feature/(.+)$') {
+                $branchType = "f"
+                $branchName = $matches[1]
+                Write-Host "Feature branch detected: $branchName"
+              } elseif ($sourceBranch -match '^refs/heads/bugfix/(.+)$') {
+                $branchType = "b"
+                $branchName = $matches[1]
+                Write-Host "Bugfix branch detected: $branchName"
+              } else {
+                # Other branches
+                $branchType = "o"
+                if ($sourceBranch -match '^refs/heads/(.+)$') {
+                  $branchName = $matches[1]
+                }
+                Write-Host "Other branch type detected: $branchName"
+              }
+              
+              # Sanitize branch name with explicit max length
+              Write-Host "Sanitizing branch name..."
+              $sanitizedBranch = Sanitize-SemVerString -inputString $branchName -maxLength 25
+              Write-Host "Final sanitized branch name: '$sanitizedBranch'"
+              
+              # Get developer first name from Build.RequestedFor
+              $requestedFor = "$(Build.RequestedFor)"
+              
+              $firstName = ""
+              if (-not [string]::IsNullOrWhiteSpace($requestedFor)) {
+                # Extract first name (everything before first space)
+                $nameParts = $requestedFor -split '\s+'
+                $firstName = $nameParts[0]
+                Write-Host "Extracted first name: '$firstName'"
+                Write-Host "Sanitizing first name..."
+                $firstName = Sanitize-SemVerString -inputString $firstName -maxLength 15
+                Write-Host "Final sanitized first name: '$firstName'"
+              } else {
+                Write-Host "WARNING: Build.RequestedFor is empty"
+              }
+              
+              # Build the semantic version suffix
+              $suffix = "-$branchType"
+              if (-not [string]::IsNullOrWhiteSpace($sanitizedBranch)) {
+                $suffix += "-$sanitizedBranch"
+              }
+              if (-not [string]::IsNullOrWhiteSpace($firstName)) {
+                $suffix += "-$firstName"
+              }
+              
+              $semanticVersion = "$baseBuildNumber$suffix"
+            }
+            
+            Write-Host "================================"
+            Write-Host "Final semantic version: $semanticVersion"
+            Write-Host "================================"
+            
+            # Update the build number
+            Write-Host "##vso[build.updatebuildnumber]$semanticVersion"
+            Write-Host "Build number update command sent"
+            
+            # Also set as a variable for use in the pipeline (for diagnostics)
+            Write-Host "##vso[task.setvariable variable=semanticBuildNumber]$semanticVersion"
+            Write-Host "Variable 'semanticBuildNumber' set to: $semanticVersion"
+      
+      # Diagnostic step to verify build number was updated (can be removed after testing)
+      - task: PowerShell@2
+        displayName: 'Verify Build Number Update'
+        inputs:
+          targetType: 'inline'
+          script: |
+            Write-Host "================================"
+            Write-Host "Build number verification:"
+            Write-Host "Build.BuildNumber = $(Build.BuildNumber)"
+            Write-Host "semanticBuildNumber variable = $(semanticBuildNumber)"
+            Write-Host "================================"
+            
+            if ("$(Build.BuildNumber)" -eq "$(semanticBuildNumber)") {
+              Write-Host "SUCCESS: Build number was updated correctly"
+            } else {
+              Write-Host "WARNING: Build number mismatch - this may indicate an issue"
+            }
+
+      # Detect changes using PowerShell with parameter overrides
+      - task: PowerShell@2
+        displayName: 'Detect Changed Files'
+        name: 'detectChanges'
+        inputs:
+          targetType: 'inline'
+          script: |
+            # Check for manual force parameters first
+            $forceAll = '${{ parameters.forceRebuildAll }}' -eq 'True'
+            $forceInternal = '${{ parameters.forceRebuildInternal }}' -eq 'True'  
+            $forceExternal = '${{ parameters.forceRebuildExternal }}' -eq 'True'
+            
+            Write-Host "Force parameters - All: $forceAll, Internal: $forceInternal, External: $forceExternal"
+            
+            if ($forceAll) {
+              Write-Host "Force rebuild all projects requested"
+              $buildInternal = $true
+              $buildExternal = $true
+            } elseif ($forceInternal -or $forceExternal) {
+              Write-Host "Force rebuild specific projects requested"
+              $buildInternal = $forceInternal
+              $buildExternal = $forceExternal
+            } else {
+              Write-Host "No force parameters set, checking for file changes"
+              try {
+                # Get changed files between HEAD and HEAD~1 (previous commit)
+                # For PR builds, you might want to compare against target branch
+                $changedFiles = git diff --name-only HEAD~1 HEAD
+                
+                if ($LASTEXITCODE -ne 0 -or $null -eq $changedFiles) {
+                  Write-Host "Could not get diff, building all projects as fallback"
+                  $buildInternal = $true
+                  $buildExternal = $true
+                } else {
+                  Write-Host "Changed files:"
+                  $changedFiles | ForEach-Object { Write-Host "  $_" }
+                  
+                  $buildInternal = $false
+                  $buildExternal = $false
+                  
+                  foreach ($file in $changedFiles) {
+                    if ($file -like "CrystalGroupHome.Internal/*" -or $file -like "CrystalGroupHome.SharedRCL/*") {
+                      $buildInternal = $true
+                    }
+                    if ($file -like "CrystalGroupHome.External/*" -or $file -like "CrystalGroupHome.SharedRCL/*") {
+                      $buildExternal = $true
+                    }
+                  }
+                }
+              } catch {
+                Write-Host "Error detecting changes, building all projects: $_"
+                $buildInternal = $true
+                $buildExternal = $true
+              }
+            }
+            
+            # Set BOTH output variables (for templates) AND regular variables (for conditions in same job)
+            Write-Host "##vso[task.setvariable variable=BuildInternal;isOutput=true]$($buildInternal.ToString().ToLower())"
+            Write-Host "##vso[task.setvariable variable=BuildExternal;isOutput=true]$($buildExternal.ToString().ToLower())"
+            Write-Host "##vso[task.setvariable variable=BuildInternal]$($buildInternal.ToString().ToLower())"
+            Write-Host "##vso[task.setvariable variable=BuildExternal]$($buildExternal.ToString().ToLower())"
+            Write-Host "Final decision - Build Internal: $buildInternal, Build External: $buildExternal"
+
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: restore
+          projects: $(BuildParameters.RestoreBuildProjects)
+
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          projects: $(BuildParameters.RestoreBuildProjects)
+          arguments: --configuration $(BuildConfiguration)
+
+      - task: DotNetCoreCLI@2
+        displayName: Test
+        inputs:
+          command: test
+          projects: $(BuildParameters.TestProjects)
+          arguments: --configuration $(BuildConfiguration)
+
+      # Conditional publish for Internal project - use lowercase 'true'
+      - task: DotNetCoreCLI@2
+        displayName: Publish Internal
+        condition: eq(variables['BuildInternal'], 'true')
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: '**/CrystalGroupHome.Internal.csproj'
+          modifyOutputPath: True
+          arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/'
+          zipAfterPublish: True
+
+      # Conditional publish for External project - use lowercase 'true'
+      - task: DotNetCoreCLI@2
+        displayName: Publish External
+        condition: eq(variables['BuildExternal'], 'true')
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: '**/CrystalGroupHome.External.csproj'
+          modifyOutputPath: True
+          arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)/'
+          zipAfterPublish: True
+
+      # Rename Internal artifact - use lowercase 'true'
+      - task: PowerShell@2
+        displayName: 'Rename Internal Artifact'
+        condition: eq(variables['BuildInternal'], 'true')
+        inputs:
+          targetType: 'inline'
+          script: |
+            $internalZip = "$(build.artifactstagingdirectory)\CrystalGroupHome.Internal.zip"
+            if (Test-Path $internalZip) {
+              Rename-Item -Path $internalZip -NewName "CrystalGroupHome.$(Build.BuildNumber).zip"
+              Write-Host "Renamed Internal artifact"
+            } else {
+              Write-Host "Internal zip not found at: $internalZip"
+            }
+
+                      # Rename External artifact - use lowercase 'true'
+      - task: PowerShell@2
+        displayName: 'Rename External Artifact'
+        condition: eq(variables['BuildExternal'], 'true')
+        inputs:
+          targetType: 'inline'
+          script: |
+            $externalZip = "$(build.artifactstagingdirectory)\CrystalGroupHome.External.zip"
+            if (Test-Path $externalZip) {
+              Rename-Item -Path $externalZip -NewName "CrystalGroupHomeVendor.$(Build.BuildNumber).zip"
+              Write-Host "Renamed External artifact"
+            } else {
+              Write-Host "External zip not found at: $externalZip"
+            }
+
+      # Publish Internal Artifact - use lowercase 'true'
+      - task: PublishBuildArtifacts@1
+        displayName: Publish Internal Artifact
+        condition: eq(variables['BuildInternal'], 'true')
+        inputs:
+          PathtoPublish: '$(build.artifactstagingdirectory)/CrystalGroupHome.$(Build.BuildNumber).zip'
+          ArtifactName: drop-internal
+          publishLocation: 'Container'
+
+      # Publish External Artifact - use lowercase 'true'
+      - task: PublishBuildArtifacts@1
+        displayName: Publish External Artifact
+        condition: eq(variables['BuildExternal'], 'true')
+        inputs:
+          PathtoPublish: '$(build.artifactstagingdirectory)/CrystalGroupHomeVendor.$(Build.BuildNumber).zip'
+          ArtifactName: drop-external
+          publishLocation: 'Container'
+
+  # Internal deployment stage
+  - template: DotNetWebForms/OctoPublishAndRelease.yml@templates 
+    parameters:
+        AppProjectName: 'CrystalGroupHome'
+        ArtifactExtension: 'zip'
+        PackageRootPath: '$(System.ArtifactsDirectory)\drop-internal'
+        ArtifactName: 'drop-internal'
+        runtimeDependsOn: 
+        - Build
+        runtimeCondition: eq(dependencies.Build.outputs['BuildAndPackage.detectChanges.BuildInternal'], 'true')
+
+  # External deployment stage
+  - template: DotNetWebForms/OctoPublishAndRelease.yml@templates 
+    parameters:
+        AppProjectName: 'CrystalGroupHomeVendor'
+        ArtifactExtension: 'zip'
+        PackageRootPath: '$(System.ArtifactsDirectory)\drop-external'
+        ArtifactName: 'drop-external'
+        runtimeDependsOn: 
+        - Build
+        runtimeCondition: eq(dependencies.Build.outputs['BuildAndPackage.detectChanges.BuildExternal'], 'true')
+
+  # Auto-deployment stage for non-master Internal builds
+  - stage: AutoDeploy
+    displayName: Auto Deploy to Dev
+    dependsOn: 
+    - Build
+    - OctoPublishAndRelease_CrystalGroupHome
+    condition: |
+      and(
+        succeeded(),
+        ne(variables['Build.SourceBranch'], 'refs/heads/master'),
+        eq(dependencies.Build.outputs['BuildAndPackage.detectChanges.BuildInternal'], 'true')
+      )
+    jobs:
+    - job: DeployToDev
+      displayName: Deploy Internal to Dev Environment
+      pool:
+        name: CGPrimary
+      steps:
+      # Extract developer first name for environment name
+      - task: PowerShell@2
+        displayName: 'Set Deployment Variables'
+        name: 'setDeployVars'
+        inputs:
+          targetType: 'inline'
+          script: |
+            # Get developer first name from Build.RequestedFor
+            $requestedFor = "$(Build.RequestedFor)"
+            Write-Host "Build requested by: $requestedFor"
+            
+            # Extract first name
+            $firstName = ($requestedFor -split '\s+')[0]
+            
+            # Sanitize for environment name (alphanumeric and underscores only)
+            $firstName = $firstName -replace '[^a-zA-Z0-9_]', ''
+            
+            Write-Host "Developer first name: $firstName"
+            
+            # Set the environment name
+            $envName = "Dev_$firstName"
+            Write-Host "Target environment: $envName"
+            
+            # Set as variable for subsequent tasks
+            Write-Host "##vso[task.setvariable variable=DevEnvironmentName]$envName"
+            Write-Host "##vso[task.setvariable variable=DeveloperFirstName]$firstName"
+      
+      # Deploy release to Octopus
+      - task: OctopusDeployRelease@6
+        displayName: 'Deploy to $(DevEnvironmentName)'
+        inputs:
+          OctoConnectedServiceName: 'OctopusDeploy'
+          Space: 'Default'
+          ProjectGroup: 'ProjectGroups-2'
+          Project: 'CrystalGroupHome'
+          ReleaseNumber: '$(Build.BuildNumber)'
+          Environments: '$(DevEnvironmentName)'
+          Channel: 'Non-Master'
+          ShowProgress: true
+          DeploymentTimeout: '00:30:00'

@@ -1,0 +1,39 @@
+﻿@attribute [Route(NavHelpers.FirstTimeYieldMainPage)]
+@attribute [Route(NavHelpers.FirstTimeYieldAddEntry)]
+@attribute [Route(NavHelpers.FirstTimeYieldEditEntry)]
+@attribute [Route(NavHelpers.FirstTimeYieldEditEntryWithEditId)]
+@attribute [Route(NavHelpers.FirstTimeYieldAdmin)]
+@using CrystalGroupHome.SharedRCL.Helpers
+@using CrystalGroupHome.Internal.Features.FirstTimeYield.Components
+@inherits FirstTimeYieldBase
+
+<PageTitle>First Time Yield</PageTitle>
+
+@if (FirstTimeYield.IsAdmin(CurrentUser?.ADUser)) {
+    <Div Style="display: flex; flex-direction: row;">
+        <h1>First Time Yield</h1>
+        <Div Class="role-tag">ADMIN</Div>
+        <InfoHoverIcon Style="margin-left: 0.5rem; margin-bottom: 0.75rem;"
+                       HoverText="@($"Members of \"{FTYAdminRole}\" are granted ADMIN permissions here.")" />
+    </Div>
+} else {
+    <h1>First Time Yield</h1>
+}
+<Div>
+    @if (CurrentView == "DataGrid")
+    {
+        <FirstTimeYield_DataGrid Areas="@Areas" />
+    }
+    else if (CurrentView == "AddForm")
+    {
+        <FirstTimeYield_EntryForm IsEdit="false" Areas="@Areas" />
+    }
+    else if (CurrentView == "AdminTools")
+    {
+        <FirstTimeYield_AdminTools Areas="@Areas" />
+    }
+    else if (CurrentView == "EditForm" && EditId != null)
+    {
+        <FirstTimeYield_EntryForm IsEdit="true" EditId="@EditId" Areas="@Areas" />
+    }
+</Div>

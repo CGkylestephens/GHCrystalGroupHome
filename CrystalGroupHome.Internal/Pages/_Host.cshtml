@@ -1,0 +1,131 @@
+@page "/"
+@namespace CrystalGroupHome.Internal.Pages
+@using CrystalGroupHome.Internal
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+}
+
+<component type="typeof(App)" render-mode="Server" />
+
+<link rel="stylesheet" href="_content/Blazorise/blazorise.css" />
+<link rel="stylesheet" href="_content/Blazorise.Bootstrap5/blazorise.bootstrap5.css" />
+<link rel="stylesheet" href="_content/Blazorise.LoadingIndicator/blazorise.loadingindicator.css" />     
+
+<link rel="stylesheet" href="CrystalGroupHome.Internal.styles.css" />
+<link rel="stylesheet" href="_content/CrystalGroupHome.SharedRCL/webfonts/fa-solid-900.ttf" />
+<link rel="stylesheet" href="_content/CrystalGroupHome.SharedRCL/webfonts/fa-solid-900.woff2" />
+
+<link href="_content/BlazorTextDiff/css/BlazorDiff.css" rel="stylesheet" />
+<script src="_content/BlazorTextDiff/js/BlazorTextDiff.js"></script>
+
+<script>
+    window.setToggleDebugMode = function (dotNetHelper) {
+        // Expose a global function that returns the debug mode state.
+        window.toggleDebugMode = function () {
+            return dotNetHelper.invokeMethodAsync('ToggleDebugMode')
+                .then(newState => {
+                    console.log("Debug mode is now:", newState ? "Enabled" : "Disabled");
+                    return newState;
+                })
+                .catch(err => {
+                    console.error(err);
+                    throw err;
+                });
+        }
+        console.log("toggleDebugMode function registered. Call it from the console to toggle debug mode.");
+    }
+
+    // download PDFFile as attachment
+    window.downloadPdfFile = function (base64Data, fileName) {
+        try {
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            return true;
+        } catch (error) {
+            console.error('Error downloading PDF:', error);
+            return false;
+        }
+    };
+
+    // Open PDF inline in a new tab (no attachment)
+    window.openPdfInline = function (base64Data) {
+        try {
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+
+            // Use a temporary anchor (no download attribute => inline viewer)
+            const a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            // Revoke later
+            setTimeout(() => URL.revokeObjectURL(url), 10 * 60 * 1000);
+            return true;
+        } catch (e) {
+            console.error('Error opening PDF inline:', e);
+            return false;
+        }
+    };
+
+    // Function for direct file downloads (no CORS issues)
+    window.downloadFileDirect = (url) => {
+        window.open(url, '_self');
+    };
+
+    // Bulk (archived) downloads via API
+    window.downloadFileFromUrl = (url, filename) => {
+        // Use fetch to make the API request directly
+        fetch(url, {
+            method: 'GET',
+            credentials: 'include' // Include auth cookies
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Download failed: ${response.status} ${response.statusText}`);
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            // Create download link from blob
+            const downloadUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = filename;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(downloadUrl);
+        })
+        .catch(error => {
+            console.error('Download error:', error);
+            alert('Download failed: ' + error.message);
+        });
+    };
+</script>
