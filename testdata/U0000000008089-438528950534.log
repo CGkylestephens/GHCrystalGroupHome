@@ -1,0 +1,730 @@
+                Friday, February 6, 2026 12:10:52
+12:10:52                 Version 11.3.100.14 - 09/11/2024 - 14:00 --- MoveJobItem
+12:10:52                 Processing - Job:U0000000008089, Assembly: 0, Operation:0. --- MoveJobItem
+12:10:52                 Passed StartDate - 3/11/2026, Passed StartHour: 0. --- MoveJobItem
+12:10:52                 Passed DueDate   - 3/11/2026, Passed DueHour:   7. --- MoveJobItem
+12:10:52                 Ignore Material Constraints = False --- MoveJobItem
+12:10:52                 Running Finite = True --- MoveJobItem
+12:10:52                 Global Finite horz .. 60  --- MoveJobItem
+12:10:52                 Subassembly 0 (ELA-00411). Req = 3.00000000. Pull =0.00000000 --- CacheJob
+12:10:52                 Company   - CG, JobNum:   U0000000008089 AssemblySeq 0. --- MoveJobItem
+12:10:52                 Scheduling in past is not allowed -  False 2/6/2026. --- MoveJobItem
+12:10:52                 Scheduling code  SB  --- processJob
+12:10:52                 Changed DueDate to: 3/6/2026 for 3 days of receive time for ELA-00411 . Calendar: CG --- processJob
+12:10:52                 Scheduling job U0000000008089 Assembly 0 Operation 40: ASY-INSM --- doMainProc
+12:10:52                 	**Looking for Job U0000000008089 Assem: 0 Operation: 40 has not been scheduled --- scheduleOperation
+12:10:52                 	Scheduling Block - Alloc: 1 Prod: 0.25000 Split 0.25000 Ops: 3 SDt: 3/6/2026 SHr: 7 EDt: 3/6/2026 EHr: 7 Setup Time 0. --- CreateAllocationBlock
+12:10:52                 Scheduling Job U0000000008089 Assem: 0 Operation: 40 il_OprBackward True --- scheduleOperation
+12:10:52                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:52                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:52                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:52                 		Backward Scheduling - Job U0000000008089 Asm 0 Opr 40 OpDtl 10 AllocationBlock - 1 For: Enddate - 3/6/2026 EndHour - 7 Endtime 1 Setup/Prod/Both B. tmpendtime 634207. --- OpDtlBkProduction
+12:10:52                 		**Scheduling Resource: ASSYINSP for 3/6/2026 for a time of 7 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYINSP for 0.25000 hours  --- processResourceID
+12:10:52                 				Resource ASSYINSP is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYINSP from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYINSP is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYINSP. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYINSP for 0.25000 hours on 3/6/2026 with a EndTime of 7 IP-ProcTime 7. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYINSP FiniteHorizonDate 2/6/2026 ScheduleDate 3/6/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYINSP is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/6/2026 as a valid working date IP-ProcTime = 25200 --- GetBackwardDateTime
+12:10:52                 		Found 3/6/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYINSP starting at time: 3/6/2026 7   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Request time of 7 is before first prod hour of 8  --- GetBackwardDateTime
+12:10:52                 		Resetting date and time to 3/5/2026 at 24  --- GetBackwardDateTime
+12:10:52                 				Resource ASSYINSP is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 86400 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYINSP starting at time: 3/5/2026 24   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYINSP for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 15   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYINSP before  3/5/2026 and a start hour of 15  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.25 Hours Ending on 3/5/2026 and an end hour of 15 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYINSP has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 1 Hours Ending on 3/5/2026 and an end hour of 15 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYINSP for 3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYINSP for job U0000000008089 Operation 40 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 14.75  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYINSP for job U0000000008089 Operation 40 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYINSP is 3/5/2026 at 53100 (14.75) ending on 3/5/2026 at 15 for 0.25 hours. Move Date 3/5/2026 Move Hour 15. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/6/2026 found 25200 54000 For resource ASSYINSP  --- processResGrp
+12:10:52                 		Found time for ASSYINSP on 3/5/2026 53100 ending 3/5/2026 54000 Priority 1010 with Forward = _Forward. --- _SetPriority
+12:10:52                 	**Chose Resource - ASSYINSP Time: SDt 3/5/2026, STime 14.75, End Dt 3/5/2026, End Time 15 Move Dt 3/5/2026 Move Hr 15 . --- OpDtlBkProduction
+12:10:52                 		Tested and bounce because tmpEndTime 634207 <> dEndTime 634191 --- OpDtlBkProduction
+12:10:52                 		Checking if we should keep processing l_DateChanged True of Job: True l-OpMastSchedChange False l-TimeblockChange False iBeatCounter 0 --- OpDtlBkProduction
+12:10:52                 Keep processing  True --- OpDtlBkProduction
+12:10:52                 		Resetting Allocation block endtime from 3/6/2026  634207 to 3/5/2026 15 --- OpDtlBkProduction
+12:10:52                 	****Created RTU for job U0000000008089 Operation 40 with start date of 3/5/2026 and enddate of 3/5/2026 --- createTTResourceTimeUsed
+12:10:52                 				Consolidating calendar with resource ASSYINSP  --- OpDtlBkProduction
+12:10:52                 				Consolidated Operation Calendar with Resource Calendar: ASSYINSP --- Consolcals
+12:10:52                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:52                 ttopmasOrig True x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:52                 				Consolidated Operation Calendar with Resource Calendar: ASSYINSP --- Consolcals
+12:10:52                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:52                 ttopmasOrig False x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:52                 		Checking if we should keep processing l_DateChanged False of Job: False l-OpMastSchedChange True l-TimeblockChange False iBeatCounter 0 --- operationBackward
+12:10:52                 Keep processing  False --- operationBackward
+12:10:52                 Scheduled Operation 40 - Queue Time: Dt 3/5/2026 Hr 14.75 Start Time: Dt 3/5/2026 Hr 14.75 End Time: Dt3/5/2026 Hr 15 Move Time: Dt 3/5/2026 H: 15 --- doMainProc
+12:10:52                 Scheduling job U0000000008089 Assembly 0 Operation 20: ASY-ASM --- doMainProc
+12:10:52                 	**Looking for Job U0000000008089 Assem: 0 Operation: 20 has not been scheduled --- scheduleOperation
+12:10:52                 	Scheduling Block - Alloc: 1 Prod: 0.57000 Split 0.57000 Ops: 3 SDt: 3/5/2026 SHr: 14.75 EDt: 3/5/2026 EHr: 14.75 Setup Time 0. --- CreateAllocationBlock
+12:10:52                 Scheduling Job U0000000008089 Assem: 0 Operation: 20 il_OprBackward True --- scheduleOperation
+12:10:52                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:52                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:52                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:52                 		Backward Scheduling - Job U0000000008089 Asm 0 Opr 20 OpDtl 10 AllocationBlock - 1 For: Enddate - 3/5/2026 EndHour - 14.75 Endtime 1 Setup/Prod/Both B. tmpendtime 634190.75. --- OpDtlBkProduction
+12:10:52                 		**Scheduling Resource: ASSYWH1 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH1 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH1 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH1 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH1 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH1. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH1 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH1 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH1 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH1 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH1 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH1 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH1 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH1 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH1 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH1 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH1 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH1  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH10 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH10 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH10 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH10 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH10 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH10. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH10 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH10 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH10 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH10 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH10 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH10 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH10 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH10 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH10 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH10 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH10 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH10  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH2 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH2 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH2 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH2 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH2 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH2. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH2 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH2 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH2 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH2 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH2 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH2 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH2 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH2 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH2 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH2 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH2 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH2  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH3 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH3 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH3 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH3 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH3 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH3. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH3 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH3 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH3 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH3 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH3 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH3 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH3 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH3 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH3 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH3 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH3 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH3  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH4 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH4 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH4 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH4 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH4 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH4. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH4 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH4 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH4 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH4 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH4 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH4 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH4 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH4 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH4 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH4 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH4 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH4  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH5 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH5 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH5 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH5 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH5 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH5. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH5 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH5 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH5 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH5 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH5 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH5 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH5 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH5 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH5 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH5 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH5 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH5  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH6 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH6 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH6 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH6 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH6 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH6. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH6 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH6 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH6 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH6 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH6 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH6 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH6 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH6 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH6 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH6 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH6 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH6  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH7 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH7 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH7 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH7 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH7 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH7. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH7 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH7 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH7 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH7 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH7 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH7 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH7 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH7 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH7 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH7 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH7 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH7  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH8 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH8 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH8 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH8 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH8 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH8. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH8 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH8 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH8 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH8 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH8 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH8 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH8 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH8 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH8 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH8 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH8 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH8  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH9 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH9 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH9 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH9 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH9 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH9. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH9 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH9 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH9 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH9 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH9 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH9 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH9 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH9 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH9 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH9 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH9 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH9  --- processResGrp
+12:10:52                 		Found time for ASSYWH1 on 3/5/2026 31248 ending 3/5/2026 33300 Priority 10 with Forward = _Forward. --- _SetPriority
+12:10:52                 	**Chose Resource - ASSYWH1 Time: SDt 3/5/2026, STime 8.68, End Dt 3/5/2026, End Time 9.25 Move Dt 3/5/2026 Move Hr 14.75 . --- OpDtlBkProduction
+12:10:52                 			Changing move time for Resource - ASSYWH1 from: 0 to  5.00. --- OpDtlBkProduction
+12:10:52                 Reschedule due to Move Time change --- operationBackward
+12:10:52                 Resetting allocationblock!! --- operationBackward
+12:10:52                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:52                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:52                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:52                 		Backward Scheduling - Job U0000000008089 Asm 0 Opr 20 OpDtl 10 AllocationBlock - 1 For: Enddate - 3/5/2026 EndHour - 14.75 Endtime 1 Setup/Prod/Both B. tmpendtime 634190.75. --- OpDtlBkProduction
+12:10:52                 		**Scheduling Resource: ASSYWH1 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH1 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH1 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH1 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH1 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH1. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH1 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH1 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH1 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH1 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH1 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH1 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH1 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH1 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH1 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH1 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH1 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH1  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH10 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH10 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH10 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH10 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH10 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH10. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH10 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH10 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH10 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH10 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH10 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH10 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH10 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH10 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH10 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH10 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH10 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH10  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH2 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH2 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH2 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH2 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH2 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH2. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH2 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH2 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH2 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH2 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH2 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH2 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH2 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH2 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH2 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH2 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH2 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH2  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH3 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH3 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH3 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH3 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH3 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH3. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH3 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH3 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH3 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH3 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH3 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH3 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH3 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH3 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH3 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH3 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH3 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH3  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH4 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH4 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH4 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH4 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH4 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH4. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH4 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH4 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH4 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH4 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH4 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH4 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH4 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH4 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH4 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH4 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH4 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH4  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH5 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH5 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH5 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH5 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH5 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH5. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH5 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH5 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH5 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH5 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH5 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH5 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH5 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH5 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH5 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH5 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH5 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH5  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH6 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH6 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH6 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH6 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH6 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH6. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH6 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH6 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH6 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH6 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH6 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH6 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH6 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH6 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH6 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH6 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH6 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH6  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH7 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH7 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH7 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH7 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH7 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH7. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH7 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH7 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH7 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH7 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH7 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH7 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH7 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH7 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH7 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH7 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH7 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH7  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH8 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH8 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH8 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH8 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH8 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH8. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH8 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH8 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH8 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH8 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH8 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH8 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH8 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH8 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH8 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH8 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH8 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH8  --- processResGrp
+12:10:52                 		**Scheduling Resource: ASSYWH9 for 3/5/2026 for a time of 14.75 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWH9 for 0.57000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWH9 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWH9 from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWH9 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWH9. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWH9 for 0.57000 hours on 3/5/2026 with a EndTime of 14.75 IP-ProcTime 14.75. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWH9 FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWH9 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 53100 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH9 starting at time: 3/5/2026 14.75   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWH9 for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 14.75   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 5 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 14.75 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 3/5/2026 MoveStartHour: 9.25  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWH9 before  3/5/2026 and a start hour of 14.75  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.57 Hours Ending on 3/5/2026 and an end hour of 9.25 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWH9 has 7 working hours on 3/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 2 Hours Ending on 3/5/2026 and an end hour of 10 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 	****5 OP-StartTime  31248   --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWH9 for 3/5/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWH9 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 3/5/2026 QueueStartHour: 8.68  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWH9 for job U0000000008089 Operation 20 Priority 100 StartDate 3/5/2026 EndDate 3/5/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWH9 is 3/5/2026 at 31248 (8.68) ending on 3/5/2026 at 9.25 for 0.57 hours. Move Date 3/5/2026 Move Hour 14.75. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 3/5/2026 3/5/2026 found 53100 33300 For resource ASSYWH9  --- processResGrp
+12:10:52                 		Found time for ASSYWH1 on 3/5/2026 31248 ending 3/5/2026 33300 Priority 10 with Forward = _Forward. --- _SetPriority
+12:10:52                 	**Chose Resource - ASSYWH1 Time: SDt 3/5/2026, STime 8.68, End Dt 3/5/2026, End Time 9.25 Move Dt 3/5/2026 Move Hr 14.75 . --- OpDtlBkProduction
+12:10:52                 	****Created RTU for job U0000000008089 Operation 20 with start date of 3/5/2026 and enddate of 3/5/2026 --- createTTResourceTimeUsed
+12:10:52                 				Consolidating calendar with resource ASSYWH1  --- OpDtlBkProduction
+12:10:52                 				Consolidated Operation Calendar with Resource Calendar: ASSYWH1 --- Consolcals
+12:10:52                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:52                 ttopmasOrig True x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:52                 				Consolidated Operation Calendar with Resource Calendar: ASSYWH1 --- Consolcals
+12:10:52                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:52                 ttopmasOrig False x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:52                 		Checking if we should keep processing l_DateChanged False of Job: False l-OpMastSchedChange True l-TimeblockChange False iBeatCounter 1 --- operationBackward
+12:10:52                 Keep processing  False --- operationBackward
+12:10:52                 Scheduled Operation 20 - Queue Time: Dt 3/5/2026 Hr 8.68 Start Time: Dt 3/5/2026 Hr 8.68 End Time: Dt3/5/2026 Hr 9.25 Move Time: Dt 3/5/2026 H: 14.75 --- doMainProc
+12:10:52                 Scheduling job U0000000008089 Assembly 0 Operation 10: ASY-CUT --- doMainProc
+12:10:52                 	**Looking for Job U0000000008089 Assem: 0 Operation: 10 has not been scheduled --- scheduleOperation
+12:10:52                 	Scheduling Block - Alloc: 1 Prod: 0.01000 Split 0.01000 Ops: 3 SDt: 3/5/2026 SHr: 8.68 EDt: 3/5/2026 EHr: 8.68 Setup Time 0.05. --- CreateAllocationBlock
+12:10:52                 Scheduling Job U0000000008089 Assem: 0 Operation: 10 il_OprBackward True --- scheduleOperation
+12:10:52                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:52                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:52                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:52                 		Backward Scheduling - Job U0000000008089 Asm 0 Opr 10 OpDtl 10 AllocationBlock - 1 For: Enddate - 3/5/2026 EndHour - 8.68 Endtime 1 Setup/Prod/Both B. tmpendtime 634184.68. --- OpDtlBkProduction
+12:10:52                 		**Scheduling Resource: ASSYWIRE for 3/5/2026 for a time of 8.68 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWIRE for 0.06000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWIRE is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWIRE from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWIRE is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWIRE. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWIRE for 0.06000 hours on 3/5/2026 with a EndTime of 8.68 IP-ProcTime 8.68. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWIRE FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWIRE is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 31248 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWIRE starting at time: 3/5/2026 8.68   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWIRE for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 8.68   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 28 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 8.68 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 2/27/2026 MoveStartHour: 8.32  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWIRE before  2/27/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.06 Hours Ending on 2/27/2026 and an end hour of 8.32 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWIRE has 7 working hours on 2/27/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 1 Hours Ending on 2/27/2026 and an end hour of 9 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWIRE for 2/27/2026 and a start hour of 8.26  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWIRE for job U0000000008089 Operation 10 Priority 100 StartDate 2/27/2026 EndDate 2/27/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 2/19/2026 QueueStartHour: 8.74  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWIRE for job U0000000008089 Operation 10 Priority 100 StartDate 2/27/2026 EndDate 2/27/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWIRE is 2/27/2026 at 29736 (8.26) ending on 2/27/2026 at 8.32 for 0.06 hours. Move Date 3/5/2026 Move Hour 8.68. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 2/27/2026 3/5/2026 found 31248 29952 For resource ASSYWIRE  --- processResGrp
+12:10:52                 		Found time for ASSYWIRE on 2/27/2026 29736 ending 2/27/2026 29952 Priority 1010 with Forward = _Forward. --- _SetPriority
+12:10:52                 	**Chose Resource - ASSYWIRE Time: SDt 2/27/2026, STime 8.26, End Dt 2/27/2026, End Time 8.32 Move Dt 3/5/2026 Move Hr 8.68 . --- OpDtlBkProduction
+12:10:52                 			Changing move time for Resource - ASSYWIRE from: 0 to  28.00. --- OpDtlBkProduction
+12:10:52                 Reschedule due to Move Time change --- operationBackward
+12:10:52                 Resetting allocationblock!! --- operationBackward
+12:10:52                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:52                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:52                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:52                 		Backward Scheduling - Job U0000000008089 Asm 0 Opr 10 OpDtl 10 AllocationBlock - 1 For: Enddate - 3/5/2026 EndHour - 8.68 Endtime 1 Setup/Prod/Both B. tmpendtime 634184.68. --- OpDtlBkProduction
+12:10:52                 		**Scheduling Resource: ASSYWIRE for 3/5/2026 for a time of 8.68 Forward = False. --- processResGrp
+12:10:52                 		***Scheduling resource ASSYWIRE for 0.06000 hours  --- processResourceID
+12:10:52                 				Resource ASSYWIRE is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making production calendar for Resource ASSYWIRE from production calendar CG. --- MakeConResCal
+12:10:52                 				Resource ASSYWIRE is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:52                 		Making setup calendar CG for Resource: ASSYWIRE. --- MakeConResCal
+12:10:52                 		Backward Scheduling  ASSYWIRE for 0.06000 hours on 3/5/2026 with a EndTime of 8.68 IP-ProcTime 8.68. --- processResourceID
+12:10:52                 		Infinitely scheduling ASSYWIRE FiniteHorizonDate 2/6/2026 ScheduleDate 3/5/2026 --- GetBackwardDateTime
+12:10:52                 				Resource ASSYWIRE is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:52                 		Found 3/5/2026 as a valid working date IP-ProcTime = 31248 --- GetBackwardDateTime
+12:10:52                 		Found 3/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWIRE starting at time: 3/5/2026 8.68   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:52                 		Scheduling resource ASSYWIRE for : ScheduleDate 3/5/2026 FirstProdHour 8 LastProdHour 8.68   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:52                 	 UsingCalendarForMove of 28 Setting Move Due Time. MoveDueDate: 3/5/2026 MoveDueHour: 8.68 --- GetBackwardDateTime
+12:10:52                 	 Setting Move start time according to production calendar. MoveStartDate: 2/27/2026 MoveStartHour: 8.32  --- GetBackwardDateTime
+12:10:52                 		Looking for  previous scheduled time on resource ASSYWIRE before  2/27/2026 and a start hour of 8.68  --- GetBackwardDateTime
+12:10:52                 		Looking to Schedule 0.06 Hours Ending on 2/27/2026 and an end hour of 8.32 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		 Found that resource ASSYWIRE has 7 working hours on 2/27/2026.  --- GetPrevTotalAvailProdTime
+12:10:52                 		Looking to Schedule 1 Hours Ending on 2/27/2026 and an end hour of 9 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:52                 		Scheduled start time for resource ASSYWIRE for 2/27/2026 and a start hour of 8.26  --- GetBackwardDateTime
+12:10:52                 		Scheduling Resource ASSYWIRE for job U0000000008089 Operation 10 Priority 100 StartDate 2/27/2026 EndDate 2/27/2026. --- processResourceID
+12:10:52                 	 Setting Queue start time according to production calendar. QueueStartDate: 2/19/2026 QueueStartHour: 8.74  --- _addQueueAndMoveTimesToAvailableResource
+12:10:52                 		***Done Scheduling Resource ASSYWIRE for job U0000000008089 Operation 10 Priority 100 StartDate 2/27/2026 EndDate 2/27/2026 Move Date 3/5/2026. --- processResourceID
+12:10:52                 	*First available time for Resource ASSYWIRE is 2/27/2026 at 29736 (8.26) ending on 2/27/2026 at 8.32 for 0.06 hours. Move Date 3/5/2026 Move Hour 8.68. --- processResourceID
+12:10:52                 Checking time to see is we need to leave : 2/27/2026 3/5/2026 found 31248 29952 For resource ASSYWIRE  --- processResGrp
+12:10:52                 		Found time for ASSYWIRE on 2/27/2026 29736 ending 2/27/2026 29952 Priority 1010 with Forward = _Forward. --- _SetPriority
+12:10:52                 	**Chose Resource - ASSYWIRE Time: SDt 2/27/2026, STime 8.26, End Dt 2/27/2026, End Time 8.32 Move Dt 3/5/2026 Move Hr 8.68 . --- OpDtlBkProduction
+12:10:52                 	****Created RTU for job U0000000008089 Operation 10 with start date of 2/27/2026 and enddate of 2/27/2026 --- createTTResourceTimeUsed
+12:10:52                 				Consolidating calendar with resource ASSYWIRE  --- OpDtlBkProduction
+12:10:52                 				Consolidated Operation Calendar with Resource Calendar: ASSYWIRE --- Consolcals
+12:10:52                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:52                 ttopmasOrig True x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:52                 				Consolidated Operation Calendar with Resource Calendar: ASSYWIRE --- Consolcals
+12:10:52                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:52                 ttopmasOrig False x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:52                 		Checking if we should keep processing l_DateChanged False of Job: False l-OpMastSchedChange True l-TimeblockChange False iBeatCounter 1 --- operationBackward
+12:10:52                 Keep processing  False --- operationBackward
+12:10:52                 Scheduled Operation 10 - Queue Time: Dt 2/19/2026 Hr 8.74 Start Time: Dt 2/27/2026 Hr 8.26 End Time: Dt2/27/2026 Hr 8.32 Move Time: Dt 3/5/2026 H: 8.68 --- doMainProc
+12:10:52                 Committing Job -  U0000000008089. --- MoveJobItem
+12:10:52                 Overload Horizon Days .. 180  --- CommitJob
+12:10:52                 Global Finite horz .. 60  --- CommitJob
+12:10:52                 Rough cut scheduling U0000000008089 False. Job start date 2/27/2026 Rough cut date 8/5/2026. --- CommitJob
+12:10:52                 Create RTU for Job U0000000008089 Asmbl 0 Sequence 40 OpDtl 10 Whatif True. Resource ASSYINSP Start date: 3/5/2026, Start time: 53100, End Date: 3/5/2026, End time: 54000 --- CommitJob
+12:10:52                 about apply whatif load :  False  --- CommitJob
+12:10:52                 Rough cut scheduling U0000000008089 False. Job start date 2/27/2026 Rough cut date 8/5/2026. --- CommitJob
+12:10:52                 Create RTU for Job U0000000008089 Asmbl 0 Sequence 20 OpDtl 10 Whatif True. Resource ASSYWH1 Start date: 3/5/2026, Start time: 31248, End Date: 3/5/2026, End time: 33300 --- CommitJob
+12:10:52                 about apply whatif load :  False  --- CommitJob
+12:10:52                 Rough cut scheduling U0000000008089 False. Job start date 2/27/2026 Rough cut date 8/5/2026. --- CommitJob
+12:10:52                 Create RTU for Job U0000000008089 Asmbl 0 Sequence 10 OpDtl 10 Whatif True. Resource ASSYWIRE Start date: 2/27/2026, Start time: 29736, End Date: 2/27/2026, End time: 29952 --- CommitJob
+12:10:52                 about apply whatif load :  False  --- CommitJob
+12:10:52                 About to update Job Head --- CommitJob
+12:10:52                 About to update Assemblies --- CommitJob
+12:10:52                 About to update Operations --- CommitJob
+12:10:52                 About to update Operations details --- CommitJob
+12:10:52                 Finished Committing Job -  U0000000008089. --- MoveJobItem
+12:10:52                 Receive Time of 3 days added to Due Date calculation for Job U0000000008089. --- MoveJobItem
+12:10:52                 Committ Completed for Job U0000000008089  --- MoveJobItem
+12:10:52                 Writing Job -  U0000000008089. --- MoveJobItem
+12:10:52                 Overload Horizon Days .. 180  --- WriteJob
+12:10:52                 About to clean up the WI RTU --- MoveJobItem
+12:10:52                 About to create Shop Load. --- WriteJob
+12:10:52                 Setting RTU lock to false see -> False  --- WriteJob
+12:10:52                 Setting RTU lock to false see -> False  --- WriteJob
+12:10:52                 Setting RTU lock to false see -> False  --- WriteJob
+12:10:52                 Subassembly 0 (ELA-00411). Req = 3.00000000. Pull =0.00000000 --- WriteJob
+12:10:52                 AVAIL bJobOper.WIStartDate 2/27/2026 BJobOper.AssemblySeq 0 bJobOper.OprSeq 10 procOper False  --- WriteJob
+12:10:52                 AVAIL bJobOper.WIStartDate 3/5/2026 BJobOper.AssemblySeq 0 bJobOper.OprSeq 20 procOper False  --- WriteJob
+12:10:52                 AVAIL bJobOper.WIStartDate 3/5/2026 BJobOper.AssemblySeq 0 bJobOper.OprSeq 40 procOper False  --- WriteJob
+12:10:52                 Update plannedkitdate and Plannedactiondate --- WriteJob
+12:10:52                 Finished writing Job -  U0000000008089. --- MoveJobItem
+12:10:52                 Scheduling Completed for Job U0000000008089  --- MoveJobItem

@@ -1,0 +1,102 @@
+﻿System.Collections.Hashtable
+==== Normal Planning Entries ====
+12:00:08 Sort Level 0 MRP Jobs by Date     -> False
+12:00:08 Recycle MRP Jobs                  -> False
+12:00:08   Group -> Delete; Queue -> DeleteJob; Type -> Job; Finite -> False
+12:00:08     Check List -> DeleteAllPO~DeleteJob~DeleteTO; Last Group -> False
+12:00:08   Group -> Load; Queue -> SaveLoad; Type -> Job; Finite -> False
+12:00:08   Group -> NonPart; Queue -> LotJobSplit; Type -> Job; Finite -> False
+12:00:08   Group -> NonPart; Queue -> SchedJobI; Type -> Job; Finite -> False
+12:00:08   Group -> NonPart; Queue -> FirmJob; Type -> Job; Finite -> False
+12:00:08     Check List -> FirmJob~LotJobSplit~Part~SchedJobF~SchedJobI; Last Group -> False
+12:00:08   Group -> Part; Queue -> LotJobSplit; Type -> Job; Finite -> False
+12:00:08   Group -> Part; Queue -> SchedJobI; Type -> Job; Finite -> False
+12:00:08   Group -> Part; Queue -> FirmJob; Type -> Job; Finite -> False
+12:00:08     Check List -> FirmJob~LotJobSplit~Part~SchedJobF~SchedJobI; Last Group -> False
+12:00:08   Group -> Sched; Queue -> PreJobI; Type -> Job; Finite -> False
+12:00:08     Check List -> PreJobF~PreJobI; Last Group -> False
+12:00:08   Group -> Zero; Queue -> LotJobSplit; Type -> Job; Finite -> False
+12:00:08     Check List -> LotJobSplit~Part; Last Group -> False
+12:00:08   Group -> ZeroSort; Queue -> SchedJobI; Type -> Job; Finite -> False
+12:00:08   Group -> ZeroSort; Queue -> FirmJob; Type -> Job; Finite -> False
+12:00:08     Check List -> FirmJob~SchedJobF~SchedJobI~ZeroJob; Last Group -> False
+12:00:09 Start Processing Part:., Attribute Set:'',  LLC:-1--1
+12:00:09 Processing Part:., Attribute Set:''
+12:00:09 Deleting unfirm Jobs for Part:., Attribute Set:''
+12:00:09 Processing non-stock transactions for Part:., Attribute Set:''
+12:00:09 Creating new PO suggestion for Part:., Attribute Set:'', Date:4/1/2026 12:00:00 AM, Quantity:9.00000000, Number:0 - No Vendor
+12:00:09 Processing stock transactions for Part:., Attribute Set:''
+12:00:09 Done with Part:., Attribute Set:''
+12:00:09 Finished Processing Part:.
+12:00:09 Start Processing Part:testaa, Attribute Set:'',  LLC:-1--1
+12:00:09 Processing Part:testaa, Attribute Set:''
+12:00:09 Deleting unfirm Jobs for Part:testaa, Attribute Set:''
+12:00:09 Processing non-stock transactions for Part:testaa, Attribute Set:''
+12:00:09 Processing stock transactions for Part:testaa, Attribute Set:''
+12:00:09 Done with Part:testaa, Attribute Set:''
+12:00:09 Finished Processing Part:testaa
+12:00:15 Ending Part Level: -1--1. Wait Time 00h:00m:06s, Parts 2, Jobs 0
+12:00:47 Parts:2; New Jobs:0; Reused Jobs:0; Deleted Jobs:0; Scheduled Jobs:0; Saved Load:0
+12:00:10 Sort Level 0 MRP Jobs by Date     -> False
+12:00:10 Recycle MRP Jobs                  -> False
+12:00:10   Group -> Delete; Queue -> DeleteJob; Type -> Job; Finite -> False
+12:00:10     Check List -> DeleteAllPO~DeleteJob~DeleteTO; Last Group -> False
+12:00:10   Group -> Load; Queue -> SaveLoad; Type -> Job; Finite -> False
+12:00:10   Group -> NonPart; Queue -> LotJobSplit; Type -> Job; Finite -> False
+12:00:10   Group -> NonPart; Queue -> SchedJobI; Type -> Job; Finite -> False
+12:00:10   Group -> NonPart; Queue -> FirmJob; Type -> Job; Finite -> False
+12:00:10     Check List -> FirmJob~LotJobSplit~Part~SchedJobF~SchedJobI; Last Group -> False
+12:00:10   Group -> Part; Queue -> LotJobSplit; Type -> Job; Finite -> False
+12:00:10   Group -> Part; Queue -> SchedJobI; Type -> Job; Finite -> False
+12:00:10   Group -> Part; Queue -> FirmJob; Type -> Job; Finite -> False
+12:00:10     Check List -> FirmJob~LotJobSplit~Part~SchedJobF~SchedJobI; Last Group -> False
+12:00:10   Group -> Sched; Queue -> PreJobI; Type -> Job; Finite -> False
+12:00:10     Check List -> PreJobF~PreJobI; Last Group -> False
+12:00:10   Group -> Zero; Queue -> LotJobSplit; Type -> Job; Finite -> False
+12:00:10     Check List -> LotJobSplit~Part; Last Group -> False
+12:00:10   Group -> ZeroSort; Queue -> SchedJobI; Type -> Job; Finite -> False
+12:00:10   Group -> ZeroSort; Queue -> FirmJob; Type -> Job; Finite -> False
+12:00:10     Check List -> FirmJob~SchedJobF~SchedJobI~ZeroJob; Last Group -> False
+12:00:10 Start Processing Part:[CRP-00171-07], Attribute Set:'',  LLC:-1--1
+12:00:10 Processing Part:[CRP-00171-07], Attribute Set:''
+12:00:10 Deleting unfirm Jobs for Part:[CRP-00171-07], Attribute Set:''
+12:00:10 Processing non-stock transactions for Part:[CRP-00171-07], Attribute Set:''
+12:00:10 Processing stock transactions for Part:[CRP-00171-07], Attribute Set:''
+12:00:10 Done with Part:[CRP-00171-07], Attribute Set:''
+12:00:10 Finished Processing Part:[CRP-00171-07]
+12:00:10 Start Processing Part:testaa, Attribute Set:'',  LLC:-1--1
+12:00:10 Processing Part:testaa, Attribute Set:''
+12:00:10 Deleting unfirm Jobs for Part:testaa, Attribute Set:''
+12:00:10 Processing non-stock transactions for Part:testaa, Attribute Set:''
+12:00:10 Processing stock transactions for Part:testaa, Attribute Set:''
+12:00:10 Done with Part:testaa, Attribute Set:''
+12:00:10 Finished Processing Part:testaa
+12:00:12 Ending Non-Part Parts.  Wait Time 00h:00m:02s, Parts 2, Jobs 0
+12:00:12 Start Processing Part:C1000355, Attribute Set:'',  LLC:0-0
+12:00:12 Processing Part:C1000355, Attribute Set:''
+12:00:12 Deleting unfirm Jobs for Part:C1000355, Attribute Set:''
+12:00:12 Processing non-stock transactions for Part:C1000355, Attribute Set:''
+12:00:12 Processing Job:F346188 Production Quantity:2.00000000
+12:00:12 Processing stock transactions for Part:C1000355, Attribute Set:''
+12:00:12 Done with Part:C1000355, Attribute Set:''
+12:00:12 Finished Processing Part:C1000355
+12:00:12 Start Processing Part:C1000877, Attribute Set:'',  LLC:0-0
+12:00:12 Processing Part:C1000877, Attribute Set:''
+12:00:12 Deleting unfirm Jobs for Part:C1000877, Attribute Set:''
+12:00:12 Processing non-stock transactions for Part:C1000877, Attribute Set:''
+12:00:12 Processing stock transactions for Part:C1000877, Attribute Set:''
+12:00:12 Done with Part:C1000877, Attribute Set:''
+12:00:12 Finished Processing Part:C1000877
+12:00:12 Start Processing Part:CMS-00450-A, Attribute Set:'',  LLC:0-0
+12:00:12 Processing Part:CMS-00450-A, Attribute Set:''
+12:00:12 Deleting unfirm Jobs for Part:CMS-00450-A, Attribute Set:''
+12:00:12 Processing non-stock transactions for Part:CMS-00450-A, Attribute Set:''
+12:00:12 Create Intersite Supply
+12:00:12 Creating new unfirm Job:U0000000007868 for Part:CMS-00450-A
+12:00:12 Created new unfirm Job:U0000000007868 Quantity:2.00000000
+12:00:13 Adding to Job:U0000000007868 Quantity:2.00000000
+12:00:13 Copying BOM from Part:CMS-00450-A Rev:01 to Job:U0000000007868
+12:00:13 Sent Job:U0000000007868 to SchedJobI
+12:00:13 Processing stock transactions for Part:CMS-00450-A, Attribute Set:''
+12:00:13 Done with Part:CMS-00450-A, Attribute Set:''
+12:00:13 Finished Processing Part:CMS-00450-A

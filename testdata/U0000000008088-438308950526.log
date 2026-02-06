@@ -1,0 +1,612 @@
+                Friday, February 6, 2026 12:10:30
+12:10:30                 Version 11.3.100.14 - 09/11/2024 - 14:00 --- MoveJobItem
+12:10:30                 Processing - Job:U0000000008088, Assembly: 0, Operation:0. --- MoveJobItem
+12:10:30                 Passed StartDate - 10/9/2026, Passed StartHour: 0. --- MoveJobItem
+12:10:30                 Passed DueDate   - 10/9/2026, Passed DueHour:   7. --- MoveJobItem
+12:10:30                 Ignore Material Constraints = False --- MoveJobItem
+12:10:30                 Running Finite = False --- MoveJobItem
+12:10:30                 Subassembly 0 (ELA-02274). Req = 54.00000000. Pull =0.00000000 --- CacheJob
+12:10:30                 Company   - CG, JobNum:   U0000000008088 AssemblySeq 0. --- MoveJobItem
+12:10:30                 Scheduling in past is not allowed -  False 2/6/2026. --- MoveJobItem
+12:10:30                 Scheduling code  SB  --- processJob
+12:10:30                 Changed DueDate to: 10/6/2026 for 3 days of receive time for ELA-02274 . Calendar: CG --- processJob
+12:10:30                 Scheduling job U0000000008088 Assembly 0 Operation 30: BS-INS --- doMainProc
+12:10:30                 	**Looking for Job U0000000008088 Assem: 0 Operation: 30 has not been scheduled --- scheduleOperation
+12:10:30                 	Scheduling Block - Alloc: 1 Prod: 1.08000 Split 1.08000 Ops: 54 SDt: 10/6/2026 SHr: 7 EDt: 10/6/2026 EHr: 7 Setup Time 0. --- CreateAllocationBlock
+12:10:30                 Scheduling Job U0000000008088 Assem: 0 Operation: 30 il_OprBackward True --- scheduleOperation
+12:10:30                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:30                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 		Backward Scheduling - Job U0000000008088 Asm 0 Opr 30 OpDtl 10 AllocationBlock - 1 For: Enddate - 10/6/2026 EndHour - 7 Endtime 1 Setup/Prod/Both B. tmpendtime 639343. --- OpDtlBkProduction
+12:10:30                 		**Scheduling Resource: SMDBSOLR1 for 10/6/2026 for a time of 7 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDBSOLR1 for 1.08000 hours  --- processResourceID
+12:10:30                 				Resource SMDBSOLR1 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making production calendar for Resource SMDBSOLR1 from production calendar CG. --- MakeConResCal
+12:10:30                 				Resource SMDBSOLR1 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDBSOLR1. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDBSOLR1 for 1.08000 hours on 10/6/2026 with a EndTime of 7 IP-ProcTime 7. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDBSOLR1 FiniteHorizonDate 2/6/2026 ScheduleDate 10/6/2026 --- GetBackwardDateTime
+12:10:30                 				Resource SMDBSOLR1 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 10/6/2026 as a valid working date IP-ProcTime = 25200 --- GetBackwardDateTime
+12:10:30                 		Found 10/6/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR1 starting at time: 10/6/2026 7   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Request time of 7 is before first prod hour of 8  --- GetBackwardDateTime
+12:10:30                 		Resetting date and time to 10/5/2026 at 24  --- GetBackwardDateTime
+12:10:30                 				Resource SMDBSOLR1 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 10/5/2026 as a valid working date IP-ProcTime = 86400 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR1 starting at time: 10/5/2026 24   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR1 for : ScheduleDate 10/5/2026 FirstProdHour 8 LastProdHour 15   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDBSOLR1 before  10/5/2026 and a start hour of 15  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 1.08 Hours Ending on 10/5/2026 and an end hour of 15 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 7 working hours on 10/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 2 Hours Ending on 10/5/2026 and an end hour of 15 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDBSOLR1 for 10/5/2026 and a start hour of 13.92  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDBSOLR1 for job U0000000008088 Operation 30 Priority 100 StartDate 10/5/2026 EndDate 10/5/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDBSOLR1 for job U0000000008088 Operation 30 Priority 100 StartDate 10/5/2026 EndDate 10/5/2026 Move Date 10/5/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDBSOLR1 is 10/5/2026 at 50112 (13.92) ending on 10/5/2026 at 15 for 1.08 hours. Move Date 10/5/2026 Move Hour 15. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 10/5/2026 10/6/2026 found 25200 54000 For resource SMDBSOLR1  --- processResGrp
+12:10:30                 		**Scheduling Resource: SMDBSOLR2 for 10/6/2026 for a time of 7 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDBSOLR2 for 1.08000 hours  --- processResourceID
+12:10:30                 				Resource SMDBSOLR2 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making production calendar for Resource SMDBSOLR2 from production calendar CG. --- MakeConResCal
+12:10:30                 				Resource SMDBSOLR2 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDBSOLR2. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDBSOLR2 for 1.08000 hours on 10/6/2026 with a EndTime of 7 IP-ProcTime 7. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDBSOLR2 FiniteHorizonDate 2/6/2026 ScheduleDate 10/6/2026 --- GetBackwardDateTime
+12:10:30                 				Resource SMDBSOLR2 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 10/6/2026 as a valid working date IP-ProcTime = 25200 --- GetBackwardDateTime
+12:10:30                 		Found 10/6/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR2 starting at time: 10/6/2026 7   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Request time of 7 is before first prod hour of 8  --- GetBackwardDateTime
+12:10:30                 		Resetting date and time to 10/5/2026 at 24  --- GetBackwardDateTime
+12:10:30                 				Resource SMDBSOLR2 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 10/5/2026 as a valid working date IP-ProcTime = 86400 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR2 starting at time: 10/5/2026 24   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR2 for : ScheduleDate 10/5/2026 FirstProdHour 8 LastProdHour 15   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDBSOLR2 before  10/5/2026 and a start hour of 15  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 1.08 Hours Ending on 10/5/2026 and an end hour of 15 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 7 working hours on 10/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 2 Hours Ending on 10/5/2026 and an end hour of 15 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDBSOLR2 for 10/5/2026 and a start hour of 13.92  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDBSOLR2 for job U0000000008088 Operation 30 Priority 100 StartDate 10/5/2026 EndDate 10/5/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDBSOLR2 for job U0000000008088 Operation 30 Priority 100 StartDate 10/5/2026 EndDate 10/5/2026 Move Date 10/5/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDBSOLR2 is 10/5/2026 at 50112 (13.92) ending on 10/5/2026 at 15 for 1.08 hours. Move Date 10/5/2026 Move Hour 15. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 10/5/2026 10/6/2026 found 25200 54000 For resource SMDBSOLR2  --- processResGrp
+12:10:30                 		**Scheduling Resource: SMDBSOLR3 for 10/6/2026 for a time of 7 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDBSOLR3 for 1.08000 hours  --- processResourceID
+12:10:30                 		Making production calendar for Resource SMDBSOLR3 from production calendar CG. --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDBSOLR3. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDBSOLR3 for 1.08000 hours on 10/6/2026 with a EndTime of 7 IP-ProcTime 7. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDBSOLR3 FiniteHorizonDate 2/6/2026 ScheduleDate 10/6/2026 --- GetBackwardDateTime
+12:10:30                 		Found 10/6/2026 as a valid working date IP-ProcTime = 25200 --- GetBackwardDateTime
+12:10:30                 		Found 10/6/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR3 starting at time: 10/6/2026 7   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Request time of 7 is before first prod hour of 8  --- GetBackwardDateTime
+12:10:30                 		Resetting date and time to 10/5/2026 at 24  --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date IP-ProcTime = 86400 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR3 starting at time: 10/5/2026 24   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR3 for : ScheduleDate 10/5/2026 FirstProdHour 8 LastProdHour 15   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDBSOLR3 before  10/5/2026 and a start hour of 15  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 1.08 Hours Ending on 10/5/2026 and an end hour of 15 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 7 working hours on 10/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 2 Hours Ending on 10/5/2026 and an end hour of 15 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDBSOLR3 for 10/5/2026 and a start hour of 13.92  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDBSOLR3 for job U0000000008088 Operation 30 Priority 100 StartDate 10/5/2026 EndDate 10/5/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDBSOLR3 for job U0000000008088 Operation 30 Priority 100 StartDate 10/5/2026 EndDate 10/5/2026 Move Date 10/5/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDBSOLR3 is 10/5/2026 at 50112 (13.92) ending on 10/5/2026 at 15 for 1.08 hours. Move Date 10/5/2026 Move Hour 15. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 10/5/2026 10/6/2026 found 25200 54000 For resource SMDBSOLR3  --- processResGrp
+12:10:30                 		Found time for SMDBSOLR1 on 10/5/2026 50112 ending 10/5/2026 54000 Priority 10 with Forward = _Forward. --- _SetPriority
+12:10:30                 	**Chose Resource - SMDBSOLR1 Time: SDt 10/5/2026, STime 13.92, End Dt 10/5/2026, End Time 15 Move Dt 10/5/2026 Move Hr 15 . --- OpDtlBkProduction
+12:10:30                 		Tested and bounce because tmpEndTime 639343 <> dEndTime 639327 --- OpDtlBkProduction
+12:10:30                 		Checking if we should keep processing l_DateChanged True of Job: True l-OpMastSchedChange False l-TimeblockChange False iBeatCounter 0 --- OpDtlBkProduction
+12:10:30                 Keep processing  True --- OpDtlBkProduction
+12:10:30                 		Resetting Allocation block endtime from 10/6/2026  639343 to 10/5/2026 15 --- OpDtlBkProduction
+12:10:30                 	****Created RTU for job U0000000008088 Operation 30 with start date of 10/5/2026 and enddate of 10/5/2026 --- createTTResourceTimeUsed
+12:10:30                 				Consolidating calendar with resource SMDBSOLR1  --- OpDtlBkProduction
+12:10:30                 				Consolidated Operation Calendar with Resource Calendar: SMDBSOLR1 --- Consolcals
+12:10:30                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:30                 ttopmasOrig True x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:30                 				Consolidated Operation Calendar with Resource Calendar: SMDBSOLR1 --- Consolcals
+12:10:30                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:30                 ttopmasOrig False x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:30                 		Checking if we should keep processing l_DateChanged False of Job: False l-OpMastSchedChange True l-TimeblockChange False iBeatCounter 0 --- operationBackward
+12:10:30                 Keep processing  False --- operationBackward
+12:10:30                 Scheduled Operation 30 - Queue Time: Dt 10/5/2026 Hr 13.92 Start Time: Dt 10/5/2026 Hr 13.92 End Time: Dt10/5/2026 Hr 15 Move Time: Dt 10/5/2026 H: 15 --- doMainProc
+12:10:30                 Scheduling job U0000000008088 Assembly 0 Operation 20: BS-ASM --- doMainProc
+12:10:30                 	**Looking for Job U0000000008088 Assem: 0 Operation: 20 has not been scheduled --- scheduleOperation
+12:10:30                 	Scheduling Block - Alloc: 1 Prod: 10.80000 Split 10.80000 Ops: 54 SDt: 10/5/2026 SHr: 13.92 EDt: 10/5/2026 EHr: 13.92 Setup Time 0. --- CreateAllocationBlock
+12:10:30                 Scheduling Job U0000000008088 Assem: 0 Operation: 20 il_OprBackward True --- scheduleOperation
+12:10:30                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:30                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 		Backward Scheduling - Job U0000000008088 Asm 0 Opr 20 OpDtl 10 AllocationBlock - 1 For: Enddate - 10/5/2026 EndHour - 13.92 Endtime 1 Setup/Prod/Both B. tmpendtime 639325.92. --- OpDtlBkProduction
+12:10:30                 		**Scheduling Resource: SMDBSOLR1 for 10/5/2026 for a time of 13.92 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDBSOLR1 for 10.80000 hours  --- processResourceID
+12:10:30                 				Resource SMDBSOLR1 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making production calendar for Resource SMDBSOLR1 from production calendar CG. --- MakeConResCal
+12:10:30                 				Resource SMDBSOLR1 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDBSOLR1. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDBSOLR1 for 10.80000 hours on 10/5/2026 with a EndTime of 13.92 IP-ProcTime 13.92. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDBSOLR1 FiniteHorizonDate 2/6/2026 ScheduleDate 10/5/2026 --- GetBackwardDateTime
+12:10:30                 				Resource SMDBSOLR1 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 10/5/2026 as a valid working date IP-ProcTime = 50112 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR1 starting at time: 10/5/2026 13.92   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR1 for : ScheduleDate 10/5/2026 FirstProdHour 8 LastProdHour 13.92   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 6 Setting Move Due Time. MoveDueDate: 10/5/2026 MoveDueHour: 13.92 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 10/5/2026 MoveStartHour: 7.08  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDBSOLR1 before  10/5/2026 and a start hour of 13.92  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 10.80 Hours Ending on 10/5/2026 and an end hour of 7.08 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 7 working hours on 10/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/5/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/5/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 0 working hours on 10/4/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/4/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/4/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 0 working hours on 10/3/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/3/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/3/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 7 working hours on 10/2/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/2/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  7 on 10/2/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 7 working hours on 10/1/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/1/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 	****5 OP-StartTime  37008   --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDBSOLR1 for 10/1/2026 and a start hour of 10.28  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDBSOLR1 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDBSOLR1 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026 Move Date 10/5/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDBSOLR1 is 10/1/2026 at 37008 (10.28) ending on 10/5/2026 at 7.08 for 10.8 hours. Move Date 10/5/2026 Move Hour 13.92. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 10/5/2026 10/5/2026 found 50112 25488 For resource SMDBSOLR1  --- processResGrp
+12:10:30                 		**Scheduling Resource: SMDBSOLR2 for 10/5/2026 for a time of 13.92 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDBSOLR2 for 10.80000 hours  --- processResourceID
+12:10:30                 				Resource SMDBSOLR2 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making production calendar for Resource SMDBSOLR2 from production calendar CG. --- MakeConResCal
+12:10:30                 				Resource SMDBSOLR2 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDBSOLR2. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDBSOLR2 for 10.80000 hours on 10/5/2026 with a EndTime of 13.92 IP-ProcTime 13.92. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDBSOLR2 FiniteHorizonDate 2/6/2026 ScheduleDate 10/5/2026 --- GetBackwardDateTime
+12:10:30                 				Resource SMDBSOLR2 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 10/5/2026 as a valid working date IP-ProcTime = 50112 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR2 starting at time: 10/5/2026 13.92   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR2 for : ScheduleDate 10/5/2026 FirstProdHour 8 LastProdHour 13.92   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 6 Setting Move Due Time. MoveDueDate: 10/5/2026 MoveDueHour: 13.92 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 10/5/2026 MoveStartHour: 7.08  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDBSOLR2 before  10/5/2026 and a start hour of 13.92  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 10.80 Hours Ending on 10/5/2026 and an end hour of 7.08 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 7 working hours on 10/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/5/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/5/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 0 working hours on 10/4/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/4/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/4/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 0 working hours on 10/3/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/3/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/3/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 7 working hours on 10/2/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/2/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  7 on 10/2/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 7 working hours on 10/1/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/1/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 	****5 OP-StartTime  37008   --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDBSOLR2 for 10/1/2026 and a start hour of 10.28  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDBSOLR2 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDBSOLR2 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026 Move Date 10/5/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDBSOLR2 is 10/1/2026 at 37008 (10.28) ending on 10/5/2026 at 7.08 for 10.8 hours. Move Date 10/5/2026 Move Hour 13.92. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 10/5/2026 10/5/2026 found 50112 25488 For resource SMDBSOLR2  --- processResGrp
+12:10:30                 		**Scheduling Resource: SMDBSOLR3 for 10/5/2026 for a time of 13.92 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDBSOLR3 for 10.80000 hours  --- processResourceID
+12:10:30                 		Making production calendar for Resource SMDBSOLR3 from production calendar CG. --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDBSOLR3. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDBSOLR3 for 10.80000 hours on 10/5/2026 with a EndTime of 13.92 IP-ProcTime 13.92. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDBSOLR3 FiniteHorizonDate 2/6/2026 ScheduleDate 10/5/2026 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date IP-ProcTime = 50112 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR3 starting at time: 10/5/2026 13.92   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR3 for : ScheduleDate 10/5/2026 FirstProdHour 8 LastProdHour 13.92   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 6 Setting Move Due Time. MoveDueDate: 10/5/2026 MoveDueHour: 13.92 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 10/5/2026 MoveStartHour: 7.08  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDBSOLR3 before  10/5/2026 and a start hour of 13.92  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 10.80 Hours Ending on 10/5/2026 and an end hour of 7.08 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 7 working hours on 10/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/5/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/5/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 0 working hours on 10/4/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/4/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/4/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 0 working hours on 10/3/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/3/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/3/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 7 working hours on 10/2/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/2/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  7 on 10/2/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 7 working hours on 10/1/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/1/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 	****5 OP-StartTime  37008   --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDBSOLR3 for 10/1/2026 and a start hour of 10.28  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDBSOLR3 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDBSOLR3 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026 Move Date 10/5/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDBSOLR3 is 10/1/2026 at 37008 (10.28) ending on 10/5/2026 at 7.08 for 10.8 hours. Move Date 10/5/2026 Move Hour 13.92. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 10/5/2026 10/5/2026 found 50112 25488 For resource SMDBSOLR3  --- processResGrp
+12:10:30                 		Found time for SMDBSOLR1 on 10/1/2026 37008 ending 10/5/2026 25488 Priority 11 with Forward = _Forward. --- _SetPriority
+12:10:30                 	**Chose Resource - SMDBSOLR1 Time: SDt 10/1/2026, STime 10.28, End Dt 10/5/2026, End Time 7.08 Move Dt 10/5/2026 Move Hr 13.92 . --- OpDtlBkProduction
+12:10:30                 			Changing move time for Resource - SMDBSOLR1 from: 0 to  6.00. --- OpDtlBkProduction
+12:10:30                 Reschedule due to Move Time change --- operationBackward
+12:10:30                 Resetting allocationblock!! --- operationBackward
+12:10:30                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:30                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 		Backward Scheduling - Job U0000000008088 Asm 0 Opr 20 OpDtl 10 AllocationBlock - 1 For: Enddate - 10/5/2026 EndHour - 13.92 Endtime 1 Setup/Prod/Both B. tmpendtime 639325.92. --- OpDtlBkProduction
+12:10:30                 		**Scheduling Resource: SMDBSOLR1 for 10/5/2026 for a time of 13.92 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDBSOLR1 for 10.80000 hours  --- processResourceID
+12:10:30                 				Resource SMDBSOLR1 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making production calendar for Resource SMDBSOLR1 from production calendar CG. --- MakeConResCal
+12:10:30                 				Resource SMDBSOLR1 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDBSOLR1. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDBSOLR1 for 10.80000 hours on 10/5/2026 with a EndTime of 13.92 IP-ProcTime 13.92. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDBSOLR1 FiniteHorizonDate 2/6/2026 ScheduleDate 10/5/2026 --- GetBackwardDateTime
+12:10:30                 				Resource SMDBSOLR1 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 10/5/2026 as a valid working date IP-ProcTime = 50112 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR1 starting at time: 10/5/2026 13.92   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR1 for : ScheduleDate 10/5/2026 FirstProdHour 8 LastProdHour 13.92   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 6 Setting Move Due Time. MoveDueDate: 10/5/2026 MoveDueHour: 13.92 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 10/5/2026 MoveStartHour: 7.08  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDBSOLR1 before  10/5/2026 and a start hour of 13.92  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 10.80 Hours Ending on 10/5/2026 and an end hour of 7.08 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 7 working hours on 10/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/5/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/5/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 0 working hours on 10/4/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/4/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/4/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 0 working hours on 10/3/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/3/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/3/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 7 working hours on 10/2/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/2/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  7 on 10/2/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR1 has 7 working hours on 10/1/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/1/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 	****5 OP-StartTime  37008   --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDBSOLR1 for 10/1/2026 and a start hour of 10.28  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDBSOLR1 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDBSOLR1 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026 Move Date 10/5/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDBSOLR1 is 10/1/2026 at 37008 (10.28) ending on 10/5/2026 at 7.08 for 10.8 hours. Move Date 10/5/2026 Move Hour 13.92. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 10/5/2026 10/5/2026 found 50112 25488 For resource SMDBSOLR1  --- processResGrp
+12:10:30                 		**Scheduling Resource: SMDBSOLR2 for 10/5/2026 for a time of 13.92 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDBSOLR2 for 10.80000 hours  --- processResourceID
+12:10:30                 				Resource SMDBSOLR2 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making production calendar for Resource SMDBSOLR2 from production calendar CG. --- MakeConResCal
+12:10:30                 				Resource SMDBSOLR2 is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDBSOLR2. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDBSOLR2 for 10.80000 hours on 10/5/2026 with a EndTime of 13.92 IP-ProcTime 13.92. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDBSOLR2 FiniteHorizonDate 2/6/2026 ScheduleDate 10/5/2026 --- GetBackwardDateTime
+12:10:30                 				Resource SMDBSOLR2 is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 10/5/2026 as a valid working date IP-ProcTime = 50112 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR2 starting at time: 10/5/2026 13.92   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR2 for : ScheduleDate 10/5/2026 FirstProdHour 8 LastProdHour 13.92   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 6 Setting Move Due Time. MoveDueDate: 10/5/2026 MoveDueHour: 13.92 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 10/5/2026 MoveStartHour: 7.08  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDBSOLR2 before  10/5/2026 and a start hour of 13.92  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 10.80 Hours Ending on 10/5/2026 and an end hour of 7.08 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 7 working hours on 10/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/5/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/5/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 0 working hours on 10/4/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/4/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/4/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 0 working hours on 10/3/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/3/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/3/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 7 working hours on 10/2/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/2/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  7 on 10/2/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR2 has 7 working hours on 10/1/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/1/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 	****5 OP-StartTime  37008   --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDBSOLR2 for 10/1/2026 and a start hour of 10.28  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDBSOLR2 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDBSOLR2 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026 Move Date 10/5/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDBSOLR2 is 10/1/2026 at 37008 (10.28) ending on 10/5/2026 at 7.08 for 10.8 hours. Move Date 10/5/2026 Move Hour 13.92. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 10/5/2026 10/5/2026 found 50112 25488 For resource SMDBSOLR2  --- processResGrp
+12:10:30                 		**Scheduling Resource: SMDBSOLR3 for 10/5/2026 for a time of 13.92 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDBSOLR3 for 10.80000 hours  --- processResourceID
+12:10:30                 		Making production calendar for Resource SMDBSOLR3 from production calendar CG. --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDBSOLR3. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDBSOLR3 for 10.80000 hours on 10/5/2026 with a EndTime of 13.92 IP-ProcTime 13.92. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDBSOLR3 FiniteHorizonDate 2/6/2026 ScheduleDate 10/5/2026 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date IP-ProcTime = 50112 --- GetBackwardDateTime
+12:10:30                 		Found 10/5/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR3 starting at time: 10/5/2026 13.92   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDBSOLR3 for : ScheduleDate 10/5/2026 FirstProdHour 8 LastProdHour 13.92   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 6 Setting Move Due Time. MoveDueDate: 10/5/2026 MoveDueHour: 13.92 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 10/5/2026 MoveStartHour: 7.08  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDBSOLR3 before  10/5/2026 and a start hour of 13.92  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 10.80 Hours Ending on 10/5/2026 and an end hour of 7.08 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 7 working hours on 10/5/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/5/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/5/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 0 working hours on 10/4/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/4/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/4/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 0 working hours on 10/3/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/3/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 10/3/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 7 working hours on 10/2/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/2/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  7 on 10/2/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDBSOLR3 has 7 working hours on 10/1/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 12 Hours Ending on 10/1/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 	****5 OP-StartTime  37008   --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDBSOLR3 for 10/1/2026 and a start hour of 10.28  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDBSOLR3 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDBSOLR3 for job U0000000008088 Operation 20 Priority 100 StartDate 10/1/2026 EndDate 10/5/2026 Move Date 10/5/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDBSOLR3 is 10/1/2026 at 37008 (10.28) ending on 10/5/2026 at 7.08 for 10.8 hours. Move Date 10/5/2026 Move Hour 13.92. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 10/5/2026 10/5/2026 found 50112 25488 For resource SMDBSOLR3  --- processResGrp
+12:10:30                 		Found time for SMDBSOLR1 on 10/1/2026 37008 ending 10/5/2026 25488 Priority 11 with Forward = _Forward. --- _SetPriority
+12:10:30                 	**Chose Resource - SMDBSOLR1 Time: SDt 10/1/2026, STime 10.28, End Dt 10/5/2026, End Time 7.08 Move Dt 10/5/2026 Move Hr 13.92 . --- OpDtlBkProduction
+12:10:30                 	****Created RTU for job U0000000008088 Operation 20 with start date of 10/1/2026 and enddate of 10/5/2026 --- createTTResourceTimeUsed
+12:10:30                 				Consolidating calendar with resource SMDBSOLR1  --- OpDtlBkProduction
+12:10:30                 				Consolidated Operation Calendar with Resource Calendar: SMDBSOLR1 --- Consolcals
+12:10:30                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:30                 ttopmasOrig True x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:30                 				Consolidated Operation Calendar with Resource Calendar: SMDBSOLR1 --- Consolcals
+12:10:30                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:30                 ttopmasOrig False x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:30                 		Checking if we should keep processing l_DateChanged False of Job: False l-OpMastSchedChange True l-TimeblockChange False iBeatCounter 1 --- operationBackward
+12:10:30                 Keep processing  False --- operationBackward
+12:10:30                 Scheduled Operation 20 - Queue Time: Dt 10/1/2026 Hr 10.28 Start Time: Dt 10/1/2026 Hr 10.28 End Time: Dt10/5/2026 Hr 7.08 Move Time: Dt 10/5/2026 H: 13.92 --- doMainProc
+12:10:30                 Scheduling job U0000000008088 Assembly 0 Operation 16: SMD-AOI --- doMainProc
+12:10:30                 	**Looking for Job U0000000008088 Assem: 0 Operation: 16 has not been scheduled --- scheduleOperation
+12:10:30                 	Scheduling Block - Alloc: 1 Prod: 0.54000 Split 0.54000 Ops: 54 SDt: 10/1/2026 SHr: 10.28 EDt: 10/1/2026 EHr: 10.28 Setup Time 0. --- CreateAllocationBlock
+12:10:30                 Scheduling Job U0000000008088 Assem: 0 Operation: 16 il_OprBackward True --- scheduleOperation
+12:10:30                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:30                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 		Backward Scheduling - Job U0000000008088 Asm 0 Opr 16 OpDtl 10 AllocationBlock - 1 For: Enddate - 10/1/2026 EndHour - 10.28 Endtime 1 Setup/Prod/Both B. tmpendtime 639226.28. --- OpDtlBkProduction
+12:10:30                 		**Scheduling Resource: SMD-AOI for 10/1/2026 for a time of 10.28 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMD-AOI for 0.54000 hours  --- processResourceID
+12:10:30                 				Resource SMD-AOI is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making production calendar for Resource SMD-AOI from production calendar CG. --- MakeConResCal
+12:10:30                 				Resource SMD-AOI is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMD-AOI. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMD-AOI for 0.54000 hours on 10/1/2026 with a EndTime of 10.28 IP-ProcTime 10.28. --- processResourceID
+12:10:30                 		Infinitely scheduling SMD-AOI FiniteHorizonDate 2/6/2026 ScheduleDate 10/1/2026 --- GetBackwardDateTime
+12:10:30                 				Resource SMD-AOI is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 10/1/2026 as a valid working date IP-ProcTime = 37008 --- GetBackwardDateTime
+12:10:30                 		Found 10/1/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMD-AOI starting at time: 10/1/2026 10.28   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMD-AOI for : ScheduleDate 10/1/2026 FirstProdHour 8 LastProdHour 10.28   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 4 Setting Move Due Time. MoveDueDate: 10/1/2026 MoveDueHour: 10.28 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 9/30/2026 MoveStartHour: 13.72  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMD-AOI before  9/30/2026 and a start hour of 10.28  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 0.54 Hours Ending on 9/30/2026 and an end hour of 13.72 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMD-AOI has 7 working hours on 9/30/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 1 Hours Ending on 9/30/2026 and an end hour of 14 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMD-AOI for 9/30/2026 and a start hour of 13.18  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMD-AOI for job U0000000008088 Operation 16 Priority 100 StartDate 9/30/2026 EndDate 9/30/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMD-AOI for job U0000000008088 Operation 16 Priority 100 StartDate 9/30/2026 EndDate 9/30/2026 Move Date 10/1/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMD-AOI is 9/30/2026 at 47448 (13.18) ending on 9/30/2026 at 13.72 for 0.54 hours. Move Date 10/1/2026 Move Hour 10.28. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 9/30/2026 10/1/2026 found 37008 49392 For resource SMD-AOI  --- processResGrp
+12:10:30                 		Found time for SMD-AOI on 9/30/2026 47448 ending 9/30/2026 49392 Priority 1011 with Forward = _Forward. --- _SetPriority
+12:10:30                 	**Chose Resource - SMD-AOI Time: SDt 9/30/2026, STime 13.18, End Dt 9/30/2026, End Time 13.72 Move Dt 10/1/2026 Move Hr 10.28 . --- OpDtlBkProduction
+12:10:30                 			Changing move time for Resource - SMD-AOI from: 0 to  4.00. --- OpDtlBkProduction
+12:10:30                 Reschedule due to Move Time change --- operationBackward
+12:10:30                 Resetting allocationblock!! --- operationBackward
+12:10:30                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:30                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 		Backward Scheduling - Job U0000000008088 Asm 0 Opr 16 OpDtl 10 AllocationBlock - 1 For: Enddate - 10/1/2026 EndHour - 10.28 Endtime 1 Setup/Prod/Both B. tmpendtime 639226.28. --- OpDtlBkProduction
+12:10:30                 		**Scheduling Resource: SMD-AOI for 10/1/2026 for a time of 10.28 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMD-AOI for 0.54000 hours  --- processResourceID
+12:10:30                 				Resource SMD-AOI is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making production calendar for Resource SMD-AOI from production calendar CG. --- MakeConResCal
+12:10:30                 				Resource SMD-AOI is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMD-AOI. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMD-AOI for 0.54000 hours on 10/1/2026 with a EndTime of 10.28 IP-ProcTime 10.28. --- processResourceID
+12:10:30                 		Infinitely scheduling SMD-AOI FiniteHorizonDate 2/6/2026 ScheduleDate 10/1/2026 --- GetBackwardDateTime
+12:10:30                 				Resource SMD-AOI is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 10/1/2026 as a valid working date IP-ProcTime = 37008 --- GetBackwardDateTime
+12:10:30                 		Found 10/1/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMD-AOI starting at time: 10/1/2026 10.28   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMD-AOI for : ScheduleDate 10/1/2026 FirstProdHour 8 LastProdHour 10.28   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 4 Setting Move Due Time. MoveDueDate: 10/1/2026 MoveDueHour: 10.28 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 9/30/2026 MoveStartHour: 13.72  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMD-AOI before  9/30/2026 and a start hour of 10.28  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 0.54 Hours Ending on 9/30/2026 and an end hour of 13.72 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMD-AOI has 7 working hours on 9/30/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 1 Hours Ending on 9/30/2026 and an end hour of 14 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMD-AOI for 9/30/2026 and a start hour of 13.18  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMD-AOI for job U0000000008088 Operation 16 Priority 100 StartDate 9/30/2026 EndDate 9/30/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMD-AOI for job U0000000008088 Operation 16 Priority 100 StartDate 9/30/2026 EndDate 9/30/2026 Move Date 10/1/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMD-AOI is 9/30/2026 at 47448 (13.18) ending on 9/30/2026 at 13.72 for 0.54 hours. Move Date 10/1/2026 Move Hour 10.28. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 9/30/2026 10/1/2026 found 37008 49392 For resource SMD-AOI  --- processResGrp
+12:10:30                 		Found time for SMD-AOI on 9/30/2026 47448 ending 9/30/2026 49392 Priority 1011 with Forward = _Forward. --- _SetPriority
+12:10:30                 	**Chose Resource - SMD-AOI Time: SDt 9/30/2026, STime 13.18, End Dt 9/30/2026, End Time 13.72 Move Dt 10/1/2026 Move Hr 10.28 . --- OpDtlBkProduction
+12:10:30                 	****Created RTU for job U0000000008088 Operation 16 with start date of 9/30/2026 and enddate of 9/30/2026 --- createTTResourceTimeUsed
+12:10:30                 				Consolidating calendar with resource SMD-AOI  --- OpDtlBkProduction
+12:10:30                 				Consolidated Operation Calendar with Resource Calendar: SMD-AOI --- Consolcals
+12:10:30                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:30                 ttopmasOrig True x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:30                 				Consolidated Operation Calendar with Resource Calendar: SMD-AOI --- Consolcals
+12:10:30                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:30                 ttopmasOrig False x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:30                 		Checking if we should keep processing l_DateChanged False of Job: False l-OpMastSchedChange True l-TimeblockChange False iBeatCounter 1 --- operationBackward
+12:10:30                 Keep processing  False --- operationBackward
+12:10:30                 Scheduled Operation 16 - Queue Time: Dt 9/30/2026 Hr 13.18 Start Time: Dt 9/30/2026 Hr 13.18 End Time: Dt9/30/2026 Hr 13.72 Move Time: Dt 10/1/2026 H: 10.28 --- doMainProc
+12:10:30                 Scheduling job U0000000008088 Assembly 0 Operation 15: WAS-BWAS --- doMainProc
+12:10:30                 	**Looking for Job U0000000008088 Assem: 0 Operation: 15 has not been scheduled --- scheduleOperation
+12:10:30                 	Scheduling Block - Alloc: 1 Prod: 0.09 Split 0.09 Ops: 54 SDt: 9/30/2026 SHr: 13.18 EDt: 9/30/2026 EHr: 13.18 Setup Time 0. --- CreateAllocationBlock
+12:10:30                 Scheduling Job U0000000008088 Assem: 0 Operation: 15 il_OprBackward True --- scheduleOperation
+12:10:30                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:30                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 		Backward Scheduling - Job U0000000008088 Asm 0 Opr 15 OpDtl 10 AllocationBlock - 1 For: Enddate - 9/30/2026 EndHour - 13.18 Endtime 1 Setup/Prod/Both B. tmpendtime 639205.18. --- OpDtlBkProduction
+12:10:30                 		**Scheduling Resource: BSOL-WAS for 9/30/2026 for a time of 13.18 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource BSOL-WAS for 0.09 hours  --- processResourceID
+12:10:30                 		Making production calendar for Resource BSOL-WAS from production calendar CG. --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: BSOL-WAS. --- MakeConResCal
+12:10:30                 		Backward Scheduling  BSOL-WAS for 0.09 hours on 9/30/2026 with a EndTime of 13.18 IP-ProcTime 13.18. --- processResourceID
+12:10:30                 		Infinitely scheduling BSOL-WAS FiniteHorizonDate 2/6/2026 ScheduleDate 9/30/2026 --- GetBackwardDateTime
+12:10:30                 		Found 9/30/2026 as a valid working date IP-ProcTime = 47448 --- GetBackwardDateTime
+12:10:30                 		Found 9/30/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource BSOL-WAS starting at time: 9/30/2026 13.18   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource BSOL-WAS for : ScheduleDate 9/30/2026 FirstProdHour 8 LastProdHour 13.18   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 0 Setting Move Due Time. MoveDueDate: 9/30/2026 MoveDueHour: 13.18 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 9/30/2026 MoveStartHour: 13.18  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource BSOL-WAS before  9/30/2026 and a start hour of 13.18  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 0.09 Hours Ending on 9/30/2026 and an end hour of 13.18 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource BSOL-WAS has 7 working hours on 9/30/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 1 Hours Ending on 9/30/2026 and an end hour of 14 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource BSOL-WAS for 9/30/2026 and a start hour of 13.09  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource BSOL-WAS for job U0000000008088 Operation 15 Priority 100 StartDate 9/30/2026 EndDate 9/30/2026. --- processResourceID
+12:10:30                 	 Setting Queue start time according to production calendar. QueueStartDate: 9/29/2026 QueueStartHour: 13.91  --- _addQueueAndMoveTimesToAvailableResource
+12:10:30                 		***Done Scheduling Resource BSOL-WAS for job U0000000008088 Operation 15 Priority 100 StartDate 9/30/2026 EndDate 9/30/2026 Move Date 9/30/2026. --- processResourceID
+12:10:30                 	*First available time for Resource BSOL-WAS is 9/30/2026 at 47124 (13.09) ending on 9/30/2026 at 13.18 for 0.09 hours. Move Date 9/30/2026 Move Hour 13.18. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 9/30/2026 9/30/2026 found 47448 47448 For resource BSOL-WAS  --- processResGrp
+12:10:30                 		Found time for BSOL-WAS on 9/30/2026 47124 ending 9/30/2026 47448 Priority 1011 with Forward = _Forward. --- _SetPriority
+12:10:30                 	**Chose Resource - BSOL-WAS Time: SDt 9/30/2026, STime 13.09, End Dt 9/30/2026, End Time 13.18 Move Dt 9/30/2026 Move Hr 13.18 . --- OpDtlBkProduction
+12:10:30                 	****Created RTU for job U0000000008088 Operation 15 with start date of 9/30/2026 and enddate of 9/30/2026 --- createTTResourceTimeUsed
+12:10:30                 				Consolidating calendar with resource BSOL-WAS  --- OpDtlBkProduction
+12:10:30                 				Consolidated Operation Calendar with Resource Calendar: BSOL-WAS --- Consolcals
+12:10:30                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:30                 ttopmasOrig True x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:30                 				Consolidated Operation Calendar with Resource Calendar: BSOL-WAS --- Consolcals
+12:10:30                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:30                 ttopmasOrig False x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:30                 		Checking if we should keep processing l_DateChanged False of Job: False l-OpMastSchedChange True l-TimeblockChange False iBeatCounter 1 --- operationBackward
+12:10:30                 Keep processing  False --- operationBackward
+12:10:30                 Scheduled Operation 15 - Queue Time: Dt 9/29/2026 Hr 13.91 Start Time: Dt 9/30/2026 Hr 13.09 End Time: Dt9/30/2026 Hr 13.18 Move Time: Dt 9/30/2026 H: 13.18 --- doMainProc
+12:10:30                 Scheduling job U0000000008088 Assembly 0 Operation 10: SMD-SMT --- doMainProc
+12:10:30                 	**Looking for Job U0000000008088 Assem: 0 Operation: 10 has not been scheduled --- scheduleOperation
+12:10:30                 	Scheduling Block - Alloc: 1 Prod: 2.16000 Split 2.16000 Ops: 54 SDt: 9/29/2026 SHr: 13.91 EDt: 9/29/2026 EHr: 13.91 Setup Time 0.50. --- CreateAllocationBlock
+12:10:30                 Scheduling Job U0000000008088 Assem: 0 Operation: 10 il_OprBackward True --- scheduleOperation
+12:10:30                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:30                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 		Backward Scheduling - Job U0000000008088 Asm 0 Opr 10 OpDtl 10 AllocationBlock - 1 For: Enddate - 9/29/2026 EndHour - 13.91 Endtime 1 Setup/Prod/Both B. tmpendtime 639181.91. --- OpDtlBkProduction
+12:10:30                 		**Scheduling Resource: SMDSMD for 9/29/2026 for a time of 13.91 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDSMD for 2.66000 hours  --- processResourceID
+12:10:30                 				Resource SMDSMD is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making production calendar for Resource SMDSMD from production calendar CG. --- MakeConResCal
+12:10:30                 				Resource SMDSMD is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDSMD. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDSMD for 2.66000 hours on 9/29/2026 with a EndTime of 13.91 IP-ProcTime 13.91. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDSMD FiniteHorizonDate 2/6/2026 ScheduleDate 9/29/2026 --- GetBackwardDateTime
+12:10:30                 				Resource SMDSMD is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 9/29/2026 as a valid working date IP-ProcTime = 50076 --- GetBackwardDateTime
+12:10:30                 		Found 9/29/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDSMD starting at time: 9/29/2026 13.91   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDSMD for : ScheduleDate 9/29/2026 FirstProdHour 8 LastProdHour 13.91   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 6 Setting Move Due Time. MoveDueDate: 9/29/2026 MoveDueHour: 13.91 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 9/29/2026 MoveStartHour: 7.09  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDSMD before  9/29/2026 and a start hour of 13.91  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 2.66 Hours Ending on 9/29/2026 and an end hour of 7.09 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDSMD has 7 working hours on 9/29/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 4 Hours Ending on 9/29/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 9/29/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDSMD has 7 working hours on 9/28/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 4 Hours Ending on 9/28/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDSMD has 7 working hours on 9/28/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 4 Hours Ending on 9/28/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 	****5 OP-StartTime  41148   --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDSMD for 9/28/2026 and a start hour of 11.43  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDSMD for job U0000000008088 Operation 10 Priority 100 StartDate 9/28/2026 EndDate 9/29/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDSMD for job U0000000008088 Operation 10 Priority 100 StartDate 9/28/2026 EndDate 9/29/2026 Move Date 9/29/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDSMD is 9/28/2026 at 41148 (11.43) ending on 9/29/2026 at 7.09 for 2.66 hours. Move Date 9/29/2026 Move Hour 13.91. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 9/29/2026 9/29/2026 found 50076 25524 For resource SMDSMD  --- processResGrp
+12:10:30                 		Found time for SMDSMD on 9/28/2026 41148 ending 9/29/2026 25524 Priority 1011 with Forward = _Forward. --- _SetPriority
+12:10:30                 	**Chose Resource - SMDSMD Time: SDt 9/28/2026, STime 11.43, End Dt 9/29/2026, End Time 7.09 Move Dt 9/29/2026 Move Hr 13.91 . --- OpDtlBkProduction
+12:10:30                 			Changing move time for Resource - SMDSMD from: 0 to  6.00. --- OpDtlBkProduction
+12:10:30                 Reschedule due to Move Time change --- operationBackward
+12:10:30                 Resetting allocationblock!! --- operationBackward
+12:10:30                 Creating new Block calendar for Allocation Block: 1 --- operationBackward
+12:10:30                 Prod  Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 Setup Master x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- MakeOperCal
+12:10:30                 		Backward Scheduling - Job U0000000008088 Asm 0 Opr 10 OpDtl 10 AllocationBlock - 1 For: Enddate - 9/29/2026 EndHour - 13.91 Endtime 1 Setup/Prod/Both B. tmpendtime 639181.91. --- OpDtlBkProduction
+12:10:30                 		**Scheduling Resource: SMDSMD for 9/29/2026 for a time of 13.91 Forward = False. --- processResGrp
+12:10:30                 		***Scheduling resource SMDSMD for 2.66000 hours  --- processResourceID
+12:10:30                 				Resource SMDSMD is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making production calendar for Resource SMDSMD from production calendar CG. --- MakeConResCal
+12:10:30                 				Resource SMDSMD is using production calendar CG from Resource Group . --- MakeConResCal
+12:10:30                 		Making setup calendar CG for Resource: SMDSMD. --- MakeConResCal
+12:10:30                 		Backward Scheduling  SMDSMD for 2.66000 hours on 9/29/2026 with a EndTime of 13.91 IP-ProcTime 13.91. --- processResourceID
+12:10:30                 		Infinitely scheduling SMDSMD FiniteHorizonDate 2/6/2026 ScheduleDate 9/29/2026 --- GetBackwardDateTime
+12:10:30                 				Resource SMDSMD is using production calendar CG from Resource Group . --- checkRsrcCal
+12:10:30                 		Found 9/29/2026 as a valid working date IP-ProcTime = 50076 --- GetBackwardDateTime
+12:10:30                 		Found 9/29/2026 as a valid working date --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDSMD starting at time: 9/29/2026 13.91   (getBackwardDateTime)   --- GetBackwardDateTime
+12:10:30                 		Scheduling resource SMDSMD for : ScheduleDate 9/29/2026 FirstProdHour 8 LastProdHour 13.91   (getBackwardDateTime)  --- GetBackwardDateTime
+12:10:30                 	 UsingCalendarForMove of 6 Setting Move Due Time. MoveDueDate: 9/29/2026 MoveDueHour: 13.91 --- GetBackwardDateTime
+12:10:30                 	 Setting Move start time according to production calendar. MoveStartDate: 9/29/2026 MoveStartHour: 7.09  --- GetBackwardDateTime
+12:10:30                 		Looking for  previous scheduled time on resource SMDSMD before  9/29/2026 and a start hour of 13.91  --- GetBackwardDateTime
+12:10:30                 		Looking to Schedule 2.66 Hours Ending on 9/29/2026 and an end hour of 7.09 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDSMD has 7 working hours on 9/29/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 4 Hours Ending on 9/29/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Total hours Found  0 on 9/29/2026  (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDSMD has 7 working hours on 9/28/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 4 Hours Ending on 9/28/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 		 Found that resource SMDSMD has 7 working hours on 9/28/2026.  --- GetPrevTotalAvailProdTime
+12:10:30                 		Looking to Schedule 4 Hours Ending on 9/28/2026 and an end hour of 8 (getPrevTotalAvailProdTime)  --- GetPrevTotalAvailProdTime
+12:10:30                 	****5 OP-StartTime  41148   --- GetPrevTotalAvailProdTime
+12:10:30                 		Scheduled start time for resource SMDSMD for 9/28/2026 and a start hour of 11.43  --- GetBackwardDateTime
+12:10:30                 		Scheduling Resource SMDSMD for job U0000000008088 Operation 10 Priority 100 StartDate 9/28/2026 EndDate 9/29/2026. --- processResourceID
+12:10:30                 		***Done Scheduling Resource SMDSMD for job U0000000008088 Operation 10 Priority 100 StartDate 9/28/2026 EndDate 9/29/2026 Move Date 9/29/2026. --- processResourceID
+12:10:30                 	*First available time for Resource SMDSMD is 9/28/2026 at 41148 (11.43) ending on 9/29/2026 at 7.09 for 2.66 hours. Move Date 9/29/2026 Move Hour 13.91. --- processResourceID
+12:10:30                 Checking time to see is we need to leave : 9/29/2026 9/29/2026 found 50076 25524 For resource SMDSMD  --- processResGrp
+12:10:30                 		Found time for SMDSMD on 9/28/2026 41148 ending 9/29/2026 25524 Priority 1011 with Forward = _Forward. --- _SetPriority
+12:10:30                 	**Chose Resource - SMDSMD Time: SDt 9/28/2026, STime 11.43, End Dt 9/29/2026, End Time 7.09 Move Dt 9/29/2026 Move Hr 13.91 . --- OpDtlBkProduction
+12:10:30                 	****Created RTU for job U0000000008088 Operation 10 with start date of 9/28/2026 and enddate of 9/29/2026 --- createTTResourceTimeUsed
+12:10:30                 				Consolidating calendar with resource SMDSMD  --- OpDtlBkProduction
+12:10:30                 				Consolidated Operation Calendar with Resource Calendar: SMDSMD --- Consolcals
+12:10:30                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:30                 ttopmasOrig True x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:30                 				Consolidated Operation Calendar with Resource Calendar: SMDSMD --- Consolcals
+12:10:30                 ttopmastcal  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - -x-x-x-x-x-x-x- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - --- Consolcals
+12:10:30                 ttopmasOrig False x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x- --- Consolcals
+12:10:30                 		Checking if we should keep processing l_DateChanged False of Job: False l-OpMastSchedChange True l-TimeblockChange False iBeatCounter 1 --- operationBackward
+12:10:30                 Keep processing  False --- operationBackward
+12:10:30                 Scheduled Operation 10 - Queue Time: Dt 9/28/2026 Hr 11.43 Start Time: Dt 9/28/2026 Hr 11.43 End Time: Dt9/29/2026 Hr 7.09 Move Time: Dt 9/29/2026 H: 13.91 --- doMainProc
+12:10:30                 Committing Job -  U0000000008088. --- MoveJobItem
+12:10:30                 Overload Horizon Days .. 180  --- CommitJob
+12:10:30                 Global Finite horz .. 60  --- CommitJob
+12:10:30                 Rough cut scheduling U0000000008088 False. Job start date 9/28/2026 Rough cut date 8/5/2026. --- CommitJob
+12:10:30                 Create RTU for Job U0000000008088 Asmbl 0 Sequence 30 OpDtl 10 Whatif True. Resource SMDBSOLR1 Start date: 10/5/2026, Start time: 50112, End Date: 10/5/2026, End time: 54000 --- CommitJob
+12:10:30                 about apply whatif load :  False  --- CommitJob
+12:10:30                 Rough cut scheduling U0000000008088 False. Job start date 9/28/2026 Rough cut date 8/5/2026. --- CommitJob
+12:10:30                 Create RTU for Job U0000000008088 Asmbl 0 Sequence 20 OpDtl 10 Whatif True. Resource SMDBSOLR1 Start date: 10/1/2026, Start time: 37008, End Date: 10/5/2026, End time: 25488 --- CommitJob
+12:10:30                 about apply whatif load :  False  --- CommitJob
+12:10:30                 Rough cut scheduling U0000000008088 False. Job start date 9/28/2026 Rough cut date 8/5/2026. --- CommitJob
+12:10:30                 Create RTU for Job U0000000008088 Asmbl 0 Sequence 16 OpDtl 10 Whatif True. Resource SMD-AOI Start date: 9/30/2026, Start time: 47448, End Date: 9/30/2026, End time: 49392 --- CommitJob
+12:10:30                 about apply whatif load :  False  --- CommitJob
+12:10:30                 Rough cut scheduling U0000000008088 False. Job start date 9/28/2026 Rough cut date 8/5/2026. --- CommitJob
+12:10:30                 Create RTU for Job U0000000008088 Asmbl 0 Sequence 15 OpDtl 10 Whatif True. Resource BSOL-WAS Start date: 9/30/2026, Start time: 47124, End Date: 9/30/2026, End time: 47448 --- CommitJob
+12:10:30                 about apply whatif load :  False  --- CommitJob
+12:10:30                 Rough cut scheduling U0000000008088 False. Job start date 9/28/2026 Rough cut date 8/5/2026. --- CommitJob
+12:10:30                 Create RTU for Job U0000000008088 Asmbl 0 Sequence 10 OpDtl 10 Whatif True. Resource SMDSMD Start date: 9/28/2026, Start time: 41148, End Date: 9/29/2026, End time: 25524 --- CommitJob
+12:10:30                 about apply whatif load :  False  --- CommitJob
+12:10:30                 About to update Job Head --- CommitJob
+12:10:30                 About to update Assemblies --- CommitJob
+12:10:30                 About to update Operations --- CommitJob
+12:10:30                 About to update Operations details --- CommitJob
+12:10:30                 Finished Committing Job -  U0000000008088. --- MoveJobItem
+12:10:30                 Receive Time of 3 days added to Due Date calculation for Job U0000000008088. --- MoveJobItem
+12:10:30                 Committ Completed for Job U0000000008088  --- MoveJobItem
+12:10:30                 Writing Job -  U0000000008088. --- MoveJobItem
+12:10:30                 Overload Horizon Days .. 180  --- WriteJob
+12:10:30                 About to clean up the WI RTU --- MoveJobItem
+12:10:30                 No ShopLoad records are being created, this is a Rough Cut scheduled job. --- WriteJob
+12:10:30                 Subassembly 0 (ELA-02274). Req = 54.00000000. Pull =0.00000000 --- WriteJob
+12:10:30                 AVAIL bJobOper.WIStartDate 9/28/2026 BJobOper.AssemblySeq 0 bJobOper.OprSeq 10 procOper False  --- WriteJob
+12:10:30                 AVAIL bJobOper.WIStartDate 9/30/2026 BJobOper.AssemblySeq 0 bJobOper.OprSeq 15 procOper False  --- WriteJob
+12:10:30                 AVAIL bJobOper.WIStartDate 9/30/2026 BJobOper.AssemblySeq 0 bJobOper.OprSeq 16 procOper False  --- WriteJob
+12:10:30                 AVAIL bJobOper.WIStartDate 10/1/2026 BJobOper.AssemblySeq 0 bJobOper.OprSeq 20 procOper False  --- WriteJob
+12:10:30                 AVAIL bJobOper.WIStartDate 10/5/2026 BJobOper.AssemblySeq 0 bJobOper.OprSeq 30 procOper False  --- WriteJob
+12:10:30                 Update plannedkitdate and Plannedactiondate --- WriteJob
+12:10:30                 Finished writing Job -  U0000000008088. --- MoveJobItem
+12:10:30                 Scheduling Completed for Job U0000000008088  --- MoveJobItem

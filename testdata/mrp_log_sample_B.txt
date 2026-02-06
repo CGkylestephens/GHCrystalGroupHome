@@ -1,0 +1,8 @@
+# Example: 2024-02-02 MRP Net Change Run
+Start Time: 2024-02-02 01:58 UTC
+Site: PLANT01
+...
+Job 14567 not present
+Part: ABC123 reappears with new demand
+...
+End Time: 2024-02-02 03:05 UTC

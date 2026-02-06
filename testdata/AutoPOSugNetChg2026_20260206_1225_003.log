@@ -1,0 +1,3153 @@
+                Friday, February 6, 2026 12:25:06
+12:25:06 MRP Net Change process 3 begin - Ver 07-28-2020 Run Date 2/6/2026 12:00:00 AM
+12:25:06 ------------------------------------------------------------
+12:25:06 Cut Off Date                      -> 2/28/2027 12:00:00 AM
+12:25:06 Schedule Start Date               -> 2/6/2026 12:00:00 AM
+12:25:06 Run Finite Scheduling             -> True
+12:25:06 Ignore Constrained Materials      -> False
+12:25:06 Allow Historical Dates            -> True
+12:25:06 Use Production Preparation Buffer -> True
+12:25:06 Sort Level 0 MRP Jobs by Date     -> False
+12:25:06 Recycle MRP Jobs                  -> False
+12:25:06 Site List                         -> MfgSys
+12:25:06 ------------------------------------------------------------
+12:25:06 Process Control Queue
+12:25:06   Group -> Delete; Queue -> DeleteAllPO; Type -> Default; Finite -> False
+12:25:06     Check List -> DeleteAllPO; Last Group -> False
+12:25:06   Group -> NonPart; Queue -> Part; Type -> Part; Finite -> False
+12:25:06     Check List -> Part; Last Group -> False
+12:25:06   Group -> Part; Queue -> Part; Type -> Part; Finite -> False
+12:25:06     Check List -> Part; Last Group -> True
+12:25:06 ------------------------------------------------------------
+12:25:06 Starting Non-Part Parts
+12:25:06 Start Processing Part:., Attribute Set:'',  LLC:-1--1
+12:25:06 Processing Part:., Attribute Set:''
+12:25:06 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 0; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:06 Deleting Suggestions
+12:25:06 Processing non-stock transactions for Part:., Attribute Set:''
+12:25:06 Creating new PO suggestion for Part:., Attribute Set:'', Date:4/1/2026 12:00:00 AM, Quantity:9.00000000, Number:0 - No Vendor
+12:25:06 Done with New Suggestion transaction
+12:25:06 Processing stock transactions for Part:., Attribute Set:''
+12:25:06 Beginning Balance:0
+12:25:06 Done with Part:., Attribute Set:''
+12:25:06 Finished Processing Part:.
+12:25:12 Ending Non-Part Parts.  Wait Time 00h:00m:06s, Parts 1, Jobs 0
+12:25:12 Starting Part Level: 0-0
+12:25:12 Start Processing Part:BBS-02130-01, Attribute Set:'',  LLC:0-0
+12:25:12 Processing Part:BBS-02130-01, Attribute Set:''
+12:25:12 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:12 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:BBS-02130-01, Attribute Set:''
+12:25:13 Processing stock transactions for Part:BBS-02130-01, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:BBS-02130-01, Attribute Set:''
+12:25:13 Finished Processing Part:BBS-02130-01
+12:25:13 Start Processing Part:BBS-02149, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:BBS-02149, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:BBS-02149, Attribute Set:''
+12:25:13 Processing stock transactions for Part:BBS-02149, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:BBS-02149, Attribute Set:''
+12:25:13 Finished Processing Part:BBS-02149
+12:25:13 Start Processing Part:BBS-02152-07, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:BBS-02152-07, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:BBS-02152-07, Attribute Set:''
+12:25:13 Processing stock transactions for Part:BBS-02152-07, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:BBS-02152-07, Attribute Set:''
+12:25:13 Finished Processing Part:BBS-02152-07
+12:25:13 Start Processing Part:C1000324, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:C1000324, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:C1000324, Attribute Set:''
+12:25:13 Processing stock transactions for Part:C1000324, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:C1000324, Attribute Set:''
+12:25:13 Finished Processing Part:C1000324
+12:25:13 Start Processing Part:C1000389, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:C1000389, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:C1000389, Attribute Set:''
+12:25:13 Processing stock transactions for Part:C1000389, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:C1000389, Attribute Set:''
+12:25:13 Finished Processing Part:C1000389
+12:25:13 Start Processing Part:C1000533, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:C1000533, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:C1000533, Attribute Set:''
+12:25:13 Processing stock transactions for Part:C1000533, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:C1000533, Attribute Set:''
+12:25:13 Finished Processing Part:C1000533
+12:25:13 Start Processing Part:C1000589, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:C1000589, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:C1000589, Attribute Set:''
+12:25:13 Processing stock transactions for Part:C1000589, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:C1000589, Attribute Set:''
+12:25:13 Finished Processing Part:C1000589
+12:25:13 Start Processing Part:C1000828, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:C1000828, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:C1000828, Attribute Set:''
+12:25:13 Processing stock transactions for Part:C1000828, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:C1000828, Attribute Set:''
+12:25:13 Finished Processing Part:C1000828
+12:25:13 Start Processing Part:C1001060, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:C1001060, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:C1001060, Attribute Set:''
+12:25:13 Processing stock transactions for Part:C1001060, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:C1001060, Attribute Set:''
+12:25:13 Finished Processing Part:C1001060
+12:25:13 Start Processing Part:C1001210, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:C1001210, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:C1001210, Attribute Set:''
+12:25:13 Processing stock transactions for Part:C1001210, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:C1001210, Attribute Set:''
+12:25:13 Finished Processing Part:C1001210
+12:25:13 Start Processing Part:C1001326, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:C1001326, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:C1001326, Attribute Set:''
+12:25:13 Processing stock transactions for Part:C1001326, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:C1001326, Attribute Set:''
+12:25:13 Finished Processing Part:C1001326
+12:25:13 Start Processing Part:C1001330, Attribute Set:'',  LLC:0-0
+12:25:13 Processing Part:C1001330, Attribute Set:''
+12:25:13 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:13 Deleting Suggestions
+12:25:13 Processing non-stock transactions for Part:C1001330, Attribute Set:''
+12:25:13 Processing stock transactions for Part:C1001330, Attribute Set:''
+12:25:13 Beginning Balance:0
+12:25:13 Done with Part:C1001330, Attribute Set:''
+12:25:13 Finished Processing Part:C1001330
+12:25:14 Start Processing Part:C1001334, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001334, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001334, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001334, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001334, Attribute Set:''
+12:25:14 Finished Processing Part:C1001334
+12:25:14 Start Processing Part:C1001338, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001338, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001338, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001338, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001338, Attribute Set:''
+12:25:14 Finished Processing Part:C1001338
+12:25:14 Start Processing Part:C1001342, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001342, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001342, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001342, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001342, Attribute Set:''
+12:25:14 Finished Processing Part:C1001342
+12:25:14 Start Processing Part:C1001346, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001346, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001346, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001346, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001346, Attribute Set:''
+12:25:14 Finished Processing Part:C1001346
+12:25:14 Start Processing Part:C1001350, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001350, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001350, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001350, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001350, Attribute Set:''
+12:25:14 Finished Processing Part:C1001350
+12:25:14 Start Processing Part:C1001355, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001355, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001355, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001355, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001355, Attribute Set:''
+12:25:14 Finished Processing Part:C1001355
+12:25:14 Start Processing Part:C1001359, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001359, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001359, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001359, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001359, Attribute Set:''
+12:25:14 Finished Processing Part:C1001359
+12:25:14 Start Processing Part:C1001363, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001363, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001363, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001363, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001363, Attribute Set:''
+12:25:14 Finished Processing Part:C1001363
+12:25:14 Start Processing Part:C1001366, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001366, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001366, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001366, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001366, Attribute Set:''
+12:25:14 Finished Processing Part:C1001366
+12:25:14 Start Processing Part:C1001370, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001370, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001370, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001370, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001370, Attribute Set:''
+12:25:14 Finished Processing Part:C1001370
+12:25:14 Start Processing Part:C1001374, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001374, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:14 Processing non-stock transactions for Part:C1001374, Attribute Set:''
+12:25:14 Processing stock transactions for Part:C1001374, Attribute Set:''
+12:25:14 Beginning Balance:0
+12:25:14 Done with Part:C1001374, Attribute Set:''
+12:25:14 Finished Processing Part:C1001374
+12:25:14 Start Processing Part:C1001379, Attribute Set:'',  LLC:0-0
+12:25:14 Processing Part:C1001379, Attribute Set:''
+12:25:14 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:14 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:C1001379, Attribute Set:''
+12:25:15 Processing stock transactions for Part:C1001379, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:C1001379, Attribute Set:''
+12:25:15 Finished Processing Part:C1001379
+12:25:15 Start Processing Part:CCM-00094, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CCM-00094, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CCM-00094, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CCM-00094, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CCM-00094, Attribute Set:''
+12:25:15 Finished Processing Part:CCM-00094
+12:25:15 Start Processing Part:CMS-00309, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CMS-00309, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CMS-00309, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CMS-00309, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CMS-00309, Attribute Set:''
+12:25:15 Finished Processing Part:CMS-00309
+12:25:15 Start Processing Part:CMS-00906, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CMS-00906, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CMS-00906, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CMS-00906, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CMS-00906, Attribute Set:''
+12:25:15 Finished Processing Part:CMS-00906
+12:25:15 Start Processing Part:CMS-00975, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CMS-00975, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CMS-00975, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CMS-00975, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CMS-00975, Attribute Set:''
+12:25:15 Finished Processing Part:CMS-00975
+12:25:15 Start Processing Part:CMS-01044, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CMS-01044, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CMS-01044, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CMS-01044, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CMS-01044, Attribute Set:''
+12:25:15 Finished Processing Part:CMS-01044
+12:25:15 Start Processing Part:CMS-01098, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CMS-01098, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CMS-01098, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CMS-01098, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CMS-01098, Attribute Set:''
+12:25:15 Finished Processing Part:CMS-01098
+12:25:15 Start Processing Part:CMS-01268-A, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CMS-01268-A, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CMS-01268-A, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CMS-01268-A, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CMS-01268-A, Attribute Set:''
+12:25:15 Finished Processing Part:CMS-01268-A
+12:25:15 Start Processing Part:CMS-01317, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CMS-01317, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CMS-01317, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CMS-01317, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CMS-01317, Attribute Set:''
+12:25:15 Finished Processing Part:CMS-01317
+12:25:15 Start Processing Part:CMS-01378, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CMS-01378, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CMS-01378, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CMS-01378, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CMS-01378, Attribute Set:''
+12:25:15 Finished Processing Part:CMS-01378
+12:25:15 Start Processing Part:CMS-01450, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CMS-01450, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CMS-01450, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CMS-01450, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CMS-01450, Attribute Set:''
+12:25:15 Finished Processing Part:CMS-01450
+12:25:15 Start Processing Part:CMS-01496, Attribute Set:'',  LLC:0-0
+12:25:15 Processing Part:CMS-01496, Attribute Set:''
+12:25:15 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:15 Deleting Suggestions
+12:25:15 Processing non-stock transactions for Part:CMS-01496, Attribute Set:''
+12:25:15 Processing stock transactions for Part:CMS-01496, Attribute Set:''
+12:25:15 Beginning Balance:0
+12:25:15 Done with Part:CMS-01496, Attribute Set:''
+12:25:15 Finished Processing Part:CMS-01496
+12:25:16 Start Processing Part:CMS-01502, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:CMS-01502, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:CMS-01502, Attribute Set:''
+12:25:16 Processing stock transactions for Part:CMS-01502, Attribute Set:''
+12:25:16 Beginning Balance:0
+12:25:16 Done with Part:CMS-01502, Attribute Set:''
+12:25:16 Finished Processing Part:CMS-01502
+12:25:16 Start Processing Part:CMS-01546, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:CMS-01546, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:CMS-01546, Attribute Set:''
+12:25:16 Processing stock transactions for Part:CMS-01546, Attribute Set:''
+12:25:16 Beginning Balance:0
+12:25:16 Done with Part:CMS-01546, Attribute Set:''
+12:25:16 Finished Processing Part:CMS-01546
+12:25:16 Start Processing Part:CTA-00011, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:CTA-00011, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:CTA-00011, Attribute Set:''
+12:25:16 Processing stock transactions for Part:CTA-00011, Attribute Set:''
+12:25:16 Beginning Balance:0
+12:25:16 Done with Part:CTA-00011, Attribute Set:''
+12:25:16 Finished Processing Part:CTA-00011
+12:25:16 Start Processing Part:DCL-00731, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:DCL-00731, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:DCL-00731, Attribute Set:''
+12:25:16 Processing stock transactions for Part:DCL-00731, Attribute Set:''
+12:25:16 Beginning Balance:0
+12:25:16 Done with Part:DCL-00731, Attribute Set:''
+12:25:16 Finished Processing Part:DCL-00731
+12:25:16 Start Processing Part:EDV-01409-07, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:EDV-01409-07, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:EDV-01409-07, Attribute Set:''
+12:25:16 Processing stock transactions for Part:EDV-01409-07, Attribute Set:''
+12:25:16 Beginning Balance:0
+12:25:16 Done with Part:EDV-01409-07, Attribute Set:''
+12:25:16 Finished Processing Part:EDV-01409-07
+12:25:16 Start Processing Part:EDV-03176, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:EDV-03176, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 30; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:EDV-03176, Attribute Set:''
+12:25:16 Processing stock transactions for Part:EDV-03176, Attribute Set:''
+12:25:16 Beginning Balance:0
+12:25:16 Done with Part:EDV-03176, Attribute Set:''
+12:25:16 Finished Processing Part:EDV-03176
+12:25:16 Start Processing Part:ELA-03121, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:ELA-03121, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:ELA-03121, Attribute Set:''
+12:25:16 Processing stock transactions for Part:ELA-03121, Attribute Set:''
+12:25:16 Beginning Balance:2.00000000
+12:25:16 Done with Part:ELA-03121, Attribute Set:''
+12:25:16 Finished Processing Part:ELA-03121
+12:25:16 Start Processing Part:ELA-03520, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:ELA-03520, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:ELA-03520, Attribute Set:''
+12:25:16 Processing stock transactions for Part:ELA-03520, Attribute Set:''
+12:25:16 Beginning Balance:0
+12:25:16 Done with Part:ELA-03520, Attribute Set:''
+12:25:16 Finished Processing Part:ELA-03520
+12:25:16 Start Processing Part:ELA-03524, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:ELA-03524, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:ELA-03524, Attribute Set:''
+12:25:16 Processing stock transactions for Part:ELA-03524, Attribute Set:''
+12:25:16 Beginning Balance:0
+12:25:16 Done with Part:ELA-03524, Attribute Set:''
+12:25:16 Finished Processing Part:ELA-03524
+12:25:16 Start Processing Part:ELA-03528, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:ELA-03528, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:ELA-03528, Attribute Set:''
+12:25:16 Processing stock transactions for Part:ELA-03528, Attribute Set:''
+12:25:16 Beginning Balance:0
+12:25:16 Done with Part:ELA-03528, Attribute Set:''
+12:25:16 Finished Processing Part:ELA-03528
+12:25:16 Start Processing Part:ELA-03532, Attribute Set:'',  LLC:0-0
+12:25:16 Processing Part:ELA-03532, Attribute Set:''
+12:25:16 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:16 Deleting Suggestions
+12:25:16 Processing non-stock transactions for Part:ELA-03532, Attribute Set:''
+12:25:17 Processing stock transactions for Part:ELA-03532, Attribute Set:''
+12:25:17 Beginning Balance:0
+12:25:17 Done with Part:ELA-03532, Attribute Set:''
+12:25:17 Finished Processing Part:ELA-03532
+12:25:17 Start Processing Part:ELA-03534-07, Attribute Set:'',  LLC:0-0
+12:25:17 Processing Part:ELA-03534-07, Attribute Set:''
+12:25:17 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:17 Deleting Suggestions
+12:25:17 Processing non-stock transactions for Part:ELA-03534-07, Attribute Set:''
+12:25:17 Processing stock transactions for Part:ELA-03534-07, Attribute Set:''
+12:25:17 Beginning Balance:0
+12:25:17 Done with Part:ELA-03534-07, Attribute Set:''
+12:25:17 Finished Processing Part:ELA-03534-07
+12:25:17 Start Processing Part:FRU-00467, Attribute Set:'',  LLC:0-0
+12:25:17 Processing Part:FRU-00467, Attribute Set:''
+12:25:17 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 3; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:17 Deleting Suggestions
+12:25:17 Processing non-stock transactions for Part:FRU-00467, Attribute Set:''
+12:25:17 Processing stock transactions for Part:FRU-00467, Attribute Set:''
+12:25:17 Beginning Balance:0
+12:25:17 Done with Part:FRU-00467, Attribute Set:''
+12:25:17 Finished Processing Part:FRU-00467
+12:25:17 Start Processing Part:FRU-00525, Attribute Set:'',  LLC:0-0
+12:25:17 Processing Part:FRU-00525, Attribute Set:''
+12:25:17 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 3; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:17 Deleting Suggestions
+12:25:17 Processing non-stock transactions for Part:FRU-00525, Attribute Set:''
+12:25:17 Processing stock transactions for Part:FRU-00525, Attribute Set:''
+12:25:17 Beginning Balance:0
+12:25:17 Done with Part:FRU-00525, Attribute Set:''
+12:25:17 Finished Processing Part:FRU-00525
+12:25:17 Start Processing Part:GSK-00150, Attribute Set:'',  LLC:0-0
+12:25:17 Processing Part:GSK-00150, Attribute Set:''
+12:25:17 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:17 Deleting Suggestions
+12:25:17 Processing non-stock transactions for Part:GSK-00150, Attribute Set:''
+12:25:17 Processing stock transactions for Part:GSK-00150, Attribute Set:''
+12:25:17 Beginning Balance:0
+12:25:17 Done with Part:GSK-00150, Attribute Set:''
+12:25:17 Finished Processing Part:GSK-00150
+12:25:17 Start Processing Part:GSK-00159, Attribute Set:'',  LLC:0-0
+12:25:17 Processing Part:GSK-00159, Attribute Set:''
+12:25:17 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:17 Deleting Suggestions
+12:25:17 Processing non-stock transactions for Part:GSK-00159, Attribute Set:''
+12:25:17 Processing stock transactions for Part:GSK-00159, Attribute Set:''
+12:25:17 Beginning Balance:0
+12:25:17 Done with Part:GSK-00159, Attribute Set:''
+12:25:17 Finished Processing Part:GSK-00159
+12:25:17 Start Processing Part:IMP-01178, Attribute Set:'',  LLC:0-0
+12:25:17 Processing Part:IMP-01178, Attribute Set:''
+12:25:17 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:17 Deleting Suggestions
+12:25:17 Processing non-stock transactions for Part:IMP-01178, Attribute Set:''
+12:25:17 Processing stock transactions for Part:IMP-01178, Attribute Set:''
+12:25:17 Beginning Balance:0
+12:25:17 Done with Part:IMP-01178, Attribute Set:''
+12:25:17 Finished Processing Part:IMP-01178
+12:25:17 Start Processing Part:IMP-01204, Attribute Set:'',  LLC:0-0
+12:25:17 Processing Part:IMP-01204, Attribute Set:''
+12:25:17 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:17 Deleting Suggestions
+12:25:17 Processing non-stock transactions for Part:IMP-01204, Attribute Set:''
+12:25:17 Processing stock transactions for Part:IMP-01204, Attribute Set:''
+12:25:17 Beginning Balance:0
+12:25:17 Done with Part:IMP-01204, Attribute Set:''
+12:25:17 Finished Processing Part:IMP-01204
+12:25:17 Start Processing Part:MBK-00141, Attribute Set:'',  LLC:0-0
+12:25:17 Processing Part:MBK-00141, Attribute Set:''
+12:25:17 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:17 Deleting Suggestions
+12:25:17 Processing non-stock transactions for Part:MBK-00141, Attribute Set:''
+12:25:17 Processing stock transactions for Part:MBK-00141, Attribute Set:''
+12:25:17 Beginning Balance:0
+12:25:17 Done with Part:MBK-00141, Attribute Set:''
+12:25:17 Finished Processing Part:MBK-00141
+12:25:17 Start Processing Part:MBS-00467-07, Attribute Set:'',  LLC:0-0
+12:25:17 Processing Part:MBS-00467-07, Attribute Set:''
+12:25:17 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:17 Deleting Suggestions
+12:25:17 Processing non-stock transactions for Part:MBS-00467-07, Attribute Set:''
+12:25:17 Processing stock transactions for Part:MBS-00467-07, Attribute Set:''
+12:25:17 Beginning Balance:0
+12:25:18 Done with Part:MBS-00467-07, Attribute Set:''
+12:25:18 Finished Processing Part:MBS-00467-07
+12:25:18 Start Processing Part:MMP-05184, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:MMP-05184, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:MMP-05184, Attribute Set:''
+12:25:18 Processing stock transactions for Part:MMP-05184, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:MMP-05184, Attribute Set:''
+12:25:18 Finished Processing Part:MMP-05184
+12:25:18 Start Processing Part:MMP-05188, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:MMP-05188, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:MMP-05188, Attribute Set:''
+12:25:18 Processing stock transactions for Part:MMP-05188, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:MMP-05188, Attribute Set:''
+12:25:18 Finished Processing Part:MMP-05188
+12:25:18 Start Processing Part:MMP-05228, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:MMP-05228, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:MMP-05228, Attribute Set:''
+12:25:18 Processing stock transactions for Part:MMP-05228, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:MMP-05228, Attribute Set:''
+12:25:18 Finished Processing Part:MMP-05228
+12:25:18 Start Processing Part:MMP-05232, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:MMP-05232, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:MMP-05232, Attribute Set:''
+12:25:18 Processing stock transactions for Part:MMP-05232, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:MMP-05232, Attribute Set:''
+12:25:18 Finished Processing Part:MMP-05232
+12:25:18 Start Processing Part:MMP-05236, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:MMP-05236, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:MMP-05236, Attribute Set:''
+12:25:18 Processing stock transactions for Part:MMP-05236, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:MMP-05236, Attribute Set:''
+12:25:18 Finished Processing Part:MMP-05236
+12:25:18 Start Processing Part:MMP-05240, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:MMP-05240, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:MMP-05240, Attribute Set:''
+12:25:18 Processing stock transactions for Part:MMP-05240, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:MMP-05240, Attribute Set:''
+12:25:18 Finished Processing Part:MMP-05240
+12:25:18 Start Processing Part:MMP-05244, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:MMP-05244, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:MMP-05244, Attribute Set:''
+12:25:18 Processing stock transactions for Part:MMP-05244, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:MMP-05244, Attribute Set:''
+12:25:18 Finished Processing Part:MMP-05244
+12:25:18 Start Processing Part:MMP-05248, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:MMP-05248, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:MMP-05248, Attribute Set:''
+12:25:18 Processing stock transactions for Part:MMP-05248, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:MMP-05248, Attribute Set:''
+12:25:18 Finished Processing Part:MMP-05248
+12:25:18 Start Processing Part:MOD-00208-07, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:MOD-00208-07, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:MOD-00208-07, Attribute Set:''
+12:25:18 Processing stock transactions for Part:MOD-00208-07, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:MOD-00208-07, Attribute Set:''
+12:25:18 Finished Processing Part:MOD-00208-07
+12:25:18 Start Processing Part:PAD-00126, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:PAD-00126, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:PAD-00126, Attribute Set:''
+12:25:18 Processing stock transactions for Part:PAD-00126, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:PAD-00126, Attribute Set:''
+12:25:18 Finished Processing Part:PAD-00126
+12:25:18 Start Processing Part:PAD-00131, Attribute Set:'',  LLC:0-0
+12:25:18 Processing Part:PAD-00131, Attribute Set:''
+12:25:18 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:18 Deleting Suggestions
+12:25:18 Processing non-stock transactions for Part:PAD-00131, Attribute Set:''
+12:25:18 Processing stock transactions for Part:PAD-00131, Attribute Set:''
+12:25:18 Beginning Balance:0
+12:25:18 Done with Part:PAD-00131, Attribute Set:''
+12:25:18 Finished Processing Part:PAD-00131
+12:25:19 Start Processing Part:PSA-00025-04, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:PSA-00025-04, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:PSA-00025-04, Attribute Set:''
+12:25:19 Processing stock transactions for Part:PSA-00025-04, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:PSA-00025-04, Attribute Set:''
+12:25:19 Finished Processing Part:PSA-00025-04
+12:25:19 Start Processing Part:PSA-00701, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:PSA-00701, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:PSA-00701, Attribute Set:''
+12:25:19 Processing stock transactions for Part:PSA-00701, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:PSA-00701, Attribute Set:''
+12:25:19 Finished Processing Part:PSA-00701
+12:25:19 Start Processing Part:PSK-00051-04, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:PSK-00051-04, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:PSK-00051-04, Attribute Set:''
+12:25:19 Processing stock transactions for Part:PSK-00051-04, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:PSK-00051-04, Attribute Set:''
+12:25:19 Finished Processing Part:PSK-00051-04
+12:25:19 Start Processing Part:SMA-04113, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:SMA-04113, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:SMA-04113, Attribute Set:''
+12:25:19 Processing stock transactions for Part:SMA-04113, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:SMA-04113, Attribute Set:''
+12:25:19 Finished Processing Part:SMA-04113
+12:25:19 Start Processing Part:TPL-00690, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:TPL-00690, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:TPL-00690, Attribute Set:''
+12:25:19 Processing stock transactions for Part:TPL-00690, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:TPL-00690, Attribute Set:''
+12:25:19 Finished Processing Part:TPL-00690
+12:25:19 Start Processing Part:TPL-00696, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:TPL-00696, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:TPL-00696, Attribute Set:''
+12:25:19 Processing stock transactions for Part:TPL-00696, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:TPL-00696, Attribute Set:''
+12:25:19 Finished Processing Part:TPL-00696
+12:25:19 Start Processing Part:TPL-00766, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:TPL-00766, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:TPL-00766, Attribute Set:''
+12:25:19 Processing stock transactions for Part:TPL-00766, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:TPL-00766, Attribute Set:''
+12:25:19 Finished Processing Part:TPL-00766
+12:25:19 Start Processing Part:TPL-00808, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:TPL-00808, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:TPL-00808, Attribute Set:''
+12:25:19 Processing stock transactions for Part:TPL-00808, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:TPL-00808, Attribute Set:''
+12:25:19 Finished Processing Part:TPL-00808
+12:25:19 Start Processing Part:TPL-00896, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:TPL-00896, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:TPL-00896, Attribute Set:''
+12:25:19 Processing stock transactions for Part:TPL-00896, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:TPL-00896, Attribute Set:''
+12:25:19 Finished Processing Part:TPL-00896
+12:25:19 Start Processing Part:TPL-00944, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:TPL-00944, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:TPL-00944, Attribute Set:''
+12:25:19 Processing stock transactions for Part:TPL-00944, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:TPL-00944, Attribute Set:''
+12:25:19 Finished Processing Part:TPL-00944
+12:25:19 Start Processing Part:TPL-01002, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:TPL-01002, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:19 Processing non-stock transactions for Part:TPL-01002, Attribute Set:''
+12:25:19 Processing stock transactions for Part:TPL-01002, Attribute Set:''
+12:25:19 Beginning Balance:0
+12:25:19 Done with Part:TPL-01002, Attribute Set:''
+12:25:19 Finished Processing Part:TPL-01002
+12:25:19 Start Processing Part:TPL-01047, Attribute Set:'',  LLC:0-0
+12:25:19 Processing Part:TPL-01047, Attribute Set:''
+12:25:19 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:19 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:TPL-01047, Attribute Set:''
+12:25:20 Processing stock transactions for Part:TPL-01047, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:TPL-01047, Attribute Set:''
+12:25:20 Finished Processing Part:TPL-01047
+12:25:20 Start Processing Part:WHS-03169, Attribute Set:'',  LLC:0-0
+12:25:20 Processing Part:WHS-03169, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:WHS-03169, Attribute Set:''
+12:25:20 Processing stock transactions for Part:WHS-03169, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:WHS-03169, Attribute Set:''
+12:25:20 Finished Processing Part:WHS-03169
+12:25:20 Start Processing Part:WHS-04648, Attribute Set:'',  LLC:0-0
+12:25:20 Processing Part:WHS-04648, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:WHS-04648, Attribute Set:''
+12:25:20 Processing stock transactions for Part:WHS-04648, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:WHS-04648, Attribute Set:''
+12:25:20 Finished Processing Part:WHS-04648
+12:25:20 Start Processing Part:WHS-04653, Attribute Set:'',  LLC:0-0
+12:25:20 Processing Part:WHS-04653, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:WHS-04653, Attribute Set:''
+12:25:20 Processing stock transactions for Part:WHS-04653, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:WHS-04653, Attribute Set:''
+12:25:20 Finished Processing Part:WHS-04653
+12:25:20 Start Processing Part:WHS-04656, Attribute Set:'',  LLC:0-0
+12:25:20 Processing Part:WHS-04656, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:WHS-04656, Attribute Set:''
+12:25:20 Processing stock transactions for Part:WHS-04656, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:WHS-04656, Attribute Set:''
+12:25:20 Finished Processing Part:WHS-04656
+12:25:20 Start Processing Part:WHS-04671, Attribute Set:'',  LLC:0-0
+12:25:20 Processing Part:WHS-04671, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:WHS-04671, Attribute Set:''
+12:25:20 Processing stock transactions for Part:WHS-04671, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:WHS-04671, Attribute Set:''
+12:25:20 Finished Processing Part:WHS-04671
+12:25:20 Start Processing Part:WHS-04681, Attribute Set:'',  LLC:0-0
+12:25:20 Processing Part:WHS-04681, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:WHS-04681, Attribute Set:''
+12:25:20 Processing stock transactions for Part:WHS-04681, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:WHS-04681, Attribute Set:''
+12:25:20 Finished Processing Part:WHS-04681
+12:25:20 Start Processing Part:WHS-04693, Attribute Set:'',  LLC:0-0
+12:25:20 Processing Part:WHS-04693, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:WHS-04693, Attribute Set:''
+12:25:20 Processing stock transactions for Part:WHS-04693, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:WHS-04693, Attribute Set:''
+12:25:20 Finished Processing Part:WHS-04693
+12:25:20 Start Processing Part:WHS-04702, Attribute Set:'',  LLC:0-0
+12:25:20 Processing Part:WHS-04702, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:WHS-04702, Attribute Set:''
+12:25:20 Processing stock transactions for Part:WHS-04702, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:WHS-04702, Attribute Set:''
+12:25:20 Finished Processing Part:WHS-04702
+12:25:20 Ending Part Level: 0-0. Wait Time 00h:00m:14s, Parts 86, Jobs 0
+12:25:20 Starting Part Level: 1-0
+12:25:20 Start Processing Part:BBS-01194-07, Attribute Set:'',  LLC:1-0
+12:25:20 Processing Part:BBS-01194-07, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:BBS-01194-07, Attribute Set:''
+12:25:20 Processing stock transactions for Part:BBS-01194-07, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:BBS-01194-07, Attribute Set:''
+12:25:20 Finished Processing Part:BBS-01194-07
+12:25:20 Start Processing Part:BBS-02000, Attribute Set:'',  LLC:1-0
+12:25:20 Processing Part:BBS-02000, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:BBS-02000, Attribute Set:''
+12:25:20 Processing stock transactions for Part:BBS-02000, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:20 Done with Part:BBS-02000, Attribute Set:''
+12:25:20 Finished Processing Part:BBS-02000
+12:25:20 Start Processing Part:BBS-02089-07, Attribute Set:'',  LLC:1-0
+12:25:20 Processing Part:BBS-02089-07, Attribute Set:''
+12:25:20 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:20 Deleting Suggestions
+12:25:20 Processing non-stock transactions for Part:BBS-02089-07, Attribute Set:''
+12:25:20 Processing stock transactions for Part:BBS-02089-07, Attribute Set:''
+12:25:20 Beginning Balance:0
+12:25:21 Done with Part:BBS-02089-07, Attribute Set:''
+12:25:21 Finished Processing Part:BBS-02089-07
+12:25:21 Start Processing Part:BBS-02136-07, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:BBS-02136-07, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:BBS-02136-07, Attribute Set:''
+12:25:21 Processing stock transactions for Part:BBS-02136-07, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:BBS-02136-07, Attribute Set:''
+12:25:21 Finished Processing Part:BBS-02136-07
+12:25:21 Start Processing Part:BBS-02151, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:BBS-02151, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:BBS-02151, Attribute Set:''
+12:25:21 Processing stock transactions for Part:BBS-02151, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:BBS-02151, Attribute Set:''
+12:25:21 Finished Processing Part:BBS-02151
+12:25:21 Start Processing Part:CHK-00078, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:CHK-00078, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:CHK-00078, Attribute Set:''
+12:25:21 Processing stock transactions for Part:CHK-00078, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:CHK-00078, Attribute Set:''
+12:25:21 Finished Processing Part:CHK-00078
+12:25:21 Start Processing Part:EAC-02592, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:EAC-02592, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:EAC-02592, Attribute Set:''
+12:25:21 Processing stock transactions for Part:EAC-02592, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:EAC-02592, Attribute Set:''
+12:25:21 Finished Processing Part:EAC-02592
+12:25:21 Start Processing Part:EDV-01429-04, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:EDV-01429-04, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:EDV-01429-04, Attribute Set:''
+12:25:21 Processing stock transactions for Part:EDV-01429-04, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:EDV-01429-04, Attribute Set:''
+12:25:21 Finished Processing Part:EDV-01429-04
+12:25:21 Start Processing Part:EDV-02715-04, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:EDV-02715-04, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:EDV-02715-04, Attribute Set:''
+12:25:21 Processing stock transactions for Part:EDV-02715-04, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:EDV-02715-04, Attribute Set:''
+12:25:21 Finished Processing Part:EDV-02715-04
+12:25:21 Start Processing Part:EDV-03166-07, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:EDV-03166-07, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:EDV-03166-07, Attribute Set:''
+12:25:21 Processing stock transactions for Part:EDV-03166-07, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:EDV-03166-07, Attribute Set:''
+12:25:21 Finished Processing Part:EDV-03166-07
+12:25:21 Start Processing Part:ELA-01966, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:ELA-01966, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:ELA-01966, Attribute Set:''
+12:25:21 Processing stock transactions for Part:ELA-01966, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:ELA-01966, Attribute Set:''
+12:25:21 Finished Processing Part:ELA-01966
+12:25:21 Start Processing Part:FRU-00344, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:FRU-00344, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 3; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:FRU-00344, Attribute Set:''
+12:25:21 Processing stock transactions for Part:FRU-00344, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:FRU-00344, Attribute Set:''
+12:25:21 Finished Processing Part:FRU-00344
+12:25:21 Start Processing Part:HSP-00039, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:HSP-00039, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:HSP-00039, Attribute Set:''
+12:25:21 Processing stock transactions for Part:HSP-00039, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:HSP-00039, Attribute Set:''
+12:25:21 Finished Processing Part:HSP-00039
+12:25:21 Start Processing Part:IMP-01195, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:IMP-01195, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:IMP-01195, Attribute Set:''
+12:25:21 Processing stock transactions for Part:IMP-01195, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:IMP-01195, Attribute Set:''
+12:25:21 Finished Processing Part:IMP-01195
+12:25:21 Start Processing Part:MBK-00072, Attribute Set:'',  LLC:1-0
+12:25:21 Processing Part:MBK-00072, Attribute Set:''
+12:25:21 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:21 Deleting Suggestions
+12:25:21 Processing non-stock transactions for Part:MBK-00072, Attribute Set:''
+12:25:21 Processing stock transactions for Part:MBK-00072, Attribute Set:''
+12:25:21 Beginning Balance:0
+12:25:21 Done with Part:MBK-00072, Attribute Set:''
+12:25:21 Finished Processing Part:MBK-00072
+12:25:22 Start Processing Part:MBK-00133, Attribute Set:'',  LLC:1-0
+12:25:22 Processing Part:MBK-00133, Attribute Set:''
+12:25:22 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:22 Deleting Suggestions
+12:25:22 Processing non-stock transactions for Part:MBK-00133, Attribute Set:''
+12:25:22 Processing stock transactions for Part:MBK-00133, Attribute Set:''
+12:25:22 Beginning Balance:0
+12:25:22 Done with Part:MBK-00133, Attribute Set:''
+12:25:22 Finished Processing Part:MBK-00133
+12:25:22 Start Processing Part:MEM-00261-01, Attribute Set:'',  LLC:1-0
+12:25:22 Processing Part:MEM-00261-01, Attribute Set:''
+12:25:22 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:22 Deleting Suggestions
+12:25:22 Processing non-stock transactions for Part:MEM-00261-01, Attribute Set:''
+12:25:22 Processing stock transactions for Part:MEM-00261-01, Attribute Set:''
+12:25:22 Beginning Balance:0
+12:25:22 Done with Part:MEM-00261-01, Attribute Set:''
+12:25:22 Finished Processing Part:MEM-00261-01
+12:25:22 Start Processing Part:MMP-00790, Attribute Set:'',  LLC:1-0
+12:25:22 Processing Part:MMP-00790, Attribute Set:''
+12:25:22 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:22 Deleting Suggestions
+12:25:22 Processing non-stock transactions for Part:MMP-00790, Attribute Set:''
+12:25:22 Processing stock transactions for Part:MMP-00790, Attribute Set:''
+12:25:22 Beginning Balance:0
+12:25:22 Done with Part:MMP-00790, Attribute Set:''
+12:25:22 Finished Processing Part:MMP-00790
+12:25:22 Start Processing Part:MMP-00795, Attribute Set:'',  LLC:1-0
+12:25:22 Processing Part:MMP-00795, Attribute Set:''
+12:25:22 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:22 Deleting Suggestions
+12:25:22 Processing non-stock transactions for Part:MMP-00795, Attribute Set:''
+12:25:22 Processing stock transactions for Part:MMP-00795, Attribute Set:''
+12:25:22 Beginning Balance:0
+12:25:22 Done with Part:MMP-00795, Attribute Set:''
+12:25:22 Finished Processing Part:MMP-00795
+12:25:22 Start Processing Part:MMP-02715, Attribute Set:'',  LLC:1-0
+12:25:22 Processing Part:MMP-02715, Attribute Set:''
+12:25:22 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:22 Deleting Suggestions
+12:25:22 Processing non-stock transactions for Part:MMP-02715, Attribute Set:''
+12:25:22 Processing stock transactions for Part:MMP-02715, Attribute Set:''
+12:25:22 Beginning Balance:0
+12:25:22 Done with Part:MMP-02715, Attribute Set:''
+12:25:22 Finished Processing Part:MMP-02715
+12:25:22 Start Processing Part:MMP-03901, Attribute Set:'',  LLC:1-0
+12:25:22 Processing Part:MMP-03901, Attribute Set:''
+12:25:22 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:22 Deleting Suggestions
+12:25:22 Processing non-stock transactions for Part:MMP-03901, Attribute Set:''
+12:25:22 Processing stock transactions for Part:MMP-03901, Attribute Set:''
+12:25:22 Beginning Balance:0
+12:25:22 Done with Part:MMP-03901, Attribute Set:''
+12:25:22 Finished Processing Part:MMP-03901
+12:25:22 Start Processing Part:MMP-03993, Attribute Set:'',  LLC:1-0
+12:25:22 Processing Part:MMP-03993, Attribute Set:''
+12:25:22 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:22 Deleting Suggestions
+12:25:22 Processing non-stock transactions for Part:MMP-03993, Attribute Set:''
+12:25:22 Processing stock transactions for Part:MMP-03993, Attribute Set:''
+12:25:22 Beginning Balance:0
+12:25:22 Done with Part:MMP-03993, Attribute Set:''
+12:25:22 Finished Processing Part:MMP-03993
+12:25:22 Start Processing Part:MMP-05225, Attribute Set:'',  LLC:1-0
+12:25:22 Processing Part:MMP-05225, Attribute Set:''
+12:25:22 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:22 Deleting Suggestions
+12:25:22 Processing non-stock transactions for Part:MMP-05225, Attribute Set:''
+12:25:22 Processing stock transactions for Part:MMP-05225, Attribute Set:''
+12:25:22 Beginning Balance:0
+12:25:22 Done with Part:MMP-05225, Attribute Set:''
+12:25:22 Finished Processing Part:MMP-05225
+12:25:22 Start Processing Part:MOD-00204-06, Attribute Set:'',  LLC:1-0
+12:25:22 Processing Part:MOD-00204-06, Attribute Set:''
+12:25:22 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:22 Deleting Suggestions
+12:25:22 Processing non-stock transactions for Part:MOD-00204-06, Attribute Set:''
+12:25:22 Processing stock transactions for Part:MOD-00204-06, Attribute Set:''
+12:25:22 Beginning Balance:0
+12:25:22 Done with Part:MOD-00204-06, Attribute Set:''
+12:25:22 Finished Processing Part:MOD-00204-06
+12:25:22 Start Processing Part:MTA-01241-07, Attribute Set:'',  LLC:1-0
+12:25:22 Processing Part:MTA-01241-07, Attribute Set:''
+12:25:22 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:22 Deleting Suggestions
+12:25:22 Processing non-stock transactions for Part:MTA-01241-07, Attribute Set:''
+12:25:22 Processing stock transactions for Part:MTA-01241-07, Attribute Set:''
+12:25:22 Beginning Balance:0
+12:25:23 Done with Part:MTA-01241-07, Attribute Set:''
+12:25:23 Finished Processing Part:MTA-01241-07
+12:25:23 Start Processing Part:PSK-00051-07, Attribute Set:'',  LLC:1-0
+12:25:23 Processing Part:PSK-00051-07, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:PSK-00051-07, Attribute Set:''
+12:25:23 Processing stock transactions for Part:PSK-00051-07, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:PSK-00051-07, Attribute Set:''
+12:25:23 Finished Processing Part:PSK-00051-07
+12:25:23 Start Processing Part:PSK-00139, Attribute Set:'',  LLC:1-0
+12:25:23 Processing Part:PSK-00139, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:PSK-00139, Attribute Set:''
+12:25:23 Processing stock transactions for Part:PSK-00139, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:PSK-00139, Attribute Set:''
+12:25:23 Finished Processing Part:PSK-00139
+12:25:23 Start Processing Part:PSK-00240-08, Attribute Set:'',  LLC:1-0
+12:25:23 Processing Part:PSK-00240-08, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:PSK-00240-08, Attribute Set:''
+12:25:23 Processing stock transactions for Part:PSK-00240-08, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:PSK-00240-08, Attribute Set:''
+12:25:23 Finished Processing Part:PSK-00240-08
+12:25:23 Start Processing Part:TLD-00038, Attribute Set:'',  LLC:1-0
+12:25:23 Processing Part:TLD-00038, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:TLD-00038, Attribute Set:''
+12:25:23 Processing stock transactions for Part:TLD-00038, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:TLD-00038, Attribute Set:''
+12:25:23 Finished Processing Part:TLD-00038
+12:25:23 Start Processing Part:TLD-00054, Attribute Set:'',  LLC:1-0
+12:25:23 Processing Part:TLD-00054, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:TLD-00054, Attribute Set:''
+12:25:23 Processing stock transactions for Part:TLD-00054, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:TLD-00054, Attribute Set:''
+12:25:23 Finished Processing Part:TLD-00054
+12:25:23 Start Processing Part:TLD-00116, Attribute Set:'',  LLC:1-0
+12:25:23 Processing Part:TLD-00116, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:TLD-00116, Attribute Set:''
+12:25:23 Processing stock transactions for Part:TLD-00116, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:TLD-00116, Attribute Set:''
+12:25:23 Finished Processing Part:TLD-00116
+12:25:23 Start Processing Part:WHS-01278, Attribute Set:'',  LLC:1-0
+12:25:23 Processing Part:WHS-01278, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:WHS-01278, Attribute Set:''
+12:25:23 Processing stock transactions for Part:WHS-01278, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:WHS-01278, Attribute Set:''
+12:25:23 Finished Processing Part:WHS-01278
+12:25:23 Start Processing Part:WHS-02622, Attribute Set:'',  LLC:1-0
+12:25:23 Processing Part:WHS-02622, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:WHS-02622, Attribute Set:''
+12:25:23 Processing stock transactions for Part:WHS-02622, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:WHS-02622, Attribute Set:''
+12:25:23 Finished Processing Part:WHS-02622
+12:25:23 Start Processing Part:WHS-02859, Attribute Set:'',  LLC:1-0
+12:25:23 Processing Part:WHS-02859, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:WHS-02859, Attribute Set:''
+12:25:23 Processing stock transactions for Part:WHS-02859, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:WHS-02859, Attribute Set:''
+12:25:23 Finished Processing Part:WHS-02859
+12:25:23 Start Processing Part:WHS-04580, Attribute Set:'',  LLC:1-0
+12:25:23 Processing Part:WHS-04580, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:WHS-04580, Attribute Set:''
+12:25:23 Processing stock transactions for Part:WHS-04580, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:WHS-04580, Attribute Set:''
+12:25:23 Finished Processing Part:WHS-04580
+12:25:23 Ending Part Level: 1-0. Wait Time 00h:00m:17s, Parts 35, Jobs 0
+12:25:23 Starting Part Level: 2-0
+12:25:23 Start Processing Part:CCP-00047, Attribute Set:'',  LLC:2-0
+12:25:23 Processing Part:CCP-00047, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:CCP-00047, Attribute Set:''
+12:25:23 Processing stock transactions for Part:CCP-00047, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:23 Done with Part:CCP-00047, Attribute Set:''
+12:25:23 Finished Processing Part:CCP-00047
+12:25:23 Start Processing Part:CCP-00479, Attribute Set:'',  LLC:2-0
+12:25:23 Processing Part:CCP-00479, Attribute Set:''
+12:25:23 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:23 Deleting Suggestions
+12:25:23 Processing non-stock transactions for Part:CCP-00479, Attribute Set:''
+12:25:23 Processing stock transactions for Part:CCP-00479, Attribute Set:''
+12:25:23 Beginning Balance:0
+12:25:24 Done with Part:CCP-00479, Attribute Set:''
+12:25:24 Finished Processing Part:CCP-00479
+12:25:24 Start Processing Part:CCP-00984, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:CCP-00984, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:CCP-00984, Attribute Set:''
+12:25:24 Processing stock transactions for Part:CCP-00984, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:CCP-00984, Attribute Set:''
+12:25:24 Finished Processing Part:CCP-00984
+12:25:24 Start Processing Part:EDV-01160-07, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:EDV-01160-07, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:EDV-01160-07, Attribute Set:''
+12:25:24 Processing stock transactions for Part:EDV-01160-07, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:EDV-01160-07, Attribute Set:''
+12:25:24 Finished Processing Part:EDV-01160-07
+12:25:24 Start Processing Part:EDV-02857-06, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:EDV-02857-06, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:EDV-02857-06, Attribute Set:''
+12:25:24 Processing stock transactions for Part:EDV-02857-06, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:EDV-02857-06, Attribute Set:''
+12:25:24 Finished Processing Part:EDV-02857-06
+12:25:24 Start Processing Part:ELA-00294-07, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:ELA-00294-07, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:ELA-00294-07, Attribute Set:''
+12:25:24 Processing stock transactions for Part:ELA-00294-07, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:ELA-00294-07, Attribute Set:''
+12:25:24 Finished Processing Part:ELA-00294-07
+12:25:24 Start Processing Part:ELA-00905-06, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:ELA-00905-06, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:ELA-00905-06, Attribute Set:''
+12:25:24 Processing stock transactions for Part:ELA-00905-06, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:ELA-00905-06, Attribute Set:''
+12:25:24 Finished Processing Part:ELA-00905-06
+12:25:24 Start Processing Part:ELA-01612-05, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:ELA-01612-05, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:ELA-01612-05, Attribute Set:''
+12:25:24 Processing stock transactions for Part:ELA-01612-05, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:ELA-01612-05, Attribute Set:''
+12:25:24 Finished Processing Part:ELA-01612-05
+12:25:24 Start Processing Part:ELA-01929-02, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:ELA-01929-02, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:ELA-01929-02, Attribute Set:''
+12:25:24 Processing stock transactions for Part:ELA-01929-02, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:ELA-01929-02, Attribute Set:''
+12:25:24 Finished Processing Part:ELA-01929-02
+12:25:24 Start Processing Part:ELA-02202, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:ELA-02202, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:ELA-02202, Attribute Set:''
+12:25:24 Processing stock transactions for Part:ELA-02202, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:ELA-02202, Attribute Set:''
+12:25:24 Finished Processing Part:ELA-02202
+12:25:24 Start Processing Part:ELA-03218-07, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:ELA-03218-07, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:ELA-03218-07, Attribute Set:''
+12:25:24 Processing stock transactions for Part:ELA-03218-07, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:ELA-03218-07, Attribute Set:''
+12:25:24 Finished Processing Part:ELA-03218-07
+12:25:24 Start Processing Part:ELA-03381, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:ELA-03381, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:ELA-03381, Attribute Set:''
+12:25:24 Processing stock transactions for Part:ELA-03381, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:ELA-03381, Attribute Set:''
+12:25:24 Finished Processing Part:ELA-03381
+12:25:24 Start Processing Part:ELA-03483-06, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:ELA-03483-06, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:ELA-03483-06, Attribute Set:''
+12:25:24 Processing stock transactions for Part:ELA-03483-06, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:ELA-03483-06, Attribute Set:''
+12:25:24 Finished Processing Part:ELA-03483-06
+12:25:24 Start Processing Part:ELA-03514-07, Attribute Set:'',  LLC:2-0
+12:25:24 Processing Part:ELA-03514-07, Attribute Set:''
+12:25:24 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:24 Deleting Suggestions
+12:25:24 Processing non-stock transactions for Part:ELA-03514-07, Attribute Set:''
+12:25:24 Processing stock transactions for Part:ELA-03514-07, Attribute Set:''
+12:25:24 Beginning Balance:0
+12:25:24 Done with Part:ELA-03514-07, Attribute Set:''
+12:25:24 Finished Processing Part:ELA-03514-07
+12:25:25 Start Processing Part:IMP-00050, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:IMP-00050, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:IMP-00050, Attribute Set:''
+12:25:25 Processing stock transactions for Part:IMP-00050, Attribute Set:''
+12:25:25 Beginning Balance:0
+12:25:25 Done with Part:IMP-00050, Attribute Set:''
+12:25:25 Finished Processing Part:IMP-00050
+12:25:25 Start Processing Part:IMP-00479, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:IMP-00479, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:IMP-00479, Attribute Set:''
+12:25:25 Processing stock transactions for Part:IMP-00479, Attribute Set:''
+12:25:25 Beginning Balance:0
+12:25:25 Done with Part:IMP-00479, Attribute Set:''
+12:25:25 Finished Processing Part:IMP-00479
+12:25:25 Start Processing Part:IMP-00662, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:IMP-00662, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:IMP-00662, Attribute Set:''
+12:25:25 Processing stock transactions for Part:IMP-00662, Attribute Set:''
+12:25:25 Beginning Balance:4.00000000
+12:25:25 Done with Part:IMP-00662, Attribute Set:''
+12:25:25 Finished Processing Part:IMP-00662
+12:25:25 Start Processing Part:IMP-00808, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:IMP-00808, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:IMP-00808, Attribute Set:''
+12:25:25 Processing stock transactions for Part:IMP-00808, Attribute Set:''
+12:25:25 Beginning Balance:1.00000000
+12:25:25 Done with Part:IMP-00808, Attribute Set:''
+12:25:25 Finished Processing Part:IMP-00808
+12:25:25 Start Processing Part:IMP-00835, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:IMP-00835, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:IMP-00835, Attribute Set:''
+12:25:25 Processing stock transactions for Part:IMP-00835, Attribute Set:''
+12:25:25 Beginning Balance:5.00000000
+12:25:25 Done with Part:IMP-00835, Attribute Set:''
+12:25:25 Finished Processing Part:IMP-00835
+12:25:25 Start Processing Part:IMP-01127, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:IMP-01127, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:IMP-01127, Attribute Set:''
+12:25:25 Processing stock transactions for Part:IMP-01127, Attribute Set:''
+12:25:25 Beginning Balance:0
+12:25:25 Done with Part:IMP-01127, Attribute Set:''
+12:25:25 Finished Processing Part:IMP-01127
+12:25:25 Start Processing Part:IMP-01154, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:IMP-01154, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:IMP-01154, Attribute Set:''
+12:25:25 Processing stock transactions for Part:IMP-01154, Attribute Set:''
+12:25:25 Beginning Balance:0
+12:25:25 Done with Part:IMP-01154, Attribute Set:''
+12:25:25 Finished Processing Part:IMP-01154
+12:25:25 Start Processing Part:MMP-00781, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:MMP-00781, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:MMP-00781, Attribute Set:''
+12:25:25 Processing stock transactions for Part:MMP-00781, Attribute Set:''
+12:25:25 Beginning Balance:0
+12:25:25 Done with Part:MMP-00781, Attribute Set:''
+12:25:25 Finished Processing Part:MMP-00781
+12:25:25 Start Processing Part:MMP-01576, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:MMP-01576, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:MMP-01576, Attribute Set:''
+12:25:25 Processing stock transactions for Part:MMP-01576, Attribute Set:''
+12:25:25 Beginning Balance:3.00000000
+12:25:25 Done with Part:MMP-01576, Attribute Set:''
+12:25:25 Finished Processing Part:MMP-01576
+12:25:25 Start Processing Part:MMP-01707, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:MMP-01707, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:MMP-01707, Attribute Set:''
+12:25:25 Processing stock transactions for Part:MMP-01707, Attribute Set:''
+12:25:25 Beginning Balance:2.00000000
+12:25:25 Done with Part:MMP-01707, Attribute Set:''
+12:25:25 Finished Processing Part:MMP-01707
+12:25:25 Start Processing Part:MMP-02857, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:MMP-02857, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:MMP-02857, Attribute Set:''
+12:25:25 Processing stock transactions for Part:MMP-02857, Attribute Set:''
+12:25:25 Beginning Balance:11.00000000
+12:25:25 Done with Part:MMP-02857, Attribute Set:''
+12:25:25 Finished Processing Part:MMP-02857
+12:25:25 Start Processing Part:MMP-03188, Attribute Set:'',  LLC:2-0
+12:25:25 Processing Part:MMP-03188, Attribute Set:''
+12:25:25 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:25 Deleting Suggestions
+12:25:25 Processing non-stock transactions for Part:MMP-03188, Attribute Set:''
+12:25:25 Processing stock transactions for Part:MMP-03188, Attribute Set:''
+12:25:26 Beginning Balance:4.00000000
+12:25:26 Done with Part:MMP-03188, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-03188
+12:25:26 Start Processing Part:MMP-03606, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-03606, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-03606, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-03606, Attribute Set:''
+12:25:26 Beginning Balance:0
+12:25:26 Done with Part:MMP-03606, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-03606
+12:25:26 Start Processing Part:MMP-03735, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-03735, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-03735, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-03735, Attribute Set:''
+12:25:26 Beginning Balance:6.00000000
+12:25:26 Done with Part:MMP-03735, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-03735
+12:25:26 Start Processing Part:MMP-04089, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-04089, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-04089, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-04089, Attribute Set:''
+12:25:26 Beginning Balance:1.00000000
+12:25:26 Done with Part:MMP-04089, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-04089
+12:25:26 Start Processing Part:MMP-04141, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-04141, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-04141, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-04141, Attribute Set:''
+12:25:26 Beginning Balance:3.00000000
+12:25:26 Done with Part:MMP-04141, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-04141
+12:25:26 Start Processing Part:MMP-04146, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-04146, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-04146, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-04146, Attribute Set:''
+12:25:26 Beginning Balance:3.00000000
+12:25:26 Done with Part:MMP-04146, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-04146
+12:25:26 Start Processing Part:MMP-04233, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-04233, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-04233, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-04233, Attribute Set:''
+12:25:26 Beginning Balance:3.00000000
+12:25:26 Done with Part:MMP-04233, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-04233
+12:25:26 Start Processing Part:MMP-04288, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-04288, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-04288, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-04288, Attribute Set:''
+12:25:26 Beginning Balance:2.00000000
+12:25:26 Done with Part:MMP-04288, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-04288
+12:25:26 Start Processing Part:MMP-04298, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-04298, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-04298, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-04298, Attribute Set:''
+12:25:26 Beginning Balance:3.00000000
+12:25:26 Done with Part:MMP-04298, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-04298
+12:25:26 Start Processing Part:MMP-04304, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-04304, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-04304, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-04304, Attribute Set:''
+12:25:26 Beginning Balance:1.00000000
+12:25:26 Done with Part:MMP-04304, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-04304
+12:25:26 Start Processing Part:MMP-04373, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-04373, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-04373, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-04373, Attribute Set:''
+12:25:26 Beginning Balance:6.00000000
+12:25:26 Done with Part:MMP-04373, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-04373
+12:25:26 Start Processing Part:MMP-04377, Attribute Set:'',  LLC:2-0
+12:25:26 Processing Part:MMP-04377, Attribute Set:''
+12:25:26 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:26 Deleting Suggestions
+12:25:26 Processing non-stock transactions for Part:MMP-04377, Attribute Set:''
+12:25:26 Processing stock transactions for Part:MMP-04377, Attribute Set:''
+12:25:26 Beginning Balance:3.00000000
+12:25:26 Done with Part:MMP-04377, Attribute Set:''
+12:25:26 Finished Processing Part:MMP-04377
+12:25:27 Start Processing Part:MMP-04602, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:MMP-04602, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:MMP-04602, Attribute Set:''
+12:25:27 Processing stock transactions for Part:MMP-04602, Attribute Set:''
+12:25:27 Beginning Balance:4.00000000
+12:25:27 Done with Part:MMP-04602, Attribute Set:''
+12:25:27 Finished Processing Part:MMP-04602
+12:25:27 Start Processing Part:MMP-04935, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:MMP-04935, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:MMP-04935, Attribute Set:''
+12:25:27 Processing stock transactions for Part:MMP-04935, Attribute Set:''
+12:25:27 Beginning Balance:2.00000000
+12:25:27 Done with Part:MMP-04935, Attribute Set:''
+12:25:27 Finished Processing Part:MMP-04935
+12:25:27 Start Processing Part:MMP-05018, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:MMP-05018, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:MMP-05018, Attribute Set:''
+12:25:27 Processing stock transactions for Part:MMP-05018, Attribute Set:''
+12:25:27 Beginning Balance:1.00000000
+12:25:27 Done with Part:MMP-05018, Attribute Set:''
+12:25:27 Finished Processing Part:MMP-05018
+12:25:27 Start Processing Part:MMP-05075, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:MMP-05075, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:MMP-05075, Attribute Set:''
+12:25:27 Processing stock transactions for Part:MMP-05075, Attribute Set:''
+12:25:27 Beginning Balance:2.00000000
+12:25:27 Done with Part:MMP-05075, Attribute Set:''
+12:25:27 Finished Processing Part:MMP-05075
+12:25:27 Start Processing Part:MMP-05097, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:MMP-05097, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:MMP-05097, Attribute Set:''
+12:25:27 Processing stock transactions for Part:MMP-05097, Attribute Set:''
+12:25:27 Beginning Balance:0
+12:25:27 Done with Part:MMP-05097, Attribute Set:''
+12:25:27 Finished Processing Part:MMP-05097
+12:25:27 Start Processing Part:MMP-05136, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:MMP-05136, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:MMP-05136, Attribute Set:''
+12:25:27 Processing stock transactions for Part:MMP-05136, Attribute Set:''
+12:25:27 Beginning Balance:3.00000000
+12:25:27 Done with Part:MMP-05136, Attribute Set:''
+12:25:27 Finished Processing Part:MMP-05136
+12:25:27 Start Processing Part:MMP-05143, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:MMP-05143, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:MMP-05143, Attribute Set:''
+12:25:27 Processing stock transactions for Part:MMP-05143, Attribute Set:''
+12:25:27 Beginning Balance:2.00000000
+12:25:27 Done with Part:MMP-05143, Attribute Set:''
+12:25:27 Finished Processing Part:MMP-05143
+12:25:27 Start Processing Part:MMP-05172, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:MMP-05172, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:MMP-05172, Attribute Set:''
+12:25:27 Processing stock transactions for Part:MMP-05172, Attribute Set:''
+12:25:27 Beginning Balance:2.00000000
+12:25:27 Done with Part:MMP-05172, Attribute Set:''
+12:25:27 Finished Processing Part:MMP-05172
+12:25:27 Start Processing Part:MTA-01051, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:MTA-01051, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 0; Planning Fence -> 0; Delta In -> 0; Delta Out -> 7; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:MTA-01051, Attribute Set:''
+12:25:27 Processing stock transactions for Part:MTA-01051, Attribute Set:''
+12:25:27 Beginning Balance:0
+12:25:27 Date changed, Process Date:
+12:25:27 Done with Part:MTA-01051, Attribute Set:''
+12:25:27 Finished Processing Part:MTA-01051
+12:25:27 Start Processing Part:PSA-00126, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:PSA-00126, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:PSA-00126, Attribute Set:''
+12:25:27 Processing stock transactions for Part:PSA-00126, Attribute Set:''
+12:25:27 Beginning Balance:0
+12:25:27 Done with Part:PSA-00126, Attribute Set:''
+12:25:27 Finished Processing Part:PSA-00126
+12:25:27 Start Processing Part:PSA-00669-07, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:PSA-00669-07, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:27 Processing non-stock transactions for Part:PSA-00669-07, Attribute Set:''
+12:25:27 Processing stock transactions for Part:PSA-00669-07, Attribute Set:''
+12:25:27 Beginning Balance:0
+12:25:27 Done with Part:PSA-00669-07, Attribute Set:''
+12:25:27 Finished Processing Part:PSA-00669-07
+12:25:27 Start Processing Part:PSU-00071-07, Attribute Set:'',  LLC:2-0
+12:25:27 Processing Part:PSU-00071-07, Attribute Set:''
+12:25:27 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 30; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:27 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:PSU-00071-07, Attribute Set:''
+12:25:28 Processing stock transactions for Part:PSU-00071-07, Attribute Set:''
+12:25:28 Beginning Balance:0
+12:25:28 Date changed, Process Date:2/4/2026 12:00:00 AM
+12:25:28 Date changed, Process Date:3/3/2026 12:00:00 AM
+12:25:28 Date changed, Process Date:3/12/2026 12:00:00 AM
+12:25:28 Done with Part:PSU-00071-07, Attribute Set:''
+12:25:28 Finished Processing Part:PSU-00071-07
+12:25:28 Start Processing Part:SMA-03841, Attribute Set:'',  LLC:2-0
+12:25:28 Processing Part:SMA-03841, Attribute Set:''
+12:25:28 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:28 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:SMA-03841, Attribute Set:''
+12:25:28 Processing stock transactions for Part:SMA-03841, Attribute Set:''
+12:25:28 Beginning Balance:3.00000000
+12:25:28 Done with Part:SMA-03841, Attribute Set:''
+12:25:28 Finished Processing Part:SMA-03841
+12:25:28 Start Processing Part:WHS-01183, Attribute Set:'',  LLC:2-0
+12:25:28 Processing Part:WHS-01183, Attribute Set:''
+12:25:28 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:28 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:WHS-01183, Attribute Set:''
+12:25:28 Processing stock transactions for Part:WHS-01183, Attribute Set:''
+12:25:28 Beginning Balance:2.00000000
+12:25:28 Done with Part:WHS-01183, Attribute Set:''
+12:25:28 Finished Processing Part:WHS-01183
+12:25:28 Start Processing Part:WHS-01230, Attribute Set:'',  LLC:2-0
+12:25:28 Processing Part:WHS-01230, Attribute Set:''
+12:25:28 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:28 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:WHS-01230, Attribute Set:''
+12:25:28 Processing stock transactions for Part:WHS-01230, Attribute Set:''
+12:25:28 Beginning Balance:0
+12:25:28 Done with Part:WHS-01230, Attribute Set:''
+12:25:28 Finished Processing Part:WHS-01230
+12:25:28 Start Processing Part:WHS-01264, Attribute Set:'',  LLC:2-0
+12:25:28 Processing Part:WHS-01264, Attribute Set:''
+12:25:28 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:28 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:WHS-01264, Attribute Set:''
+12:25:28 Processing stock transactions for Part:WHS-01264, Attribute Set:''
+12:25:28 Beginning Balance:0
+12:25:28 Done with Part:WHS-01264, Attribute Set:''
+12:25:28 Finished Processing Part:WHS-01264
+12:25:28 Start Processing Part:WHS-02190, Attribute Set:'',  LLC:2-0
+12:25:28 Processing Part:WHS-02190, Attribute Set:''
+12:25:28 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:28 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:WHS-02190, Attribute Set:''
+12:25:28 Processing stock transactions for Part:WHS-02190, Attribute Set:''
+12:25:28 Beginning Balance:0
+12:25:28 Done with Part:WHS-02190, Attribute Set:''
+12:25:28 Finished Processing Part:WHS-02190
+12:25:28 Start Processing Part:WHS-02341, Attribute Set:'',  LLC:2-0
+12:25:28 Processing Part:WHS-02341, Attribute Set:''
+12:25:28 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:28 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:WHS-02341, Attribute Set:''
+12:25:28 Processing stock transactions for Part:WHS-02341, Attribute Set:''
+12:25:28 Beginning Balance:0
+12:25:28 Done with Part:WHS-02341, Attribute Set:''
+12:25:28 Finished Processing Part:WHS-02341
+12:25:28 Start Processing Part:WHS-02850, Attribute Set:'',  LLC:2-0
+12:25:28 Processing Part:WHS-02850, Attribute Set:''
+12:25:28 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:28 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:WHS-02850, Attribute Set:''
+12:25:28 Processing stock transactions for Part:WHS-02850, Attribute Set:''
+12:25:28 Beginning Balance:0
+12:25:28 Done with Part:WHS-02850, Attribute Set:''
+12:25:28 Finished Processing Part:WHS-02850
+12:25:28 Start Processing Part:WHS-03364, Attribute Set:'',  LLC:2-0
+12:25:28 Processing Part:WHS-03364, Attribute Set:''
+12:25:28 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:28 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:WHS-03364, Attribute Set:''
+12:25:28 Processing stock transactions for Part:WHS-03364, Attribute Set:''
+12:25:28 Beginning Balance:0
+12:25:28 Done with Part:WHS-03364, Attribute Set:''
+12:25:28 Finished Processing Part:WHS-03364
+12:25:28 Start Processing Part:WHS-03983, Attribute Set:'',  LLC:2-0
+12:25:28 Processing Part:WHS-03983, Attribute Set:''
+12:25:28 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:28 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:WHS-03983, Attribute Set:''
+12:25:28 Processing stock transactions for Part:WHS-03983, Attribute Set:''
+12:25:28 Beginning Balance:0
+12:25:28 Done with Part:WHS-03983, Attribute Set:''
+12:25:28 Finished Processing Part:WHS-03983
+12:25:28 Start Processing Part:WHS-04329, Attribute Set:'',  LLC:2-0
+12:25:28 Processing Part:WHS-04329, Attribute Set:''
+12:25:28 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:28 Deleting Suggestions
+12:25:28 Processing non-stock transactions for Part:WHS-04329, Attribute Set:''
+12:25:28 Processing stock transactions for Part:WHS-04329, Attribute Set:''
+12:25:28 Beginning Balance:0
+12:25:29 Done with Part:WHS-04329, Attribute Set:''
+12:25:29 Finished Processing Part:WHS-04329
+12:25:29 Start Processing Part:WHS-04533, Attribute Set:'',  LLC:2-0
+12:25:29 Processing Part:WHS-04533, Attribute Set:''
+12:25:29 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:29 Deleting Suggestions
+12:25:29 Processing non-stock transactions for Part:WHS-04533, Attribute Set:''
+12:25:29 Processing stock transactions for Part:WHS-04533, Attribute Set:''
+12:25:29 Beginning Balance:0
+12:25:29 Done with Part:WHS-04533, Attribute Set:''
+12:25:29 Finished Processing Part:WHS-04533
+12:25:29 Start Processing Part:WHS-04567, Attribute Set:'',  LLC:2-0
+12:25:29 Processing Part:WHS-04567, Attribute Set:''
+12:25:29 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:29 Deleting Suggestions
+12:25:29 Processing non-stock transactions for Part:WHS-04567, Attribute Set:''
+12:25:29 Processing stock transactions for Part:WHS-04567, Attribute Set:''
+12:25:29 Beginning Balance:0
+12:25:29 Done with Part:WHS-04567, Attribute Set:''
+12:25:29 Finished Processing Part:WHS-04567
+12:25:29 Ending Part Level: 2-0. Wait Time 00h:00m:23s, Parts 61, Jobs 0
+12:25:29 Starting Part Level: 3-0
+12:25:29 Start Processing Part:CCP-00143, Attribute Set:'',  LLC:3-0
+12:25:29 Processing Part:CCP-00143, Attribute Set:''
+12:25:29 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:29 Deleting Suggestions
+12:25:29 Processing non-stock transactions for Part:CCP-00143, Attribute Set:''
+12:25:29 Processing stock transactions for Part:CCP-00143, Attribute Set:''
+12:25:29 Beginning Balance:0
+12:25:29 Done with Part:CCP-00143, Attribute Set:''
+12:25:29 Finished Processing Part:CCP-00143
+12:25:29 Start Processing Part:CCP-00428, Attribute Set:'',  LLC:3-0
+12:25:29 Processing Part:CCP-00428, Attribute Set:''
+12:25:29 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:29 Deleting Suggestions
+12:25:29 Processing non-stock transactions for Part:CCP-00428, Attribute Set:''
+12:25:29 Processing stock transactions for Part:CCP-00428, Attribute Set:''
+12:25:29 Beginning Balance:0
+12:25:29 Done with Part:CCP-00428, Attribute Set:''
+12:25:29 Finished Processing Part:CCP-00428
+12:25:29 Start Processing Part:EDV-01826-07, Attribute Set:'',  LLC:3-0
+12:25:29 Processing Part:EDV-01826-07, Attribute Set:''
+12:25:29 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:29 Deleting Suggestions
+12:25:29 Processing non-stock transactions for Part:EDV-01826-07, Attribute Set:''
+12:25:29 Processing stock transactions for Part:EDV-01826-07, Attribute Set:''
+12:25:29 Beginning Balance:0
+12:25:29 Done with Part:EDV-01826-07, Attribute Set:''
+12:25:29 Finished Processing Part:EDV-01826-07
+12:25:29 Start Processing Part:ELA-02548-07, Attribute Set:'',  LLC:3-0
+12:25:29 Processing Part:ELA-02548-07, Attribute Set:''
+12:25:29 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:29 Deleting Suggestions
+12:25:29 Processing non-stock transactions for Part:ELA-02548-07, Attribute Set:''
+12:25:29 Processing stock transactions for Part:ELA-02548-07, Attribute Set:''
+12:25:29 Beginning Balance:14.00000000
+12:25:29 Date changed, Process Date:2/5/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:2/12/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:2/16/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:2/25/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:2/26/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:2/27/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:3/12/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:3/13/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:3/20/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:3/31/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:4/1/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:4/6/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:4/13/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:4/16/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:4/17/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:4/28/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:4/29/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:5/28/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:5/29/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:6/29/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:6/30/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:7/20/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:7/21/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:8/18/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:8/19/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:9/9/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:9/10/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:11/19/2026 12:00:00 AM
+12:25:29 Done with Part:ELA-02548-07, Attribute Set:''
+12:25:29 Finished Processing Part:ELA-02548-07
+12:25:29 Start Processing Part:ELA-03427, Attribute Set:'',  LLC:3-0
+12:25:29 Processing Part:ELA-03427, Attribute Set:''
+12:25:29 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:29 Deleting Suggestions
+12:25:29 Processing non-stock transactions for Part:ELA-03427, Attribute Set:''
+12:25:29 Processing stock transactions for Part:ELA-03427, Attribute Set:''
+12:25:29 Beginning Balance:0
+12:25:29 Done with Part:ELA-03427, Attribute Set:''
+12:25:29 Finished Processing Part:ELA-03427
+12:25:29 Start Processing Part:IMP-00084, Attribute Set:'',  LLC:3-0
+12:25:29 Processing Part:IMP-00084, Attribute Set:''
+12:25:29 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:29 Deleting Suggestions
+12:25:29 Processing non-stock transactions for Part:IMP-00084, Attribute Set:''
+12:25:29 Processing stock transactions for Part:IMP-00084, Attribute Set:''
+12:25:29 Beginning Balance:18.00000000
+12:25:29 Date changed, Process Date:
+12:25:29 Date changed, Process Date:2/18/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:2/20/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:2/27/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:3/23/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:4/29/2026 12:00:00 AM
+12:25:29 Date changed, Process Date:4/30/2026 12:00:00 AM
+12:25:30 Done with Part:IMP-00084, Attribute Set:''
+12:25:30 Finished Processing Part:IMP-00084
+12:25:30 Start Processing Part:MMP-01582, Attribute Set:'',  LLC:3-0
+12:25:30 Processing Part:MMP-01582, Attribute Set:''
+12:25:30 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:30 Deleting Suggestions
+12:25:30 Processing non-stock transactions for Part:MMP-01582, Attribute Set:''
+12:25:30 Processing stock transactions for Part:MMP-01582, Attribute Set:''
+12:25:30 Beginning Balance:2.00000000
+12:25:30 Done with Part:MMP-01582, Attribute Set:''
+12:25:30 Finished Processing Part:MMP-01582
+12:25:30 Start Processing Part:MMP-01676, Attribute Set:'',  LLC:3-0
+12:25:30 Processing Part:MMP-01676, Attribute Set:''
+12:25:30 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:30 Deleting Suggestions
+12:25:30 Processing non-stock transactions for Part:MMP-01676, Attribute Set:''
+12:25:30 Processing stock transactions for Part:MMP-01676, Attribute Set:''
+12:25:30 Beginning Balance:3.00000000
+12:25:30 Done with Part:MMP-01676, Attribute Set:''
+12:25:30 Finished Processing Part:MMP-01676
+12:25:30 Start Processing Part:MMP-02631, Attribute Set:'',  LLC:3-0
+12:25:30 Processing Part:MMP-02631, Attribute Set:''
+12:25:30 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:30 Deleting Suggestions
+12:25:30 Processing non-stock transactions for Part:MMP-02631, Attribute Set:''
+12:25:30 Processing stock transactions for Part:MMP-02631, Attribute Set:''
+12:25:30 Beginning Balance:1.00000000
+12:25:30 Done with Part:MMP-02631, Attribute Set:''
+12:25:30 Finished Processing Part:MMP-02631
+12:25:30 Start Processing Part:MMP-02728, Attribute Set:'',  LLC:3-0
+12:25:30 Processing Part:MMP-02728, Attribute Set:''
+12:25:30 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:30 Deleting Suggestions
+12:25:30 Processing non-stock transactions for Part:MMP-02728, Attribute Set:''
+12:25:30 Processing stock transactions for Part:MMP-02728, Attribute Set:''
+12:25:30 Beginning Balance:2.00000000
+12:25:30 Done with Part:MMP-02728, Attribute Set:''
+12:25:30 Finished Processing Part:MMP-02728
+12:25:30 Start Processing Part:MMP-02765, Attribute Set:'',  LLC:3-0
+12:25:30 Processing Part:MMP-02765, Attribute Set:''
+12:25:30 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:30 Deleting Suggestions
+12:25:30 Processing non-stock transactions for Part:MMP-02765, Attribute Set:''
+12:25:30 Processing stock transactions for Part:MMP-02765, Attribute Set:''
+12:25:30 Beginning Balance:2.00000000
+12:25:30 Done with Part:MMP-02765, Attribute Set:''
+12:25:30 Finished Processing Part:MMP-02765
+12:25:30 Start Processing Part:MMP-02974, Attribute Set:'',  LLC:3-0
+12:25:30 Processing Part:MMP-02974, Attribute Set:''
+12:25:30 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:30 Deleting Suggestions
+12:25:30 Processing non-stock transactions for Part:MMP-02974, Attribute Set:''
+12:25:30 Processing stock transactions for Part:MMP-02974, Attribute Set:''
+12:25:30 Beginning Balance:0
+12:25:30 Done with Part:MMP-02974, Attribute Set:''
+12:25:30 Finished Processing Part:MMP-02974
+12:25:30 Start Processing Part:MMP-03593, Attribute Set:'',  LLC:3-0
+12:25:30 Processing Part:MMP-03593, Attribute Set:''
+12:25:30 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:30 Deleting Suggestions
+12:25:30 Processing non-stock transactions for Part:MMP-03593, Attribute Set:''
+12:25:30 Processing stock transactions for Part:MMP-03593, Attribute Set:''
+12:25:30 Beginning Balance:0
+12:25:30 Done with Part:MMP-03593, Attribute Set:''
+12:25:30 Finished Processing Part:MMP-03593
+12:25:30 Start Processing Part:MMP-03990, Attribute Set:'',  LLC:3-0
+12:25:30 Processing Part:MMP-03990, Attribute Set:''
+12:25:30 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:30 Deleting Suggestions
+12:25:30 Processing non-stock transactions for Part:MMP-03990, Attribute Set:''
+12:25:30 Processing stock transactions for Part:MMP-03990, Attribute Set:''
+12:25:30 Beginning Balance:1.00000000
+12:25:30 Done with Part:MMP-03990, Attribute Set:''
+12:25:30 Finished Processing Part:MMP-03990
+12:25:30 Start Processing Part:MSC-00745, Attribute Set:'',  LLC:3-0
+12:25:30 Processing Part:MSC-00745, Attribute Set:''
+12:25:30 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:30 Deleting Suggestions
+12:25:30 Processing non-stock transactions for Part:MSC-00745, Attribute Set:''
+12:25:30 Processing stock transactions for Part:MSC-00745, Attribute Set:''
+12:25:30 Beginning Balance:0
+12:25:30 Done with Part:MSC-00745, Attribute Set:''
+12:25:30 Finished Processing Part:MSC-00745
+12:25:31 Start Processing Part:PSA-00289-06, Attribute Set:'',  LLC:3-0
+12:25:31 Processing Part:PSA-00289-06, Attribute Set:''
+12:25:31 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:31 Deleting Suggestions
+12:25:31 Processing non-stock transactions for Part:PSA-00289-06, Attribute Set:''
+12:25:31 Processing stock transactions for Part:PSA-00289-06, Attribute Set:''
+12:25:31 Beginning Balance:0
+12:25:31 Done with Part:PSA-00289-06, Attribute Set:''
+12:25:31 Finished Processing Part:PSA-00289-06
+12:25:31 Start Processing Part:SMA-00862, Attribute Set:'',  LLC:3-0
+12:25:31 Processing Part:SMA-00862, Attribute Set:''
+12:25:31 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:31 Deleting Suggestions
+12:25:31 Processing non-stock transactions for Part:SMA-00862, Attribute Set:''
+12:25:31 Processing stock transactions for Part:SMA-00862, Attribute Set:''
+12:25:31 Beginning Balance:166.00000000
+12:25:31 Date changed, Process Date:2/5/2026 12:00:00 AM
+12:25:31 Date changed, Process Date:3/2/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:142.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:3/25/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:134.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:3/26/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:122.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:4/30/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:110.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:6/4/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:90.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:7/10/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:78.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:8/6/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:70.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:8/7/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:58.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:9/11/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:46.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:10/15/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:38.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:10/16/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:26.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:11/17/2026 12:00:00 AM
+12:25:31 Over re-order, DoSuggestion...
+12:25:31 After DoSuggestions, Balance:14.00000000
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:12/9/2026 12:00:00 AM
+12:25:31 Below re-order, Expedite POs:12/9/2026 12:00:00 AM
+12:25:31 Creating new PO suggestion for Part:SMA-00862, Attribute Set:'', Date:11/23/2026 12:00:00 AM, Quantity:934.00000000 Number:2123016
+12:25:31 Done with New Suggestion transaction
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:12/11/2026 12:00:00 AM
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:12/14/2026 12:00:00 AM
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:12/15/2026 12:00:00 AM
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:12/22/2026 12:00:00 AM
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:1/22/2027 12:00:00 AM
+12:25:31 Below re-order, Expedite POs:1/22/2027 12:00:00 AM
+12:25:31 Creating new PO suggestion for Part:SMA-00862, Attribute Set:'', Date:1/8/2027 12:00:00 AM, Quantity:20.00000000 Number:2123019
+12:25:31 Done with New Suggestion transaction
+12:25:31 Checking Receive Time...
+12:25:31 Date changed, Process Date:2/18/2027 12:00:00 AM
+12:25:31 Checking Receive Time...
+12:25:31 Creating new PO suggestion for Part:SMA-00862, Attribute Set:'', Date:2/9/2027 12:00:00 AM, Quantity:24.00000000 Number:2123020
+12:25:31 Done with New Suggestion transaction
+12:25:31 Checking Receive Time...
+12:25:31 Done with Part:SMA-00862, Attribute Set:''
+12:25:31 Finished Processing Part:SMA-00862
+12:25:31 Start Processing Part:WHS-03807, Attribute Set:'',  LLC:3-0
+12:25:31 Processing Part:WHS-03807, Attribute Set:''
+12:25:31 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:31 Deleting Suggestions
+12:25:31 Processing non-stock transactions for Part:WHS-03807, Attribute Set:''
+12:25:31 Processing stock transactions for Part:WHS-03807, Attribute Set:''
+12:25:31 Beginning Balance:0
+12:25:31 Done with Part:WHS-03807, Attribute Set:''
+12:25:31 Finished Processing Part:WHS-03807
+12:25:31 Ending Part Level: 3-0. Wait Time 00h:00m:25s, Parts 18, Jobs 0
+12:25:31 Starting Part Level: 4-0
+12:25:31 Start Processing Part:DCL-00410, Attribute Set:'',  LLC:4-0
+12:25:31 Processing Part:DCL-00410, Attribute Set:''
+12:25:31 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:31 Deleting Suggestions
+12:25:31 Processing non-stock transactions for Part:DCL-00410, Attribute Set:''
+12:25:31 Processing stock transactions for Part:DCL-00410, Attribute Set:''
+12:25:31 Beginning Balance:0
+12:25:31 Date changed, Process Date:
+12:25:31 Date changed, Process Date:3/18/2026 12:00:00 AM
+12:25:31 Date changed, Process Date:4/30/2026 12:00:00 AM
+12:25:31 Date changed, Process Date:6/3/2026 12:00:00 AM
+12:25:31 Date changed, Process Date:7/9/2026 12:00:00 AM
+12:25:31 Date changed, Process Date:9/3/2026 12:00:00 AM
+12:25:31 Date changed, Process Date:10/9/2026 12:00:00 AM
+12:25:31 Date changed, Process Date:12/9/2026 12:00:00 AM
+12:25:31 Date changed, Process Date:1/15/2027 12:00:00 AM
+12:25:31 Done with Part:DCL-00410, Attribute Set:''
+12:25:31 Finished Processing Part:DCL-00410
+12:25:31 Start Processing Part:ELA-03116, Attribute Set:'',  LLC:4-0
+12:25:31 Processing Part:ELA-03116, Attribute Set:''
+12:25:31 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:31 Deleting Suggestions
+12:25:31 Processing non-stock transactions for Part:ELA-03116, Attribute Set:''
+12:25:31 Processing stock transactions for Part:ELA-03116, Attribute Set:''
+12:25:31 Beginning Balance:2.00000000
+12:25:31 Done with Part:ELA-03116, Attribute Set:''
+12:25:31 Finished Processing Part:ELA-03116
+12:25:31 Start Processing Part:MBS-00058, Attribute Set:'',  LLC:4-0
+12:25:31 Processing Part:MBS-00058, Attribute Set:''
+12:25:31 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:31 Deleting Suggestions
+12:25:31 Processing non-stock transactions for Part:MBS-00058, Attribute Set:''
+12:25:31 Processing stock transactions for Part:MBS-00058, Attribute Set:''
+12:25:31 Beginning Balance:0
+12:25:31 Done with Part:MBS-00058, Attribute Set:''
+12:25:31 Finished Processing Part:MBS-00058
+12:25:31 Start Processing Part:MMP-02590, Attribute Set:'',  LLC:4-0
+12:25:31 Processing Part:MMP-02590, Attribute Set:''
+12:25:31 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:31 Deleting Suggestions
+12:25:31 Processing non-stock transactions for Part:MMP-02590, Attribute Set:''
+12:25:31 Processing stock transactions for Part:MMP-02590, Attribute Set:''
+12:25:31 Beginning Balance:2.00000000
+12:25:31 Done with Part:MMP-02590, Attribute Set:''
+12:25:31 Finished Processing Part:MMP-02590
+12:25:31 Start Processing Part:MMP-02625, Attribute Set:'',  LLC:4-0
+12:25:31 Processing Part:MMP-02625, Attribute Set:''
+12:25:31 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:31 Deleting Suggestions
+12:25:31 Processing non-stock transactions for Part:MMP-02625, Attribute Set:''
+12:25:31 Processing stock transactions for Part:MMP-02625, Attribute Set:''
+12:25:31 Beginning Balance:3.00000000
+12:25:31 Done with Part:MMP-02625, Attribute Set:''
+12:25:31 Finished Processing Part:MMP-02625
+12:25:31 Start Processing Part:MMP-04037, Attribute Set:'',  LLC:4-0
+12:25:31 Processing Part:MMP-04037, Attribute Set:''
+12:25:31 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:31 Deleting Suggestions
+12:25:32 Processing non-stock transactions for Part:MMP-04037, Attribute Set:''
+12:25:32 Processing stock transactions for Part:MMP-04037, Attribute Set:''
+12:25:32 Beginning Balance:0
+12:25:32 Done with Part:MMP-04037, Attribute Set:''
+12:25:32 Finished Processing Part:MMP-04037
+12:25:32 Start Processing Part:MMP-04248, Attribute Set:'',  LLC:4-0
+12:25:32 Processing Part:MMP-04248, Attribute Set:''
+12:25:32 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:32 Deleting Suggestions
+12:25:32 Processing non-stock transactions for Part:MMP-04248, Attribute Set:''
+12:25:32 Processing stock transactions for Part:MMP-04248, Attribute Set:''
+12:25:32 Beginning Balance:3.00000000
+12:25:32 Done with Part:MMP-04248, Attribute Set:''
+12:25:32 Finished Processing Part:MMP-04248
+12:25:32 Start Processing Part:PSA-00143-08, Attribute Set:'',  LLC:4-0
+12:25:32 Processing Part:PSA-00143-08, Attribute Set:''
+12:25:32 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:32 Deleting Suggestions
+12:25:32 Processing non-stock transactions for Part:PSA-00143-08, Attribute Set:''
+12:25:32 Processing stock transactions for Part:PSA-00143-08, Attribute Set:''
+12:25:32 Beginning Balance:0
+12:25:32 Done with Part:PSA-00143-08, Attribute Set:''
+12:25:32 Finished Processing Part:PSA-00143-08
+12:25:32 Start Processing Part:WHS-00354, Attribute Set:'',  LLC:4-0
+12:25:32 Processing Part:WHS-00354, Attribute Set:''
+12:25:32 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:32 Deleting Suggestions
+12:25:32 Processing non-stock transactions for Part:WHS-00354, Attribute Set:''
+12:25:32 Processing stock transactions for Part:WHS-00354, Attribute Set:''
+12:25:32 Beginning Balance:8.00000000
+12:25:32 Done with Part:WHS-00354, Attribute Set:''
+12:25:32 Finished Processing Part:WHS-00354
+12:25:32 Start Processing Part:WHS-03474, Attribute Set:'',  LLC:4-0
+12:25:32 Processing Part:WHS-03474, Attribute Set:''
+12:25:32 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:32 Deleting Suggestions
+12:25:32 Processing non-stock transactions for Part:WHS-03474, Attribute Set:''
+12:25:32 Processing stock transactions for Part:WHS-03474, Attribute Set:''
+12:25:32 Beginning Balance:0
+12:25:32 Done with Part:WHS-03474, Attribute Set:''
+12:25:32 Finished Processing Part:WHS-03474
+12:25:32 Start Processing Part:WIR-00201, Attribute Set:'',  LLC:4-0
+12:25:32 Processing Part:WIR-00201, Attribute Set:''
+12:25:32 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:32 Deleting Suggestions
+12:25:32 Processing non-stock transactions for Part:WIR-00201, Attribute Set:''
+12:25:32 Processing stock transactions for Part:WIR-00201, Attribute Set:''
+12:25:32 Beginning Balance:2369.00000000
+12:25:32 Done with Part:WIR-00201, Attribute Set:''
+12:25:32 Finished Processing Part:WIR-00201
+12:25:32 Ending Part Level: 4-0. Wait Time 00h:00m:26s, Parts 11, Jobs 0
+12:25:32 Starting Part Level: 5-0
+12:25:32 Start Processing Part:ELA-01062, Attribute Set:'',  LLC:5-0
+12:25:32 Processing Part:ELA-01062, Attribute Set:''
+12:25:32 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:32 Deleting Suggestions
+12:25:32 Processing non-stock transactions for Part:ELA-01062, Attribute Set:''
+12:25:32 Processing stock transactions for Part:ELA-01062, Attribute Set:''
+12:25:32 Beginning Balance:6.00000000
+12:25:32 Done with Part:ELA-01062, Attribute Set:''
+12:25:32 Finished Processing Part:ELA-01062
+12:25:32 Start Processing Part:ELA-01473, Attribute Set:'',  LLC:5-0
+12:25:32 Processing Part:ELA-01473, Attribute Set:''
+12:25:32 Parameters: Receive Time -> 3; Planning Fence -> 0; Delta In -> 7; Delta Out -> 14; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:32 Deleting Suggestions
+12:25:32 Processing non-stock transactions for Part:ELA-01473, Attribute Set:''
+12:25:32 Processing stock transactions for Part:ELA-01473, Attribute Set:''
+12:25:32 Beginning Balance:63.00000000
+12:25:32 Date changed, Process Date:2/2/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:2/6/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:2/11/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:2/20/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:2/23/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:2/27/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:3/3/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:3/5/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:3/6/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:3/9/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:3/10/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:3/11/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:3/12/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:3/13/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:3/24/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:3/25/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:4/6/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:4/8/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:4/9/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:4/10/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:4/13/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:5/21/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:5/22/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:9/2/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:9/3/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:11/11/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:11/12/2026 12:00:00 AM
+12:25:32 Done with Part:ELA-01473, Attribute Set:''
+12:25:32 Finished Processing Part:ELA-01473
+12:25:32 Start Processing Part:IMP-00534, Attribute Set:'',  LLC:5-0
+12:25:32 Processing Part:IMP-00534, Attribute Set:''
+12:25:32 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:32 Deleting Suggestions
+12:25:32 Processing non-stock transactions for Part:IMP-00534, Attribute Set:''
+12:25:32 Processing stock transactions for Part:IMP-00534, Attribute Set:''
+12:25:32 Beginning Balance:1194.00000000
+12:25:32 Date changed, Process Date:1/28/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:2/2/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:2/4/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:2/5/2026 12:00:00 AM
+12:25:32 Date changed, Process Date:2/6/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:1015.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/9/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:999.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/10/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:965.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/11/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:939.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/12/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:921.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/16/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:919.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/17/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:889.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/18/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:881.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/19/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:859.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/23/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:843.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/24/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:829.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/26/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:811.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:2/27/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:807.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/2/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:805.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/3/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:785.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/5/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:769.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/6/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:752.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/10/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:738.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/11/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:726.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/12/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:722.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/13/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:713.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/16/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:705.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/20/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:695.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/25/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:688.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:3/26/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:644.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/1/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:638.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/6/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:626.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/8/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:606.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/10/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:601.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/13/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:599.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/16/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:591.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/17/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:589.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/20/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:561.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/21/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:541.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/22/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:529.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/24/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:481.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:4/28/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:469.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:5/1/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:459.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:5/4/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:453.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:5/7/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:438.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:5/8/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:434.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:5/11/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:432.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:5/22/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:412.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:5/26/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:392.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:5/29/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:320.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:6/1/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:288.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:6/2/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:268.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:6/4/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:248.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:6/9/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:208.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:6/11/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:168.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:6/15/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:148.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:6/17/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:118.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:6/24/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:94.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:6/25/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:84.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:6/26/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:68.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:7/1/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:60.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:7/6/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:48.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:7/20/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:42.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:7/23/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:39.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:8/20/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:31.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:9/10/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:30.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:10/27/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:13.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:11/3/2026 12:00:00 AM
+12:25:32 Over re-order, DoSuggestion...
+12:25:32 After DoSuggestions, Balance:1.00000000
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:11/6/2026 12:00:00 AM
+12:25:32 Below re-order, Expedite POs:11/6/2026 12:00:00 AM
+12:25:32 Creating new PO suggestion for Part:IMP-00534, Attribute Set:'', Date:10/23/2026 12:00:00 AM, Quantity:76.00000000 Number:2123027
+12:25:32 Done with New Suggestion transaction
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:11/12/2026 12:00:00 AM
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:11/13/2026 12:00:00 AM
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:11/16/2026 12:00:00 AM
+12:25:32 Checking Receive Time...
+12:25:32 Date changed, Process Date:11/17/2026 12:00:00 AM
+12:25:32 Checking Receive Time...
+12:25:32 Checking Receive Time...
+12:25:32 Done with Part:IMP-00534, Attribute Set:''
+12:25:32 Finished Processing Part:IMP-00534
+12:25:33 Start Processing Part:IMP-00673, Attribute Set:'',  LLC:5-0
+12:25:33 Processing Part:IMP-00673, Attribute Set:''
+12:25:33 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:33 Deleting Suggestions
+12:25:33 Processing non-stock transactions for Part:IMP-00673, Attribute Set:''
+12:25:33 Processing stock transactions for Part:IMP-00673, Attribute Set:''
+12:25:33 Beginning Balance:720.00000000
+12:25:33 Date changed, Process Date:2/2/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:2/4/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:2/5/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:2/6/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:663.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/11/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:661.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/12/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:656.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/16/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:654.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/17/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:648.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/19/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:644.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/23/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:642.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/26/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:594.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/27/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:592.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/4/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:584.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/5/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:579.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/6/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:574.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/10/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:560.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/11/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:536.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/12/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:534.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/13/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:532.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/16/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:515.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/20/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:505.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/23/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:502.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/25/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:495.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/26/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:475.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/1/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:466.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/6/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:447.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/8/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:427.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/10/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:425.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/13/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:421.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/16/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:391.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/17/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:388.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/20/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:386.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/21/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:384.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/24/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:344.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/28/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:326.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/29/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:311.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/30/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:291.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/4/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:276.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/8/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:274.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/11/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:267.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/14/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:259.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/15/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:229.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/19/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:223.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/22/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:187.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/29/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:169.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/3/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:153.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/9/2026 12:00:00 AM
+12:25:33 Below re-order, Expedite POs:6/9/2026 12:00:00 AM
+12:25:33 Creating new PO suggestion for Part:IMP-00673, Attribute Set:'', Date:5/26/2026 12:00:00 AM, Quantity:405.00000000 Number:0
+12:25:33 Done with New Suggestion transaction
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/10/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/11/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/15/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/24/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/29/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/30/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/1/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/20/2026 12:00:00 AM
+12:25:33 Below re-order, Expedite POs:7/20/2026 12:00:00 AM
+12:25:33 Creating new PO suggestion for Part:IMP-00673, Attribute Set:'', Date:7/6/2026 12:00:00 AM, Quantity:81.00000000 Number:0
+12:25:33 Done with New Suggestion transaction
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/21/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/23/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:8/19/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:8/28/2026 12:00:00 AM
+12:25:33 Below re-order, Expedite POs:8/28/2026 12:00:00 AM
+12:25:33 Creating new PO suggestion for Part:IMP-00673, Attribute Set:'', Date:8/14/2026 12:00:00 AM, Quantity:53.00000000 Number:0
+12:25:33 Done with New Suggestion transaction
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:9/10/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/2/2026 12:00:00 AM
+12:25:33 Below re-order, Expedite POs:10/2/2026 12:00:00 AM
+12:25:33 Creating new PO suggestion for Part:IMP-00673, Attribute Set:'', Date:9/18/2026 12:00:00 AM, Quantity:37.00000000 Number:0
+12:25:33 Done with New Suggestion transaction
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/29/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:11/12/2026 12:00:00 AM
+12:25:33 Below re-order, Expedite POs:11/12/2026 12:00:00 AM
+12:25:33 Creating new PO suggestion for Part:IMP-00673, Attribute Set:'', Date:10/29/2026 12:00:00 AM, Quantity:69.00000000 Number:0
+12:25:33 Done with New Suggestion transaction
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:11/20/2026 12:00:00 AM
+12:25:33 Checking Receive Time...
+12:25:33 Checking Receive Time...
+12:25:33 Done with Part:IMP-00673, Attribute Set:''
+12:25:33 Finished Processing Part:IMP-00673
+12:25:33 Ending Part Level: 5-0. Wait Time 00h:00m:27s, Parts 4, Jobs 0
+12:25:33 Starting Part Level: 10-0
+12:25:33 Start Processing Part:V16200, Attribute Set:'',  LLC:10-0
+12:25:33 Processing Part:V16200, Attribute Set:''
+12:25:33 Parameters: Receive Time -> 10; Planning Fence -> 0; Delta In -> 3; Delta Out -> 10; Lead Time CutOff -> , Use Dynamic DOS -> False, Allow Consume Min -> False
+12:25:33 Deleting Suggestions
+12:25:33 Processing non-stock transactions for Part:V16200, Attribute Set:''
+12:25:33 Processing stock transactions for Part:V16200, Attribute Set:''
+12:25:33 Beginning Balance:7512.00000000
+12:25:33 Date changed, Process Date:1/20/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:1/23/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:1/26/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:1/27/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:1/28/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:1/30/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:2/2/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:2/3/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:2/4/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:2/5/2026 12:00:00 AM
+12:25:33 Date changed, Process Date:2/6/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6692.50000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/9/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6675.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/10/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6674.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/12/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6661.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/13/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6644.50000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/16/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6642.50000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/17/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6504.50000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/18/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6502.50000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/19/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6349.50000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/20/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6315.25000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/23/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6290.75000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/24/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6242.50000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/25/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6241.00000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/26/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:6015.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:2/27/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5837.12000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/3/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5797.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/5/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5795.12000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/6/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5493.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/9/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5423.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/10/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5348.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/11/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5347.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/12/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5329.87000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/13/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5233.87000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/16/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5191.87000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/17/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5099.37000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/18/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5097.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/19/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5094.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/20/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5043.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/24/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:5008.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/25/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4969.62000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/26/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4951.12000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/27/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4861.12000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/30/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4804.12000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:3/31/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4758.76000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/1/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4723.26000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/2/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4705.58000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/6/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4593.58000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/9/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4587.58000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/10/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4567.58000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/13/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4563.73000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/14/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4433.73000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/15/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4427.73000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/16/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4410.23000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/21/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4372.23000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/22/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4350.23000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/27/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4346.73000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/28/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4254.73000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/29/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4250.73000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:4/30/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4212.98000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/1/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4212.73000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/4/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4195.23000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/5/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4165.23000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/6/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4132.23000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/7/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4058.73000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/11/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:4004.73000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/13/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3952.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/15/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3917.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/18/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3899.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/19/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3882.13000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/20/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3867.13000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/21/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3834.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:5/29/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3794.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/1/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3762.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/2/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3738.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/3/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3713.13000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/4/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3666.13000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/5/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3622.13000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/8/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3604.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/11/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3582.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/12/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3550.78000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/17/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3548.28000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/22/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3513.28000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:6/24/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3512.53000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/1/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3470.53000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/2/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3400.53000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/6/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3368.53000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/8/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3336.53000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/9/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3332.53000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/13/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3297.53000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/15/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3280.03000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/17/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3265.03000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/20/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3235.03000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:7/30/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3207.03000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:8/3/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3177.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:8/5/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3171.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:8/20/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3165.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:8/25/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3153.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:8/26/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3123.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:8/27/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3107.13000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:8/28/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3095.13000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:9/1/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3063.13000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:9/2/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3059.13000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:9/3/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3057.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:9/24/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:3055.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:9/28/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2799.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:9/29/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2757.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:9/30/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2731.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/2/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2707.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/5/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2517.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/8/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2509.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/9/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2506.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/14/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2497.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/16/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2385.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/21/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2373.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/23/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2370.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/26/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2208.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:10/27/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2166.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:11/3/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2136.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:11/4/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2112.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:11/5/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2102.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:11/25/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2090.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:12/7/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2040.38000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:12/8/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2028.88000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:12/9/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2027.13000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:12/15/2026 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2025.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:1/6/2027 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:2013.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:1/7/2027 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:1983.63000000
+12:25:33 Checking Receive Time...
+12:25:33 Date changed, Process Date:1/8/2027 12:00:00 AM
+12:25:33 Over re-order, DoSuggestion...
+12:25:33 After DoSuggestions, Balance:1970.13000000
+12:25:33 Checking Receive Time...
+12:25:34 Date changed, Process Date:1/13/2027 12:00:00 AM
+12:25:34 Over re-order, DoSuggestion...
+12:25:34 After DoSuggestions, Balance:1938.13000000
+12:25:34 Checking Receive Time...
+12:25:34 Date changed, Process Date:1/14/2027 12:00:00 AM
+12:25:34 Over re-order, DoSuggestion...
+12:25:34 After DoSuggestions, Balance:1934.13000000
+12:25:34 Checking Receive Time...
+12:25:34 Date changed, Process Date:1/15/2027 12:00:00 AM
+12:25:34 Over re-order, DoSuggestion...
+12:25:34 After DoSuggestions, Balance:1932.38000000
+12:25:34 Checking Receive Time...
+12:25:34 Date changed, Process Date:2/5/2027 12:00:00 AM
+12:25:34 Over re-order, DoSuggestion...
+12:25:34 After DoSuggestions, Balance:1914.38000000
+12:25:34 Checking Receive Time...
+12:25:34 Date changed, Process Date:2/9/2027 12:00:00 AM
+12:25:34 Over re-order, DoSuggestion...
+12:25:34 After DoSuggestions, Balance:1878.38000000
+12:25:34 Checking Receive Time...
+12:25:34 Date changed, Process Date:2/11/2027 12:00:00 AM
+12:25:34 Over re-order, DoSuggestion...
+12:25:34 After DoSuggestions, Balance:1863.38000000
+12:25:34 Checking Receive Time...
+12:25:34 Date changed, Process Date:2/12/2027 12:00:00 AM
+12:25:34 Over re-order, DoSuggestion...
+12:25:34 After DoSuggestions, Balance:1799.38000000
+12:25:34 Checking Receive Time...
+12:25:34 Date changed, Process Date:2/17/2027 12:00:00 AM
+12:25:34 Over re-order, DoSuggestion...
+12:25:34 After DoSuggestions, Balance:1781.38000000
+12:25:34 Checking Receive Time...
+12:25:34 Checking Receive Time...
+12:25:34 Done with Part:V16200, Attribute Set:''
+12:25:34 Finished Processing Part:V16200
+12:25:48 MRP Process 3 done
+12:25:48 MRP process 3 done.  Total Wait/Scheduling Time = 00h:02m:32s
+12:25:48 Parts:217; New Jobs:0; Reused Jobs:0; Deleted Jobs:0; Scheduled Jobs:0; Saved Load:0

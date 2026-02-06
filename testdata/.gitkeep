@@ -1,0 +1,8 @@
+# Test Data Directory
+
+Place redacted/anonymized test data files here.
+
+## Guidelines
+- All log files should use `.log` extension
+- Remove or redact any PII (names, emails, IPs, etc.)
+- Use placeholder values like `[REDACTED]`, `user@example.com`, `192.168.x.x`

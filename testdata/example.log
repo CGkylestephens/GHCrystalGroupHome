@@ -1,0 +1,14 @@
+# Example Log File (Redacted)
+# This is a template showing the expected format for test log files
+
+2026-02-06 10:00:00.000 [INFO] Application started
+2026-02-06 10:00:01.234 [INFO] User [REDACTED] logged in from 192.168.x.x
+2026-02-06 10:00:05.567 [DEBUG] Loading feature: VendorSurvey
+2026-02-06 10:00:06.789 [INFO] Survey ID: 12345 accessed by user@example.com
+2026-02-06 10:00:10.000 [WARN] Slow query detected (elapsed: 1500ms)
+2026-02-06 10:00:15.123 [ERROR] Failed to connect to external service
+  Exception: System.Net.Http.HttpRequestException
+  Message: Connection refused
+  StackTrace: [REDACTED]
+2026-02-06 10:00:20.456 [INFO] Retry successful
+2026-02-06 10:00:30.000 [INFO] Request completed successfully

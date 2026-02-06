@@ -1,0 +1,332 @@
+                Thursday, February 5, 2026 11:59:02
+23:59:02 MRP Regeneration process begin
+23:59:02 ----------------------------------------------------------------------------------------------------
+23:59:02 Part Run MRP                               -> False
+23:59:02 Cut Off Date                               -> 2/5/2036 12:00:00 AM
+23:59:02 Schedule Start Date                        -> 2/5/2026 12:00:00 AM
+23:59:02 Run Finite Scheduling                      -> True
+23:59:02 Ignore Constrained Materials               -> False
+23:59:02 Allow Historical Dates                     -> False
+23:59:02 Use Production Preparation Buffer          -> True
+23:59:02 Sort Level 0 MRP Jobs by Date              -> False
+23:59:02 Recycle MRP Jobs                           -> False
+23:59:02 Get Details From Quote                     -> False
+23:59:02 Run Multi Level Pegging                    -> True
+23:59:02 Include Contract PO Parts                  -> False
+23:59:02 Generate Purchase Schedules                -> False
+23:59:02 Incl only Parts with activity or min/safety-> True
+23:59:02 Use Lot Expiration                         -> False
+23:59:02 Number of MRP Processes                    -> 3
+23:59:02 Number of Schedulers                       -> 2
+23:59:02 Rough Cut Schedule When Getting Details    -> True
+23:59:02 Site List                                  -> MfgSys
+23:59:02 Part List                                  -> 
+23:59:02 Part Class List                            -> 
+23:59:02 Product Group List                         -> 
+23:59:02 ----------------------------------------------------------------------------------------------------
+23:59:02 PartList Levels                            -> 11
+23:59:02 ----------------------------------------------------------------------------------------------------
+23:59:02 Host.config - AppSettings
+23:59:02 MRPRowCount (Sugg: 2000 rows)              -> 2000
+23:59:02 MRPPartDtlRowCount (Sugg: 20 rows)         -> 20
+23:59:02 MRPCommandTimeout (Sugg: 3600 secs)        -> 3600
+23:59:02 CommandTimeout(Sugg: 0 secs = Infinite)    -> 0
+23:59:02 queryTimeout (Sugg: 0 secs = Infinite)     -> 0
+23:59:02 LockTimeout (Sugg: 180000 secs)            -> 180000
+23:59:02 OperationTimeout (Sugg: 0:10:00)           -> 09:00:00
+23:59:02 TransactionMaximumTimeout (Sugg: 5:00:00)  -> 05:00:00
+23:59:02 TransactionDefaultTimeout (Sugg: 5:00:00)  -> 05:00:00
+23:59:02 ----------------------------------------------------------------------------------------------------
+23:59:02 Process Control
+23:59:02   Name -> ProcessorMain; Code -> Erp.Internal.MR.MrpExp.dll
+23:59:02     Process Stop Queues -> Part~Delete~LotJobSplit~SchedJob~FirmJob~SaveLoad~QuotePart
+23:59:02     Controller -> True; Range Start -> 0; Range End -> 0
+23:59:02 Version 1.00.01
+23:59:02   Name -> ProcessorMRP; Code -> Erp.Internal.MR.MrpExpCD.dll
+23:59:02     Process Stop Queues -> 
+23:59:02     Controller -> False; Range Start -> 1; Range End -> 100
+23:59:02 Version 1.00.01
+23:59:02   Name -> ProcessorSched; Code -> Erp.Internal.MR.MrpExpSched.dll
+23:59:02     Process Stop Queues -> 
+23:59:02     Controller -> False; Range Start -> 101; Range End -> 200
+23:59:02 Version 1.00.01
+23:59:02 ----------------------------------------------------------------------------------------------------
+23:59:02 Process Queue
+23:59:02   Name -> BuildDelPOQueue; Queue In -> ; Queue Out -> DeleteAllPO; Controller -> True
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Delete; Check Group -> ; Repeat -> False; Regen Only -> True; Finite -> False
+23:59:02   Name -> BuildDelJob; Queue In -> ; Queue Out -> DeleteJob; Controller -> True
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Delete; Check Group -> ; Repeat -> False; Regen Only -> True; Finite -> False
+23:59:02   Name -> BuildDelTO; Queue In -> ; Queue Out -> DeleteTO; Controller -> True
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Delete; Check Group -> Delete; Repeat -> False; Regen Only -> True; Finite -> False
+23:59:02   Name -> ProcessDelPO; Queue In -> DeleteAllPO; Queue Out -> ; Controller -> False
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Delete; Check Group -> ; Repeat -> False; Regen Only -> True; Finite -> False
+23:59:02   Name -> ProcessDelJob; Queue In -> DeleteJob; Queue Out -> ; Controller -> False
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Delete; Check Group -> ; Repeat -> False; Regen Only -> True; Finite -> False
+23:59:02   Name -> ProcessDelTO; Queue In -> DeleteTO; Queue Out -> ; Controller -> False
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Delete; Check Group -> ; Repeat -> False; Regen Only -> True; Finite -> False
+23:59:02   Name -> BuildSched; Queue In -> ; Queue Out -> PreJobF; Controller -> True
+23:59:02     Alt Queue Out 1 -> PreJobI; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Sched; Check Group -> Sched; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> SchedJobF; Queue In -> PreJobF; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Sched; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> True
+23:59:02   Name -> SchedJobI; Queue In -> PreJobI; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Sched; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> BuildQuoteJobQueue; Queue In -> ; Queue Out -> QuotePart; Controller -> True
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Quote; Check Group -> Quote; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> ProcessQuoteJob; Queue In -> QuotePart; Queue Out -> ; Controller -> False
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Quote; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> BuildNonPart; Queue In -> ; Queue Out -> Part; Controller -> True
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> NonPart; Check Group -> NonPart; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> ProcessNonPart; Queue In -> Part; Queue Out -> SchedJobF; Controller -> False
+23:59:02     Alt Queue Out 1 -> LotJobSplit; Alt Queue Out 2 -> SchedJobI; Alt Queue Out 3 -> FirmJob
+23:59:02     Group -> NonPart; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> LotJobSplitNonPart; Queue In -> LotJobSplit; Queue Out -> SchedJobF; Controller -> False
+23:59:02     Alt Queue Out 1 -> LotJobSplit; Alt Queue Out 2 -> SchedJobI; Alt Queue Out 3 -> FirmJob
+23:59:02     Group -> NonPart; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> SchedNonPartF; Queue In -> SchedJobF; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> FirmJob; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> NonPart; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> True
+23:59:02   Name -> SchedNonPartI; Queue In -> SchedJobI; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> FirmJob; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> NonPart; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> FirmJobNonPart; Queue In -> FirmJob; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> NonPart; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> BuildPart0; Queue In -> ; Queue Out -> Part; Controller -> True
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Zero; Check Group -> Zero; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> ProcessPart0; Queue In -> Part; Queue Out -> ZeroJob; Controller -> False
+23:59:02     Alt Queue Out 1 -> LotJobSplit; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Zero; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> LotJobSplitPart0; Queue In -> LotJobSplit; Queue Out -> ZeroJob; Controller -> False
+23:59:02     Alt Queue Out 1 -> LotJobSplit; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Zero; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> SortPart0; Queue In -> ZeroJob; Queue Out -> SchedJobF; Controller -> True
+23:59:02     Alt Queue Out 1 -> SchedJobI; Alt Queue Out 2 -> FirmJob; Alt Queue Out 3 -> 
+23:59:02     Group -> ZeroSort; Check Group -> ZeroSort; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> SchedPart0F; Queue In -> SchedJobF; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> FirmJob; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> ZeroSort; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> True
+23:59:02   Name -> SchedPart0I; Queue In -> SchedJobI; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> FirmJob; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> ZeroSort; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> FirmJobPart0; Queue In -> FirmJob; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> ZeroSort; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> BuildPart; Queue In -> ; Queue Out -> Part; Controller -> True
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Part; Check Group -> Part; Repeat -> True; Regen Only -> False; Finite -> False
+23:59:02   Name -> ProcessPartL; Queue In -> Part; Queue Out -> SchedJobF; Controller -> False
+23:59:02     Alt Queue Out 1 -> LotJobSplit; Alt Queue Out 2 -> SchedJobI; Alt Queue Out 3 -> FirmJob
+23:59:02     Group -> Part; Check Group -> ; Repeat -> True; Regen Only -> False; Finite -> False
+23:59:02   Name -> LotJobSplitPartL; Queue In -> LotJobSplit; Queue Out -> SchedJobF; Controller -> False
+23:59:02     Alt Queue Out 1 -> LotJobSplit; Alt Queue Out 2 -> SchedJobI; Alt Queue Out 3 -> FirmJob
+23:59:02     Group -> Part; Check Group -> ; Repeat -> True; Regen Only -> False; Finite -> False
+23:59:02   Name -> SchedPartLF; Queue In -> SchedJobF; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> FirmJob; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Part; Check Group -> ; Repeat -> True; Regen Only -> False; Finite -> True
+23:59:02   Name -> SchedPartLI; Queue In -> SchedJobI; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> FirmJob; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Part; Check Group -> ; Repeat -> True; Regen Only -> False; Finite -> False
+23:59:02   Name -> FirmJobPartL; Queue In -> FirmJob; Queue Out -> SaveLoad; Controller -> False
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Part; Check Group -> ; Repeat -> True; Regen Only -> False; Finite -> False
+23:59:02   Name -> ProcessLoad; Queue In -> ; Queue Out -> ; Controller -> True
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Load; Check Group -> Load; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02   Name -> SaveLoad; Queue In -> SaveLoad; Queue Out -> ; Controller -> False
+23:59:02     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+23:59:02     Group -> Load; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+23:59:02 ----------------------------------------------------------------------------------------------------
+23:59:02 Delete Suggestions for Orphan Jobs
+23:59:02 Delete Unfirm Jobs
+23:59:02 Beginning of Delete Unfirm Jobs
+23:59:02  Site: MfgSys Delete of Table: ShopLoad
+00:07:29  Site: MfgSys Delete of Table: ShopLoad Record Count ( 2,819 )
+00:07:29  Site: MfgSys Delete of Table: ShopLoad Processing Time [ 00:08:26 ]
+00:07:29  Site: MfgSys Backout for JobMtl
+00:07:40  Site: MfgSys Backout for JobMtl Record Count ( 5,782 )
+00:07:40  Site: MfgSys Backout for JobMtl Processing Time [ 00:00:11 ]
+00:07:40  Site: MfgSys BackOut of JobAsmbl
+00:07:40  Site: MfgSys BackOut of JobAsmbl Record Count ( 26 )
+00:07:40  Site: MfgSys Delete of Table: JobProd
+00:11:37  Site: MfgSys Delete of Table: JobProd Record Count ( 6,360 )
+00:11:37  Site: MfgSys Delete of Table: JobProd Processing Time [ 00:03:57 ]
+00:11:37  Site: MfgSys Delete of Table: JobAudit
+00:11:38  Site: MfgSys Delete of Table: PcValueGrp
+00:11:38  Site: MfgSys Delete of Table: PcValueHead
+00:11:38  Site: MfgSys Delete of Table: PcValueSet
+00:11:38  Site: MfgSys Delete of Table: JobMtlRestriction
+00:11:38  Site: MfgSys Delete of Table: JObMtlRefDes
+00:11:38  Site: MfgSys Delete of Table: JobMtlInsp
+00:11:38  Site: MfgSys Delete of Table: JobMtlRestrictSubst
+00:11:38  Site: MfgSys Delete of Table: PcValueGrp
+00:11:38  Site: MfgSys Delete of Table: PcValueHead
+00:11:38  Site: MfgSys Delete of Table: PcValueSet
+00:11:38  Site: MfgSys Delete of Table: JobMtl
+00:11:49  Site: MfgSys Delete of Table: JobMtl Record Count ( 62,472 )
+00:11:49  Site: MfgSys Delete of Table: JobMtl Processing Time [ 00:00:11 ]
+00:11:49  Site: MfgSys Delete of Table: JobOperInsp
+00:11:49  Site: MfgSys Delete of Table: JobOper
+00:11:55  Site: MfgSys Delete of Table: JobOper Record Count ( 28,851 )
+00:11:55  Site: MfgSys Delete of Table: JobOper Processing Time [ 00:00:06 ]
+00:11:55  Site: MfgSys Delete of Table: JobOpDtl
+00:11:59  Site: MfgSys Delete of Table: JobOpDtl Record Count ( 28,912 )
+00:11:59  Site: MfgSys Delete of Table: JobOpDtl Processing Time [ 00:00:03 ]
+00:11:59  Site: MfgSys Delete of Table: JobOperRestriction
+00:11:59  Site: MfgSys Delete of Table: JobOperRestrictSubst
+00:11:59  Site: MfgSys Delete of Table: PartSug
+00:11:59  Site: MfgSys Delete of Table: PartSug Record Count ( 14 )
+00:11:59  Site: MfgSys Delete of Table: PcValueGrp
+00:11:59  Site: MfgSys Delete of Table: PcValueHead
+00:11:59  Site: MfgSys Delete of Table: PcValueSet
+00:11:59  Site: MfgSys Delete of Table: JobAsmbl
+00:12:01  Site: MfgSys Delete of Table: JobAsmbl Record Count ( 6,514 )
+00:12:01  Site: MfgSys Delete of Table: JobAsmbl Processing Time [ 00:00:01 ]
+00:12:01  Site: MfgSys Delete of Table: JobAsmblRestriction
+00:12:01  Site: MfgSys Delete of Table: JobAsmblInsp
+00:12:01  Site: MfgSys Delete of Table: JobAsmblRestrictSubst
+00:12:01  Site: MfgSys Delete of Table: TFOrdDtl
+00:12:03  Site: MfgSys Delete of Table: TFOrdDtl Processing Time [ 00:00:01 ]
+00:12:03  Site: MfgSys Delete of Table: JobPart
+00:12:03  Site: MfgSys Delete of Table: JobPart Record Count ( 6,360 )
+00:12:03  Site: MfgSys Delete of Table: PartDtl
+00:12:18  Site: MfgSys Delete of Table: PartDtl Processing Time [ 00:00:14 ]
+00:12:18  Site: MfgSys Delete of Table: PegDmdMst
+00:12:24  Site: MfgSys Delete of Table: PegDmdMst Record Count ( 56,329 )
+00:12:24  Site: MfgSys Delete of Table: PegDmdMst Processing Time [ 00:00:05 ]
+00:12:24  Site: MfgSys Delete of Table: ChgLog
+00:12:24  Site: MfgSys Delete of Table: Memo
+00:12:24  Site: MfgSys Delete of Table: XFileAttch
+00:12:25  Site: MfgSys Delete of Table: XFileAttch Record Count ( 9,683 )
+00:12:25  Site: MfgSys Delete of Table: ResourceTimeUsedSub
+00:12:25  Site: MfgSys Delete of Table: ResourceTimeUsed
+00:12:31  Site: MfgSys Delete of Table: ResourceTimeUsed Record Count ( 57,840 )
+00:12:31  Site: MfgSys Delete of Table: ResourceTimeUsed Processing Time [ 00:00:06 ]
+00:12:31  Site: MfgSys Delete of Table: JobOperMachParam
+00:12:31  Site: MfgSys Delete of Table: JobStage
+00:12:31  Site: MfgSys Delete of Table: JobOperAction
+00:12:31  Site: MfgSys Delete of Table: JobOperActionParam
+00:12:31  Site: MfgSys Delete of Table: JobHead
+00:12:34  Site: MfgSys Delete of Table: JobHead Record Count ( 6,360 )
+00:12:34  Site: MfgSys Delete of Table: JobHead Processing Time [ 00:00:03 ]
+00:12:34 End of Delete Unfirm Jobs===
+00:12:34 Starting sub-processes
+00:12:34 Deleting old Suggestions.
+00:12:34 Deleting unfirm jobs...
+00:12:34 Deleting transfer order suggestions ...
+00:12:44 Deleting transfer order suggestions ... Processing Time [ 00:00:10 ]
+00:12:44 Scheduling Jobs...
+00:12:49 Scheduling Jobs... Processing Time [ 00:00:05 ]
+00:12:49 Building Non-Part List
+00:12:56 Building Non-Part List Processing Time [ 00:00:06 ]
+00:12:56 Building PartList Level: 0-0
+00:22:29 Building PartList Level: 0-0 Processing Time [ 00:09:33 ]
+00:22:29 Building PartList Level: 1-0
+00:24:26 Building PartList Level: 1-0 Processing Time [ 00:01:56 ]
+00:24:26 Building PartList Level: 2-0
+00:35:58 Building PartList Level: 2-0 Processing Time [ 00:11:32 ]
+00:35:58 Building PartList Level: 3-0
+00:47:31 Building PartList Level: 3-0 Processing Time [ 00:11:32 ]
+00:47:31 Building PartList Level: 4-0
+00:51:35 Building PartList Level: 4-0 Processing Time [ 00:04:03 ]
+00:51:35 Building PartList Level: 5-0
+00:54:08 Building PartList Level: 5-0 Processing Time [ 00:02:33 ]
+00:54:08 Building PartList Level: 6-0
+00:55:09 Building PartList Level: 6-0 Processing Time [ 00:01:01 ]
+00:55:09 Building PartList Level: 7-0
+00:55:25 Building PartList Level: 7-0 Processing Time [ 00:00:15 ]
+00:55:25 Building PartList Level: 8-0
+00:55:36 Building PartList Level: 8-0 Processing Time [ 00:00:10 ]
+00:55:36 Building PartList Level: 9-0
+00:55:46 Building PartList Level: 9-0 Processing Time [ 00:00:10 ]
+00:55:46 Building PartList Level: 10-0
+00:55:51 Building PartList Level: 10-0 Processing Time [ 00:00:05 ]
+00:55:51 Building PartList Level: 11-0
+00:55:56 Building PartList Level: 11-0 Processing Time [ 00:00:05 ]
+00:55:56 Processing Schedule Load
+00:59:27 Processing Schedule Load Processing Time [ 00:03:30 ]
+00:59:27 Processing Orphan PO's...
+00:59:28 Processing Orphan PO:611582 Line:1 Rel:1
+00:59:30 Processing Orphan PO:611582 Line:1 Rel:1 Processing Time [ 00:00:01 ]
+00:59:30 Processing Orphan Jobs...
+00:59:30 Processing Orphan Job: F347858
+00:59:30 Processing Orphan Job: F347858
+00:59:30 Processing Orphan Job: 330056
+00:59:30 Processing Orphan Job: 330419
+01:10:58 Processing Orphan Job: 330419 Processing Time [ 00:11:27 ]
+01:10:58 MRP Regeneration process finished
+01:10:58 ================== Processor and Scheduler Summary ===================
+01:10:58 Processor: 001 Level: NPP Wait Time 00h:00m:06s Parts 2 Jobs 0
+01:10:58 Processor: 002 Level: NPP Wait Time 00h:00m:06s Parts 1 Jobs 0
+01:10:58 Processor: 003 Level: NPP Wait Time 00h:00m:06s Parts 3 Jobs 0
+01:10:58 Processor: 101 Level: NPP Wait Time 00h:00m:17s Parts 0 Jobs 1
+01:10:58 Processor: 102 Level: NPP Wait Time 00h:00m:20s Parts 0 Jobs 0
+01:10:58 Processor: 001 Level: 0-0 Wait Time 00h:00m:06s Parts 211 Jobs 116
+01:10:58 Processor: 002 Level: 0-0 Wait Time 00h:00m:08s Parts 88 Jobs 101
+01:10:58 Processor: 003 Level: 0-0 Wait Time 00h:00m:07s Parts 111 Jobs 114
+01:10:58 Processor: 101 Level: 0-0 Wait Time 00h:09m:22s Parts 0 Jobs 159
+01:10:58 Processor: 102 Level: 0-0 Wait Time 00h:09m:15s Parts 0 Jobs 155
+01:10:58 Processor: 001 Level: 1-0 Wait Time 00h:00m:02s Parts 60 Jobs 47
+01:10:58 Processor: 002 Level: 1-0 Wait Time 00h:00m:02s Parts 129 Jobs 56
+01:10:58 Processor: 003 Level: 1-0 Wait Time 00h:00m:02s Parts 155 Jobs 61
+01:10:58 Processor: 101 Level: 1-0 Wait Time 00h:01m:54s Parts 0 Jobs 107
+01:10:58 Processor: 102 Level: 1-0 Wait Time 00h:01m:54s Parts 0 Jobs 53
+01:10:58 Processor: 001 Level: 2-0 Wait Time 00h:00m:06s Parts 848 Jobs 855
+01:10:58 Processor: 002 Level: 2-0 Wait Time 00h:00m:06s Parts 838 Jobs 843
+01:10:58 Processor: 003 Level: 2-0 Wait Time 00h:00m:07s Parts 850 Jobs 834
+01:10:58 Processor: 101 Level: 2-0 Wait Time 00h:11m:16s Parts 0 Jobs 1132
+01:10:58 Processor: 102 Level: 2-0 Wait Time 00h:11m:15s Parts 0 Jobs 1171
+01:10:58 Processor: 001 Level: 3-0 Wait Time 00h:00m:08s Parts 511 Jobs 711
+01:10:58 Processor: 002 Level: 3-0 Wait Time 00h:00m:08s Parts 621 Jobs 731
+01:10:58 Processor: 003 Level: 3-0 Wait Time 00h:00m:08s Parts 666 Jobs 804
+01:10:58 Processor: 101 Level: 3-0 Wait Time 00h:09m:25s Parts 0 Jobs 983
+01:10:58 Processor: 102 Level: 3-0 Wait Time 00h:09m:27s Parts 0 Jobs 994
+01:10:58 Processor: 001 Level: 4-0 Wait Time 00h:00m:14s Parts 305 Jobs 169
+01:10:58 Processor: 002 Level: 4-0 Wait Time 00h:00m:13s Parts 274 Jobs 205
+01:10:58 Processor: 003 Level: 4-0 Wait Time 00h:00m:12s Parts 373 Jobs 198
+01:10:58 Processor: 101 Level: 4-0 Wait Time 00h:03m:47s Parts 0 Jobs 247
+01:10:58 Processor: 102 Level: 4-0 Wait Time 00h:03m:49s Parts 0 Jobs 233
+01:10:58 Processor: 001 Level: 5-0 Wait Time 00h:00m:10s Parts 286 Jobs 134
+01:10:58 Processor: 002 Level: 5-0 Wait Time 00h:00m:10s Parts 230 Jobs 170
+01:10:58 Processor: 003 Level: 5-0 Wait Time 00h:00m:11s Parts 235 Jobs 163
+01:10:58 Processor: 101 Level: 5-0 Wait Time 00h:02m:44s Parts 0 Jobs 210
+01:10:58 Processor: 102 Level: 5-0 Wait Time 00h:02m:41s Parts 0 Jobs 213
+01:10:58 Processor: 001 Level: 6-0 Wait Time 00h:00m:06s Parts 112 Jobs 26
+01:10:58 Processor: 002 Level: 6-0 Wait Time 00h:00m:06s Parts 126 Jobs 31
+01:10:58 Processor: 003 Level: 6-0 Wait Time 00h:00m:04s Parts 117 Jobs 36
+01:10:58 Processor: 101 Level: 6-0 Wait Time 00h:00m:22s Parts 0 Jobs 52
+01:10:58 Processor: 102 Level: 6-0 Wait Time 00h:00m:22s Parts 0 Jobs 41
+01:10:58 Processor: 001 Level: 7-0 Wait Time 00h:00m:05s Parts 38 Jobs 3
+01:10:58 Processor: 002 Level: 7-0 Wait Time 00h:00m:04s Parts 47 Jobs 4
+01:10:58 Processor: 003 Level: 7-0 Wait Time 00h:00m:04s Parts 57 Jobs 2
+01:10:58 Processor: 101 Level: 7-0 Wait Time 00h:00m:12s Parts 0 Jobs 5
+01:10:58 Processor: 102 Level: 7-0 Wait Time 00h:00m:18s Parts 0 Jobs 4
+01:10:58 Processor: 001 Level: 8-0 Wait Time 00h:00m:02s Parts 41 Jobs 2
+01:10:58 Processor: 002 Level: 8-0 Wait Time 00h:00m:02s Parts 54 Jobs 0
+01:10:58 Processor: 003 Level: 8-0 Wait Time 00h:00m:02s Parts 42 Jobs 0
+01:10:58 Processor: 101 Level: 8-0 Wait Time 00h:00m:04s Parts 0 Jobs 2
+01:10:58 Processor: 001 Level: 9-0 Wait Time 00h:00m:06s Parts 8 Jobs 5
+01:10:58 Processor: 002 Level: 9-0 Wait Time 00h:00m:06s Parts 13 Jobs 1
+01:10:58 Processor: 003 Level: 9-0 Wait Time 00h:00m:06s Parts 7 Jobs 4
+01:10:58 Processor: 101 Level: 9-0 Wait Time 00h:00m:08s Parts 0 Jobs 4
+01:10:58 Processor: 102 Level: 9-0 Wait Time 00h:00m:16s Parts 0 Jobs 4
+01:10:58 Processor: 001 Level: 10-0 Wait Time 00h:00m:02s Parts 8 Jobs 1
+01:10:58 Processor: 002 Level: 10-0 Wait Time 00h:00m:08s Parts 4 Jobs 0
+01:10:58 Processor: 003 Level: 10-0 Wait Time 00h:00m:02s Parts 5 Jobs 0
+01:10:58 Processor: 101 Level: 10-0 Wait Time 00h:00m:08s Parts 0 Jobs 1
+01:10:58 Processor: 001 Level: 11-0 Wait Time 00h:00m:06s Parts 3 Jobs 0
+01:10:58 Processor: 003 Level: 11-0 Wait Time 00h:00m:06s Parts 4 Jobs 0
+01:10:58 Total Memory After GC.Collect (Mb): 1168, Difference: 332
+ 

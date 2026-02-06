@@ -1,0 +1,8 @@
+# Example: 2024-02-01 MRP Regen Run (partial)
+Start Time: 2024-02-01 02:00 UTC
+Site: PLANT01
+...
+ERROR: Job 14567 abandoned due to timeout
+Part: ABC123 removed from planning
+...
+End Time: 2024-02-01 03:10 UTC

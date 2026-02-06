@@ -1,0 +1,84 @@
+                Friday, February 6, 2026 12:25:01
+12:25:01 GenPO Net Change process begin
+12:25:01 ----------------------------------------------------------------------------------------------------
+12:25:01 Part Run MRP                               -> False
+12:25:01 Cut Off Date                               -> 2/28/2027 12:00:00 AM
+12:25:01 Process Date                               -> 2/6/2026 12:00:00 AM
+12:25:01 Allow Historical Dates                     -> True
+12:25:01 Run Consolidated Purchasing                -> False
+12:25:01 Include Contract PO Parts                  -> False
+12:25:01 Generate Purchase Schedules                -> False
+12:25:01 Incl only Parts with activity or min/safety-> False
+12:25:01 Use Lot Expiration                         -> False
+12:25:01 Number of GenPO Processes                  -> 4
+12:25:01 Site List                                  -> MfgSys
+12:25:01 Part List                                  -> 
+12:25:01 Part Class List                            -> 
+12:25:01 Product Group List                         -> 
+12:25:01 ----------------------------------------------------------------------------------------------------
+12:25:01 PartList Levels                            -> 11
+12:25:01 ----------------------------------------------------------------------------------------------------
+12:25:01 Host.config - AppSettings
+12:25:01 MRPRowCount (Sugg: 2000 rows)              -> 2000
+12:25:01 MRPPartDtlRowCount (Sugg: 20 rows)         -> 20
+12:25:01 MRPCommandTimeout (Sugg: 3600 secs)        -> 3600
+12:25:01 CommandTimeout(Sugg: 0 secs = Infinite)    -> 0
+12:25:01 queryTimeout (Sugg: 0 secs = Infinite)     -> 0
+12:25:01 LockTimeout (Sugg: 180000 secs)            -> 180000
+12:25:01 OperationTimeout (Sugg: 0:10:00)           -> 09:00:00
+12:25:01 TransactionMaximumTimeout (Sugg: 5:00:00)  -> 05:00:00
+12:25:01 TransactionDefaultTimeout (Sugg: 5:00:00)  -> 05:00:00
+12:25:01 ----------------------------------------------------------------------------------------------------
+12:25:01 Process Control
+12:25:01   Name -> ProcessorMain; Code -> Erp.Internal.MR.MrpExp.dll
+12:25:01     Process Stop Queues -> Part~Delete
+12:25:01     Controller -> True; Range Start -> 0; Range End -> 0
+12:25:01 Version 1.00.01
+12:25:01   Name -> ProcessorMRP; Code -> Erp.Internal.MR.MrpExpCD.dll
+12:25:01     Process Stop Queues -> 
+12:25:01     Controller -> False; Range Start -> 1; Range End -> 100
+12:25:01 Version 1.00.01
+12:25:01 ----------------------------------------------------------------------------------------------------
+12:25:01 Process Queue
+12:25:01   Name -> BuildDelPOQueue; Queue In -> ; Queue Out -> DeleteAllPO; Controller -> True
+12:25:01     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+12:25:01     Group -> Delete; Check Group -> Delete; Repeat -> False; Regen Only -> True; Finite -> False
+12:25:01   Name -> ProcessDelPO; Queue In -> DeleteAllPO; Queue Out -> ; Controller -> False
+12:25:01     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+12:25:01     Group -> Delete; Check Group -> ; Repeat -> False; Regen Only -> True; Finite -> False
+12:25:01   Name -> BuildNonPart; Queue In -> ; Queue Out -> Part; Controller -> True
+12:25:01     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+12:25:01     Group -> NonPart; Check Group -> NonPart; Repeat -> False; Regen Only -> False; Finite -> False
+12:25:01   Name -> ProcessNonPart; Queue In -> Part; Queue Out -> ; Controller -> False
+12:25:01     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+12:25:01     Group -> NonPart; Check Group -> ; Repeat -> False; Regen Only -> False; Finite -> False
+12:25:01   Name -> BuildPart; Queue In -> ; Queue Out -> Part; Controller -> True
+12:25:01     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+12:25:01     Group -> Part; Check Group -> Part; Repeat -> True; Regen Only -> False; Finite -> False
+12:25:01   Name -> ProcessPart; Queue In -> Part; Queue Out -> ; Controller -> False
+12:25:01     Alt Queue Out 1 -> ; Alt Queue Out 2 -> ; Alt Queue Out 3 -> 
+12:25:01     Group -> Part; Check Group -> ; Repeat -> True; Regen Only -> False; Finite -> False
+12:25:01 ----------------------------------------------------------------------------------------------------
+12:25:01 Starting sub-processes
+12:25:01 Building Non-Part List
+12:25:11 Building Non-Part List Processing Time [ 00:00:10 ]
+12:25:11 Building PartList Level: 0-0
+12:25:14 Building PartList Level: 0-0 Processing Time [ 00:00:02 ]
+12:25:14 Building PartList Level: 1-0
+12:25:15 Building PartList Level: 2-0
+12:25:16 Building PartList Level: 2-0 Processing Time [ 00:00:01 ]
+12:25:16 Building PartList Level: 3-0
+12:25:16 Building PartList Level: 4-0
+12:25:17 Building PartList Level: 5-0
+12:25:17 Building PartList Level: 6-0
+12:25:17 Building PartList Level: 7-0
+12:25:17 Building PartList Level: 8-0
+12:25:17 Building PartList Level: 9-0
+12:25:17 Building PartList Level: 10-0
+12:25:17 Building PartList Level: 11-0
+12:25:47 Building PartList Level: 11-0 Processing Time [ 00:00:30 ]
+12:25:47 Processing Orphan PO's...
+12:25:50 Processing Orphan PO's... Processing Time [ 00:00:02 ]
+12:25:50 GenPO Net Change process finished
+12:25:50 Total Memory After GC.Collect (Mb): 755, Difference: 507
+ 
