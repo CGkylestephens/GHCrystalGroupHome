@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CrystalGroupHome.SharedRCL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+33fdacbe4ae3816039f93807cda133a3c54d3a4c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ca585cbbfdaa1eb8266423ec73416028401beb7c")]
 [assembly: System.Reflection.AssemblyProductAttribute("CrystalGroupHome.SharedRCL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CrystalGroupHome.SharedRCL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
