@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\CrystalGroupHome.SharedRCL.props" />
+</Project>

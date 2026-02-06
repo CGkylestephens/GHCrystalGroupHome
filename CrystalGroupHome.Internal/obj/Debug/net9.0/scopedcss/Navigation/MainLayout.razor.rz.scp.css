@@ -1,0 +1,20 @@
+.page[b-gv2qwdk3kz] {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.main[b-gv2qwdk3kz] {
+    overflow: auto;
+    display: flex;
+    width: 100%;
+}
+
+@media (min-width: 641px) {
+    .page[b-gv2qwdk3kz] {
+        flex-direction: row;
+        overflow: hidden;
+    }
+}

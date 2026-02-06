@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CrystalGroupHome.External")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a4cf3e2792bf88a91a6a1b648503bfacc430a340")]
 [assembly: System.Reflection.AssemblyProductAttribute("CrystalGroupHome.External")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CrystalGroupHome.External")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
