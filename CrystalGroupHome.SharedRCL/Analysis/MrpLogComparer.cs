@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using CrystalGroupHome.SharedRCL.Models;
 
 namespace CrystalGroupHome.SharedRCL.Analysis
@@ -10,6 +11,8 @@ namespace CrystalGroupHome.SharedRCL.Analysis
     /// </summary>
     public class MrpLogComparer
     {
+        // Static regex for efficient whitespace normalization
+        private static readonly Regex WhitespaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
         /// <summary>
         /// Compares two MRP log documents and returns a detailed comparison.
         /// </summary>
@@ -105,58 +108,48 @@ namespace CrystalGroupHome.SharedRCL.Analysis
         {
             var differences = new List<MrpDifference>();
 
-            // Group entries by job number (for matching)
+            // Group entries by job number and take the first entry with a date for each job
             var entriesAByJob = runA.Entries
                 .Where(e => !string.IsNullOrEmpty(e.JobNumber) && e.Date.HasValue)
                 .GroupBy(e => e.JobNumber!.ToUpperInvariant(), StringComparer.OrdinalIgnoreCase)
-                .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.OrdinalIgnoreCase);
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
 
             var entriesBByJob = runB.Entries
                 .Where(e => !string.IsNullOrEmpty(e.JobNumber) && e.Date.HasValue)
                 .GroupBy(e => e.JobNumber!.ToUpperInvariant(), StringComparer.OrdinalIgnoreCase)
-                .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.OrdinalIgnoreCase);
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
 
             // Compare jobs present in both runs
             foreach (var jobNumber in entriesAByJob.Keys.Where(k => entriesBByJob.ContainsKey(k)))
             {
-                var entriesA = entriesAByJob[jobNumber];
-                var entriesB = entriesBByJob[jobNumber];
+                var entryA = entriesAByJob[jobNumber];
+                var entryB = entriesBByJob[jobNumber];
 
-                // Compare dates for matching entries
-                foreach (var entryA in entriesA)
+                if (entryA.Date.HasValue && entryB.Date.HasValue)
                 {
-                    foreach (var entryB in entriesB)
+                    var daysDifference = Math.Abs((entryB.Date.Value - entryA.Date.Value).TotalDays);
+
+                    // Flag if difference > 1 day
+                    if (daysDifference > 1)
                     {
-                        if (entryA.Date.HasValue && entryB.Date.HasValue)
+                        var severity = DetermineDateShiftSeverity(daysDifference);
+
+                        differences.Add(new MrpDifference
                         {
-                            var daysDifference = Math.Abs((entryB.Date.Value - entryA.Date.Value).TotalDays);
-
-                            // Flag if difference > 1 day
-                            if (daysDifference > 1)
+                            Type = DifferenceType.DateShifted,
+                            JobNumber = jobNumber,
+                            PartNumber = entryA.PartNumber ?? entryB.PartNumber ?? string.Empty,
+                            Description = $"Date shifted for job {jobNumber}: {entryA.Date.Value:MM/dd/yyyy} → {entryB.Date.Value:MM/dd/yyyy} ({daysDifference:F0} days)",
+                            RunAEntry = entryA,
+                            RunBEntry = entryB,
+                            Severity = severity,
+                            Details = new Dictionary<string, object>
                             {
-                                var severity = DetermineDateShiftSeverity(daysDifference);
-
-                                differences.Add(new MrpDifference
-                                {
-                                    Type = DifferenceType.DateShifted,
-                                    JobNumber = jobNumber,
-                                    PartNumber = entryA.PartNumber ?? entryB.PartNumber ?? string.Empty,
-                                    Description = $"Date shifted for job {jobNumber}: {entryA.Date.Value:MM/dd/yyyy} → {entryB.Date.Value:MM/dd/yyyy} ({daysDifference:F0} days)",
-                                    RunAEntry = entryA,
-                                    RunBEntry = entryB,
-                                    Severity = severity,
-                                    Details = new Dictionary<string, object>
-                                    {
-                                        ["OriginalDate"] = entryA.Date.Value.ToString("M/d/yyyy"),
-                                        ["NewDate"] = entryB.Date.Value.ToString("M/d/yyyy"),
-                                        ["DaysDifference"] = (int)daysDifference
-                                    }
-                                });
-                                
-                                // Only report once per job to avoid duplicates
-                                break;
+                                ["OriginalDate"] = entryA.Date.Value.ToString("M/d/yyyy"),
+                                ["NewDate"] = entryB.Date.Value.ToString("M/d/yyyy"),
+                                ["DaysDifference"] = (int)daysDifference
                             }
-                        }
+                        });
                     }
                 }
             }
@@ -390,7 +383,7 @@ namespace CrystalGroupHome.SharedRCL.Analysis
         {
             // Use job number, part number, and normalized raw line to identify unique errors
             // Normalize the line by removing extra whitespace and converting to uppercase for comparison
-            var normalizedLine = System.Text.RegularExpressions.Regex.Replace(entry.RawLine.Trim().ToUpperInvariant(), @"\s+", " ");
+            var normalizedLine = WhitespaceRegex.Replace(entry.RawLine.Trim().ToUpperInvariant(), " ");
             var jobPart = $"{entry.JobNumber?.ToUpperInvariant() ?? ""}_{entry.PartNumber?.ToUpperInvariant() ?? ""}";
             return $"{jobPart}_{normalizedLine}";
         }
