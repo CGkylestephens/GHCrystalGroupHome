@@ -30,9 +30,18 @@ namespace CrystalGroupHome.SharedRCL.Services
         // Static compiled regex patterns for performance
         private static readonly Regex TimestampRegex = new(@"^(\d{2}:\d{2}:\d{2})", RegexOptions.Compiled);
         private static readonly Regex PartNumberRegex = new(@"(?:Part:|Processing Part:|For Part:)\s*([A-Za-z0-9\[\]\-_.]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        // Job number pattern supports: U-prefix (U0000000000273), F-prefix (F340394), numeric only (14567)
         private static readonly Regex JobNumberRegex = new(@"(?:Job:?|J:)\s*([UF]?\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex DemandRegex = new(@"Demand:\s*([A-Z]):\s*(\d+)/(\d+)/(\d+)\s+Date:\s*(\d{1,2}/\d{1,2}/\d{4})\s+Quantity:\s*([\d.]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex SupplyRegex = new(@"Supply:\s*([A-Z]):\s*([A-Za-z0-9\-_.]+)/(\d+)/(\d+)\s+Date:\s*(\d{1,2}/\d{1,2}/\d{4})\s+Quantity:\s*([\d.]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        
+        // Compiled regex patterns for entry type detection
+        private static readonly Regex ProcessingPartPattern = new(@"(?:Processing\s+Part:|Start\s+Processing\s+Part:|For\s+Part:)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex DemandPattern = new(@"^\s*\d{2}:\d{2}:\d{2}\s+Demand:", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SupplyPattern = new(@"^\s*\d{2}:\d{2}:\d{2}\s+Supply:", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex PeggedPattern = new(@"Pegged\s+Qty:", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SystemInfoPattern = new(@"Building|Processing|Creating|Deleting|Finished", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex WarningPattern = new(@"warning", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// Parses an MRP log file and extracts top-level run metadata.
@@ -208,7 +217,7 @@ namespace CrystalGroupHome.SharedRCL.Services
                 if (line.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     // Distinguish between error and warning
-                    if (line.IndexOf("warning", StringComparison.OrdinalIgnoreCase) >= 0)
+                    if (WarningPattern.IsMatch(line))
                     {
                         return MrpLogEntryType.Warning;
                     }
@@ -216,28 +225,28 @@ namespace CrystalGroupHome.SharedRCL.Services
                 }
             }
 
-            // Check for specific patterns
-            if (Regex.IsMatch(line, @"(?:Processing\s+Part:|Start\s+Processing\s+Part:|For\s+Part:)", RegexOptions.IgnoreCase))
+            // Check for specific patterns using compiled regex
+            if (ProcessingPartPattern.IsMatch(line))
             {
                 return MrpLogEntryType.ProcessingPart;
             }
 
-            if (Regex.IsMatch(line, @"^\s*\d{2}:\d{2}:\d{2}\s+Demand:", RegexOptions.IgnoreCase))
+            if (DemandPattern.IsMatch(line))
             {
                 return MrpLogEntryType.Demand;
             }
 
-            if (Regex.IsMatch(line, @"^\s*\d{2}:\d{2}:\d{2}\s+Supply:", RegexOptions.IgnoreCase))
+            if (SupplyPattern.IsMatch(line))
             {
                 return MrpLogEntryType.Supply;
             }
 
-            if (Regex.IsMatch(line, @"Pegged\s+Qty:", RegexOptions.IgnoreCase))
+            if (PeggedPattern.IsMatch(line))
             {
                 return MrpLogEntryType.Pegging;
             }
 
-            if (Regex.IsMatch(line, @"Building|Processing|Creating|Deleting|Finished", RegexOptions.IgnoreCase))
+            if (SystemInfoPattern.IsMatch(line))
             {
                 return MrpLogEntryType.SystemInfo;
             }
@@ -259,7 +268,8 @@ namespace CrystalGroupHome.SharedRCL.Services
             var match = TimestampRegex.Match(line);
             if (match.Success)
             {
-                if (TimeSpan.TryParse(match.Groups[1].Value, out var time))
+                // Use ParseExact for better performance and validation
+                if (TimeSpan.TryParseExact(match.Groups[1].Value, @"hh\:mm\:ss", CultureInfo.InvariantCulture, out var time))
                 {
                     return contextualDate.Date.Add(time);
                 }
@@ -295,6 +305,7 @@ namespace CrystalGroupHome.SharedRCL.Services
 
         /// <summary>
         /// Parses demand information from a log line.
+        /// Note: Parse failures are caught and logged by the calling ParseLine method.
         /// </summary>
         private DemandInfo? ParseDemand(string line)
         {
@@ -307,15 +318,15 @@ namespace CrystalGroupHome.SharedRCL.Services
                     {
                         Type = match.Groups[1].Value,
                         Order = match.Groups[2].Value,
-                        Line = int.Parse(match.Groups[3].Value),
-                        Release = int.Parse(match.Groups[4].Value),
+                        Line = int.Parse(match.Groups[3].Value, CultureInfo.InvariantCulture),
+                        Release = int.Parse(match.Groups[4].Value, CultureInfo.InvariantCulture),
                         DueDate = DateTime.Parse(match.Groups[5].Value, CultureInfo.InvariantCulture),
                         Quantity = decimal.Parse(match.Groups[6].Value, CultureInfo.InvariantCulture)
                     };
                 }
                 catch
                 {
-                    // If parsing fails, return null
+                    // If parsing fails, return null. Errors are logged by the caller.
                     return null;
                 }
             }
@@ -324,6 +335,7 @@ namespace CrystalGroupHome.SharedRCL.Services
 
         /// <summary>
         /// Parses supply information from a log line.
+        /// Note: Parse failures are caught and logged by the calling ParseLine method.
         /// </summary>
         private SupplyInfo? ParseSupply(string line)
         {
@@ -336,15 +348,15 @@ namespace CrystalGroupHome.SharedRCL.Services
                     {
                         Type = match.Groups[1].Value,
                         JobNumber = match.Groups[2].Value,
-                        Assembly = int.Parse(match.Groups[3].Value),
-                        Material = int.Parse(match.Groups[4].Value),
+                        Assembly = int.Parse(match.Groups[3].Value, CultureInfo.InvariantCulture),
+                        Material = int.Parse(match.Groups[4].Value, CultureInfo.InvariantCulture),
                         DueDate = DateTime.Parse(match.Groups[5].Value, CultureInfo.InvariantCulture),
                         Quantity = decimal.Parse(match.Groups[6].Value, CultureInfo.InvariantCulture)
                     };
                 }
                 catch
                 {
-                    // If parsing fails, return null
+                    // If parsing fails, return null. Errors are logged by the caller.
                     return null;
                 }
             }
