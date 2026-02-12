@@ -328,7 +328,7 @@ namespace CrystalGroupHome.SharedRCL.Analysis
                 {
                     Type = DifferenceType.PartAppeared,
                     PartNumber = part,
-                    Description = $"Part {part} reappeared in Run B after being removed in Run A",
+                    Description = $"Part {part} appeared in Run B (not present in Run A)",
                     RunAEntry = null,
                     RunBEntry = entry,
                     Severity = DifferenceSeverity.Warning
@@ -388,10 +388,11 @@ namespace CrystalGroupHome.SharedRCL.Analysis
         /// </summary>
         private string GetErrorKey(MrpLogEntry entry)
         {
-            // Use job number, part number, and a portion of the raw line to identify unique errors
+            // Use job number, part number, and normalized raw line to identify unique errors
+            // Normalize the line by removing extra whitespace and converting to uppercase for comparison
+            var normalizedLine = System.Text.RegularExpressions.Regex.Replace(entry.RawLine.Trim().ToUpperInvariant(), @"\s+", " ");
             var jobPart = $"{entry.JobNumber?.ToUpperInvariant() ?? ""}_{entry.PartNumber?.ToUpperInvariant() ?? ""}";
-            var lineHash = entry.RawLine.GetHashCode();
-            return $"{jobPart}_{lineHash}";
+            return $"{jobPart}_{normalizedLine}";
         }
     }
 }
