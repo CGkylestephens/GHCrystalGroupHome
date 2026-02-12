@@ -6,16 +6,15 @@ public class MrpLogParser
 {
     public MrpLogDocument Parse(string filePath)
     {
+        if (!File.Exists(filePath))
+        {
+            throw new FileNotFoundException($"Log file not found: {filePath}", filePath);
+        }
+
         var document = new MrpLogDocument
         {
             SourceFile = filePath
         };
-
-        if (!File.Exists(filePath))
-        {
-            document.ParsingErrors.Add($"File not found: {filePath}");
-            return document;
-        }
 
         var lines = File.ReadAllLines(filePath);
         var lineNumber = 0;
@@ -61,31 +60,25 @@ public class MrpLogParser
     private void ExtractPartAndJobNumbers(string line, MrpLogEntry entry)
     {
         // Simple pattern matching for part/job numbers
-        // Part: P123456 or Part: 123456
-        if (line.Contains("Part:") || line.Contains("P") && char.IsDigit(line.Skip(line.IndexOf('P') + 1).FirstOrDefault()))
+        var parts = line.Split(new[] { ' ', ':', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+        
+        // Extract part number (looks for P followed by digits)
+        foreach (var part in parts)
         {
-            var parts = line.Split(new[] { ' ', ':', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var part in parts)
+            if (part.StartsWith("P") && part.Length > 1 && char.IsDigit(part[1]))
             {
-                if (part.StartsWith("P") && part.Length > 1 && char.IsDigit(part[1]))
-                {
-                    entry.PartNumber = part;
-                    break;
-                }
+                entry.PartNumber = part;
+                break;
             }
         }
 
-        // Job: J123456 or Job: 123456
-        if (line.Contains("Job:") || line.Contains("J") && char.IsDigit(line.Skip(line.IndexOf('J') + 1).FirstOrDefault()))
+        // Extract job number (looks for J followed by digits)
+        foreach (var part in parts)
         {
-            var parts = line.Split(new[] { ' ', ':', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var part in parts)
+            if (part.StartsWith("J") && part.Length > 1 && char.IsDigit(part[1]))
             {
-                if (part.StartsWith("J") && part.Length > 1 && char.IsDigit(part[1]))
-                {
-                    entry.JobNumber = part;
-                    break;
-                }
+                entry.JobNumber = part;
+                break;
             }
         }
     }
@@ -94,13 +87,17 @@ public class MrpLogParser
     {
         var lowerLine = line.ToLowerInvariant();
 
-        // Extract site
-        if (lowerLine.Contains("site") && lowerLine.Contains(":"))
+        // Extract site - look for "Site:" followed by a single word/identifier
+        if (lowerLine.Contains("site") && line.Contains(":"))
         {
-            var parts = line.Split(':');
-            if (parts.Length > 1)
+            var match = System.Text.RegularExpressions.Regex.Match(
+                line,
+                @"site[:\s]+([A-Za-z0-9_-]+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            
+            if (match.Success && string.IsNullOrEmpty(document.Site))
             {
-                document.Site = parts[1].Trim();
+                document.Site = match.Groups[1].Value.Trim();
             }
         }
 
@@ -114,14 +111,33 @@ public class MrpLogParser
             document.RunType = "net change";
         }
 
-        // Extract timestamps - simple approach
-        if (lowerLine.Contains("start") && DateTime.TryParse(line, out var startTime))
+        // Extract timestamps - look for time patterns after keywords
+        if (lowerLine.Contains("start") && lowerLine.Contains("time"))
         {
-            document.StartTime = startTime;
+            // Try to extract time portion after "start time:"
+            var match = System.Text.RegularExpressions.Regex.Match(
+                line, 
+                @"start\s+time[:\s]+(.+?)(?:\r|\n|$)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            
+            if (match.Success && DateTime.TryParse(match.Groups[1].Value.Trim(), out var startTime))
+            {
+                document.StartTime = startTime;
+            }
         }
-        if (lowerLine.Contains("end") && DateTime.TryParse(line, out var endTime))
+        
+        if (lowerLine.Contains("end") && lowerLine.Contains("time"))
         {
-            document.EndTime = endTime;
+            // Try to extract time portion after "end time:"
+            var match = System.Text.RegularExpressions.Regex.Match(
+                line,
+                @"end\s+time[:\s]+(.+?)(?:\r|\n|$)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            
+            if (match.Success && DateTime.TryParse(match.Groups[1].Value.Trim(), out var endTime))
+            {
+                document.EndTime = endTime;
+            }
         }
     }
 }
