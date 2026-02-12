@@ -19,8 +19,8 @@ public class MrpLogParserTests
     public async Task ParseLogFileAsync_ValidLogFile_ReturnsPopulatedMetadata()
     {
         // Arrange
-        var testFile = Path.Combine("testdata", "MRPRegenSample.txt");
-        var fullPath = Path.Combine("/home/runner/work/GHCrystalGroupHome/GHCrystalGroupHome", testFile);
+        var testFile = Path.Combine("..", "..", "..", "..", "testdata", "MRPRegenSample.txt");
+        var fullPath = Path.GetFullPath(testFile);
         
         // Act
         var result = await _parser.ParseLogFileAsync(fullPath);

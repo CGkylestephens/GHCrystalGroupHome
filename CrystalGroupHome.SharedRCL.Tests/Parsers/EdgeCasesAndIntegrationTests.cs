@@ -194,16 +194,17 @@ public class EdgeCasesAndIntegrationTests
     public async Task ParseLogFileAsync_RealTestDataFile_ParsesCorrectly()
     {
         // Arrange
-        var testFile = Path.Combine("/home/runner/work/GHCrystalGroupHome/GHCrystalGroupHome", "testdata", "MRPRegenSample.txt");
+        var testFile = Path.Combine("..", "..", "..", "..", "testdata", "MRPRegenSample.txt");
+        var fullPath = Path.GetFullPath(testFile);
         
         // Skip if file doesn't exist
-        if (!File.Exists(testFile))
+        if (!File.Exists(fullPath))
         {
             return; // Skip test if sample file not available
         }
         
         // Act
-        var result = await _parser.ParseLogFileAsync(testFile);
+        var result = await _parser.ParseLogFileAsync(fullPath);
         
         // Assert
         result.Should().NotBeNull();
