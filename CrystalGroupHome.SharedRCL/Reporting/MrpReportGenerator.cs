@@ -291,20 +291,8 @@ namespace CrystalGroupHome.SharedRCL.Reporting
                 return;
             }
 
-            // Group by priority (heuristic based on keywords)
-            var mustCheck = new List<string>();
-            var shouldCheck = new List<string>();
-            var optional = new List<string>();
-
-            foreach (var step in allNextSteps)
-            {
-                if (step.Contains("Job Tracker") || step.Contains("System Monitor"))
-                    mustCheck.Add(step);
-                else if (step.Contains("Review") || step.Contains("Check"))
-                    shouldCheck.Add(step);
-                else
-                    optional.Add(step);
-            }
+            // Categorize steps by priority
+            var (mustCheck, shouldCheck, optional) = CategorizeNextSteps(allNextSteps);
 
             if (mustCheck.Any())
             {
@@ -328,6 +316,25 @@ namespace CrystalGroupHome.SharedRCL.Reporting
                 foreach (var step in optional)
                     sb.AppendLine($"- {step}");
             }
+        }
+
+        private (List<string> mustCheck, List<string> shouldCheck, List<string> optional) CategorizeNextSteps(List<string> steps)
+        {
+            var mustCheck = new List<string>();
+            var shouldCheck = new List<string>();
+            var optional = new List<string>();
+
+            foreach (var step in steps)
+            {
+                if (step.Contains("Job Tracker") || step.Contains("System Monitor"))
+                    mustCheck.Add(step);
+                else if (step.Contains("Review") || step.Contains("Check"))
+                    shouldCheck.Add(step);
+                else
+                    optional.Add(step);
+            }
+
+            return (mustCheck, shouldCheck, optional);
         }
 
         private string GeneratePlainTextReport(
@@ -581,19 +588,8 @@ namespace CrystalGroupHome.SharedRCL.Reporting
                 return;
             }
 
-            var mustCheck = new List<string>();
-            var shouldCheck = new List<string>();
-            var optional = new List<string>();
-
-            foreach (var step in allNextSteps)
-            {
-                if (step.Contains("Job Tracker") || step.Contains("System Monitor"))
-                    mustCheck.Add(step);
-                else if (step.Contains("Review") || step.Contains("Check"))
-                    shouldCheck.Add(step);
-                else
-                    optional.Add(step);
-            }
+            // Use shared categorization logic
+            var (mustCheck, shouldCheck, optional) = CategorizeNextSteps(allNextSteps);
 
             if (mustCheck.Any())
             {
@@ -647,6 +643,7 @@ namespace CrystalGroupHome.SharedRCL.Reporting
             
             // Basic markdown to HTML conversion
             var lines = markdown.Split('\n');
+            bool inCodeBlock = false;
             foreach (var line in lines)
             {
                 if (line.StartsWith("# "))
@@ -656,7 +653,18 @@ namespace CrystalGroupHome.SharedRCL.Reporting
                 else if (line.StartsWith("### "))
                     html.AppendLine($"<h3>{line.Substring(4)}</h3>");
                 else if (line.StartsWith("```"))
-                    html.AppendLine(line.Contains("```") && line != "```" ? "<pre>" : line == "```" ? "</pre>" : "<pre>");
+                {
+                    if (inCodeBlock)
+                    {
+                        html.AppendLine("</pre>");
+                        inCodeBlock = false;
+                    }
+                    else
+                    {
+                        html.AppendLine("<pre>");
+                        inCodeBlock = true;
+                    }
+                }
                 else if (line.StartsWith("- "))
                     html.AppendLine($"<li>{line.Substring(2)}</li>");
                 else if (!string.IsNullOrWhiteSpace(line))
