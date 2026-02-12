@@ -6,7 +6,7 @@ namespace MRP.Assistant.Parsers;
 public class MrpLogParser
 {
     private static readonly Regex JobPattern = new(@"Job[:\s]+([A-Z0-9\-]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-    private static readonly Regex PartPattern = new(@"Part[:\s]+([A-Z0-9\-]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex PartPattern = new(@"Part[:\s]+([A-Z0-9\-\[\]]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private static readonly Regex DemandPattern = new(@"Demand:\s+S:\s+(\d+/\d+/\d+)", RegexOptions.Compiled);
     private static readonly Regex SupplyPattern = new(@"Supply:\s+J:\s+([A-Z0-9\-]+/\d+/\d+)", RegexOptions.Compiled);
     
@@ -26,16 +26,30 @@ public class MrpLogParser
             SourceFile = sourceFile
         };
         
-        // Detect run type
-        var content = string.Join(" ", lines);
-        if (content.Contains("Regen", StringComparison.OrdinalIgnoreCase) || 
-            content.Contains("Building Pegging", StringComparison.OrdinalIgnoreCase))
+        // Detect run type from filename first
+        var fileName = Path.GetFileName(sourceFile).ToLower();
+        if (fileName.Contains("regen"))
         {
             doc.RunType = MrpRunType.Regeneration;
         }
-        else if (content.Contains("Net Change", StringComparison.OrdinalIgnoreCase))
+        else if (fileName.Contains("net") || fileName.Contains("netchange"))
         {
             doc.RunType = MrpRunType.NetChange;
+        }
+        else
+        {
+            // Detect from content
+            var content = string.Join(" ", lines);
+            if (content.Contains("Regen", StringComparison.OrdinalIgnoreCase) || 
+                content.Contains("Building Pegging", StringComparison.OrdinalIgnoreCase))
+            {
+                doc.RunType = MrpRunType.Regeneration;
+            }
+            else if (content.Contains("Net Change", StringComparison.OrdinalIgnoreCase) ||
+                     content.Contains("Start Processing Part", StringComparison.OrdinalIgnoreCase))
+            {
+                doc.RunType = MrpRunType.NetChange;
+            }
         }
         
         // Parse entries
@@ -54,14 +68,15 @@ public class MrpLogParser
             var jobMatch = JobPattern.Match(line);
             if (jobMatch.Success)
             {
-                entry.JobNumber = jobMatch.Groups[1].Value;
+                entry.JobNumber = jobMatch.Groups[1].Value.Trim('[', ']');
             }
             
             // Extract part number
             var partMatch = PartPattern.Match(line);
             if (partMatch.Success)
             {
-                entry.PartNumber = partMatch.Groups[1].Value;
+                entry.PartNumber = partMatch.Groups[1].Value.Trim('[', ']', ',', '.');
+                entry.EntryType = MrpLogEntryType.ProcessingPart;
             }
             
             // Extract demand
@@ -92,17 +107,21 @@ public class MrpLogParser
             // Extract start/end times
             if (line.Contains("Start Time:", StringComparison.OrdinalIgnoreCase))
             {
-                if (DateTime.TryParse(line.Split(':',2)[1].Trim(), out var startTime))
+                var parts = line.Split(':', 2);
+                if (parts.Length > 1 && DateTime.TryParse(parts[1].Trim(), out var startTime))
                     doc.StartTime = startTime;
             }
             if (line.Contains("End Time:", StringComparison.OrdinalIgnoreCase))
             {
-                if (DateTime.TryParse(line.Split(':', 2)[1].Trim(), out var endTime))
+                var parts = line.Split(':', 2);
+                if (parts.Length > 1 && DateTime.TryParse(parts[1].Trim(), out var endTime))
                     doc.EndTime = endTime;
             }
             if (line.Contains("Site:", StringComparison.OrdinalIgnoreCase))
             {
-                doc.Site = line.Split(':', 2)[1].Trim();
+                var parts = line.Split(':', 2);
+                if (parts.Length > 1)
+                    doc.Site = parts[1].Trim();
             }
             
             doc.Entries.Add(entry);

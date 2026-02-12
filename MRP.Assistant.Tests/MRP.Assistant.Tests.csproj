@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MRP.Assistant\MRP.Assistant.csproj" />
+    <ProjectReference Include="..\MRP.Assistant.CLI\MRP.Assistant.CLI.csproj" />
   </ItemGroup>
 
 </Project>
