@@ -54,9 +54,9 @@ public class FullPipelineTests
         report.Should().Contain("## D) LOG EVIDENCE");
         report.Should().Contain("## E) NEXT CHECKS IN EPICOR");
         
-        // Assert - Run types detected
-        runA.RunType.Should().NotBe(MrpRunType.Unknown, "Run A should be detected as Regeneration");
-        runB.RunType.Should().NotBe(MrpRunType.Unknown, "Run B should be detected as Net Change");
+        // Assert - Run types detected correctly
+        runA.RunType.Should().Be(MrpRunType.Regeneration, "Sample A filename contains 'regen'");
+        runB.RunType.Should().Be(MrpRunType.NetChange, "Sample B should be detected as Net Change");
         
         // Assert - Both documents parsed
         runA.Entries.Should().NotBeEmpty("Run A should have entries");

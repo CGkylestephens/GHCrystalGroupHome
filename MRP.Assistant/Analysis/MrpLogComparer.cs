@@ -1,12 +1,9 @@
 using MRP.Assistant.Core;
-using System.Text.RegularExpressions;
 
 namespace MRP.Assistant.Analysis;
 
 public class MrpLogComparer
 {
-    private static readonly Regex WhitespaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
-    
     public MrpLogComparison Compare(MrpLogDocument runA, MrpLogDocument runB)
     {
         var comparison = new MrpLogComparison

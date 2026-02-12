@@ -5,7 +5,7 @@ namespace MRP.Assistant.Parsers;
 
 public class MrpLogParser
 {
-    private static readonly Regex JobPattern = new(@"Job[:\s]+([A-Z0-9\-]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly Regex JobPattern = new(@"Job:\s*([A-Z0-9\-]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private static readonly Regex PartPattern = new(@"Part[:\s]+([A-Z0-9\-\[\]]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private static readonly Regex DemandPattern = new(@"Demand:\s+S:\s+(\d+/\d+/\d+)", RegexOptions.Compiled);
     private static readonly Regex SupplyPattern = new(@"Supply:\s+J:\s+([A-Z0-9\-]+/\d+/\d+)", RegexOptions.Compiled);

@@ -75,7 +75,15 @@ static string GetOptionValue(string[] args, string option, string defaultValue)
     for (int i = 0; i < args.Length - 1; i++)
     {
         if (args[i] == option)
-            return args[i + 1];
+        {
+            if (i + 1 < args.Length)
+                return args[i + 1];
+            else
+            {
+                Console.Error.WriteLine($"Warning: Option '{option}' specified but no value provided. Using default: {defaultValue}");
+                return defaultValue;
+            }
+        }
     }
     return defaultValue;
 }
