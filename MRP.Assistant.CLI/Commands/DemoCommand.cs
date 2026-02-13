@@ -1,85 +1,75 @@
-using McMaster.Extensions.CommandLineUtils;
+using MRP.Assistant.Core;
+using MRP.Assistant.Analysis;
+using MRP.Assistant.Reporting;
 
 namespace MRP.Assistant.CLI.Commands;
 
-[Command(Name = "demo", Description = "Generate sample report from included test data")]
 public class DemoCommand
 {
-    [Option("--output", Description = "Output file path (default: demo_report.md)")]
     public string OutputFile { get; set; } = "demo_report.md";
     
     public int OnExecute()
     {
-        Console.WriteLine("MRP Assistant Demo");
-        Console.WriteLine("==================");
-        Console.WriteLine();
-        Console.WriteLine("This will compare sample logs A and B...");
-        Console.WriteLine();
-        
-        // Find testdata directory (try multiple paths)
-        var testDataPaths = new[]
+        try
         {
-            Path.Combine(Directory.GetCurrentDirectory(), "testdata"),
-            Path.Combine(Directory.GetCurrentDirectory(), "..", "testdata"),
-            Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "testdata"),
-            Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "testdata"),
-            Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "testdata")
-        };
-        
-        var testDataDir = testDataPaths.FirstOrDefault(Directory.Exists);
-        
-        if (testDataDir == null)
-        {
-            Console.Error.WriteLine("Error: Could not find testdata directory");
-            Console.Error.WriteLine("Make sure you run this from the project root");
-            Console.Error.WriteLine();
-            Console.Error.WriteLine("Searched paths:");
-            foreach (var path in testDataPaths)
+            // Create demo documents
+            var runA = new MrpLogDocument
             {
-                Console.Error.WriteLine($"  - {path}");
-            }
+                SourceFile = "demo_run_a.txt",
+                RunType = MrpRunType.Regeneration,
+                StartTime = DateTime.Now.AddDays(-1),
+                EndTime = DateTime.Now.AddDays(-1).AddHours(1),
+                Site = "DEMO"
+            };
+            
+            var runB = new MrpLogDocument
+            {
+                SourceFile = "demo_run_b.txt",
+                RunType = MrpRunType.NetChange,
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now.AddHours(1),
+                Site = "DEMO"
+            };
+            
+            var comparison = new MrpLogComparison
+            {
+                RunA = runA,
+                RunB = runB
+            };
+            
+            comparison.Differences.Add(new MrpDifference
+            {
+                Type = DifferenceType.JobRemoved,
+                Severity = DifferenceSeverity.Warning,
+                JobNumber = "DEMO123",
+                Description = "Demo job removed"
+            });
+            
+            comparison.Summary.TotalDifferences = 1;
+            comparison.Summary.WarningDifferences = 1;
+            
+            var explanations = new List<Explanation>
+            {
+                new Explanation
+                {
+                    Type = ExplanationType.Fact,
+                    Text = "This is a demo report",
+                    Confidence = 1.0
+                }
+            };
+            
+            var generator = new MrpReportGenerator();
+            var report = generator.GenerateReport(comparison, explanations, new ReportOptions());
+            
+            File.WriteAllText(OutputFile, report);
+            
+            Console.WriteLine($"Demo report generated: {OutputFile}");
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error: {ex.Message}");
             return 1;
         }
-        
-        // Look for any sample log files in testdata
-        var logFiles = Directory.GetFiles(testDataDir, "*.log")
-            .Concat(Directory.GetFiles(testDataDir, "*.txt"))
-            .OrderBy(f => f)
-            .ToList();
-        
-        if (logFiles.Count < 2)
-        {
-            Console.Error.WriteLine("Error: Need at least 2 log files in testdata for demo");
-            Console.Error.WriteLine($"Found {logFiles.Count} files in: {testDataDir}");
-            return 1;
-        }
-        
-        var fileA = logFiles[0];
-        var fileB = logFiles[1];
-        
-        Console.WriteLine($"Using files:");
-        Console.WriteLine($"  Run A: {Path.GetFileName(fileA)}");
-        Console.WriteLine($"  Run B: {Path.GetFileName(fileB)}");
-        Console.WriteLine();
-        
-        // Invoke compare command
-        var compareCmd = new CompareCommand
-        {
-            RunAFile = fileA,
-            RunBFile = fileB,
-            OutputFile = OutputFile,
-            Format = "markdown"
-        };
-        
-        var result = compareCmd.OnExecute();
-        
-        if (result == 0)
-        {
-            Console.WriteLine();
-            Console.WriteLine("Demo complete! Open the report to see the results:");
-            Console.WriteLine($"  {Path.GetFullPath(OutputFile)}");
-        }
-        
-        return result;
     }
 }
