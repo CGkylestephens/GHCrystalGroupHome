@@ -1,129 +1,74 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CrystalGroupHome.SharedRCL.Models
 {
     /// <summary>
-    /// Represents a parsed MRP log document with all entries and metadata.
+    /// Represents a complete parsed MRP log file with metadata and all entries.
     /// </summary>
     public class MrpLogDocument
     {
         /// <summary>
-        /// Path to the source log file.
+        /// The path to the source log file.
         /// </summary>
         public string SourceFile { get; set; } = string.Empty;
 
         /// <summary>
-        /// Type of MRP run (e.g., "Regeneration", "Net Change").
+        /// The type of MRP run (Regeneration or Net Change).
         /// </summary>
-        public string RunType { get; set; } = "Unknown";
+        public MrpRunType RunType { get; set; }
 
         /// <summary>
-        /// Site where the run occurred.
-        /// </summary>
-        public string? Site { get; set; }
-
-        /// <summary>
-        /// Start time of the MRP run.
+        /// The timestamp when the MRP run started.
         /// </summary>
         public DateTime? StartTime { get; set; }
 
         /// <summary>
-        /// End time of the MRP run.
+        /// The timestamp when the MRP run ended.
         /// </summary>
         public DateTime? EndTime { get; set; }
 
         /// <summary>
-        /// Duration of the MRP run.
+        /// The site name where the MRP run occurred.
         /// </summary>
-        public TimeSpan? Duration
-        {
-            get
-            {
-                if (StartTime.HasValue && EndTime.HasValue)
-                {
-                    return EndTime.Value - StartTime.Value;
-                }
-                return null;
-            }
-        }
+        public string? Site { get; set; }
 
         /// <summary>
-        /// All parsed log entries.
+        /// All parsed log entries from the file.
         /// </summary>
-        public List<MrpLogEntry> Entries { get; set; } = new List<MrpLogEntry>();
+        public List<MrpLogEntry> Entries { get; set; } = new();
+
+        /// <summary>
+        /// Parsing errors or warnings encountered during parsing.
+        /// </summary>
+        public List<string> ParsingErrors { get; set; } = new();
+
+        /// <summary>
+        /// The duration of the MRP run, if both start and end times are available.
+        /// </summary>
+        public TimeSpan? Duration => EndTime.HasValue && StartTime.HasValue
+            ? EndTime.Value - StartTime.Value
+            : null;
     }
 
     /// <summary>
-    /// Represents a single entry/line in an MRP log.
+    /// Defines the types of MRP runs.
     /// </summary>
-    public class MrpLogEntry
+    public enum MrpRunType
     {
         /// <summary>
-        /// Line number in the source file.
+        /// Unknown or undetected run type.
         /// </summary>
-        public int LineNumber { get; set; }
+        Unknown,
 
         /// <summary>
-        /// Raw log line text.
+        /// Full regeneration run (processes all parts).
         /// </summary>
-        public string RawLine { get; set; } = string.Empty;
+        Regeneration,
 
         /// <summary>
-        /// Timestamp of the log entry.
+        /// Net change run (processes only changed parts).
         /// </summary>
-        public DateTime? Timestamp { get; set; }
-
-        /// <summary>
-        /// Type of log entry.
-        /// </summary>
-        public MrpLogEntryType EntryType { get; set; }
-
-        /// <summary>
-        /// Part number mentioned in this entry.
-        /// </summary>
-        public string? PartNumber { get; set; }
-
-        /// <summary>
-        /// Job number mentioned in this entry.
-        /// </summary>
-        public string? JobNumber { get; set; }
-
-        /// <summary>
-        /// Message or description from the log entry.
-        /// </summary>
-        public string? Message { get; set; }
-    }
-
-    /// <summary>
-    /// Type of MRP log entry.
-    /// </summary>
-    public enum MrpLogEntryType
-    {
-        /// <summary>
-        /// Normal informational entry.
-        /// </summary>
-        Info,
-
-        /// <summary>
-        /// Error entry.
-        /// </summary>
-        Error,
-
-        /// <summary>
-        /// Warning entry.
-        /// </summary>
-        Warning,
-
-        /// <summary>
-        /// Processing activity.
-        /// </summary>
-        Processing,
-
-        /// <summary>
-        /// Unknown type.
-        /// </summary>
-        Unknown
+        NetChange
     }
 }

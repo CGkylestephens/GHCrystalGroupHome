@@ -4,53 +4,109 @@ using System.Collections.Generic;
 namespace CrystalGroupHome.SharedRCL.Models
 {
     /// <summary>
-    /// Represents a single entry from an MRP log.
+    /// Represents a single parsed line from an MRP log file.
     /// </summary>
     public class MrpLogEntry
     {
         /// <summary>
-        /// The line number in the original log file.
+        /// The timestamp extracted from the log line (HH:mm:ss format).
         /// </summary>
-        public int LineNumber { get; set; }
+        public DateTime? Timestamp { get; set; }
 
         /// <summary>
-        /// The original log line text.
+        /// The raw, unparsed line from the log file.
         /// </summary>
         public string RawLine { get; set; } = string.Empty;
 
         /// <summary>
-        /// The part number referenced in this entry (if any).
+        /// The type of entry this line represents.
+        /// </summary>
+        public MrpLogEntryType EntryType { get; set; }
+
+        /// <summary>
+        /// The part number extracted from the line, if any.
         /// </summary>
         public string? PartNumber { get; set; }
 
         /// <summary>
-        /// The job number referenced in this entry (if any).
+        /// The job number extracted from the line, if any.
         /// </summary>
         public string? JobNumber { get; set; }
 
         /// <summary>
-        /// The date associated with this entry (if any).
+        /// Demand information extracted from the line, if this is a Demand entry.
         /// </summary>
-        public DateTime? Date { get; set; }
+        public DemandInfo? Demand { get; set; }
 
         /// <summary>
-        /// The quantity associated with this entry (if any).
+        /// Supply information extracted from the line, if this is a Supply entry.
         /// </summary>
-        public decimal? Quantity { get; set; }
+        public SupplyInfo? Supply { get; set; }
 
         /// <summary>
-        /// Whether this entry represents an error.
+        /// Error message extracted from the line, if this is an Error or Warning entry.
         /// </summary>
-        public bool IsError { get; set; }
+        public string? ErrorMessage { get; set; }
 
         /// <summary>
-        /// The type of entry (e.g., "Supply", "Demand", "Error", "Part", "Job").
+        /// The line number in the source file (1-based).
         /// </summary>
-        public string EntryType { get; set; } = string.Empty;
+        public int LineNumber { get; set; }
 
         /// <summary>
-        /// Additional metadata extracted from the entry.
+        /// Additional metadata extracted from the line.
         /// </summary>
-        public Dictionary<string, object> Metadata { get; set; } = new();
+        public Dictionary<string, string> Metadata { get; set; } = new();
+    }
+
+    /// <summary>
+    /// Defines the types of entries that can be found in an MRP log.
+    /// </summary>
+    public enum MrpLogEntryType
+    {
+        /// <summary>
+        /// Unknown or unrecognized entry type.
+        /// </summary>
+        Unknown,
+
+        /// <summary>
+        /// Line indicating a part is being processed (e.g., "Processing Part:").
+        /// </summary>
+        ProcessingPart,
+
+        /// <summary>
+        /// Line containing demand information (e.g., "Demand: S: ...").
+        /// </summary>
+        Demand,
+
+        /// <summary>
+        /// Line containing supply information (e.g., "Supply: J: ...").
+        /// </summary>
+        Supply,
+
+        /// <summary>
+        /// Line containing pegging information (e.g., "Pegged Qty: ...").
+        /// </summary>
+        Pegging,
+
+        /// <summary>
+        /// Line containing an error message.
+        /// </summary>
+        Error,
+
+        /// <summary>
+        /// Line containing a warning message.
+        /// </summary>
+        Warning,
+
+        /// <summary>
+        /// Line containing system information (e.g., "Building Pegging Demand Master...").
+        /// </summary>
+        SystemInfo,
+
+        /// <summary>
+        /// Line containing only a timestamp (no other significant data).
+        /// </summary>
+        Timestamp
     }
 }
