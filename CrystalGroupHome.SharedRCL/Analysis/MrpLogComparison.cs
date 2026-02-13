@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using CrystalGroupHome.SharedRCL.Models;
 
 namespace CrystalGroupHome.SharedRCL.Analysis
@@ -9,48 +10,48 @@ namespace CrystalGroupHome.SharedRCL.Analysis
     public class MrpLogComparison
     {
         /// <summary>
-        /// The first MRP run (typically the baseline or earlier run).
+        /// First MRP run (baseline).
         /// </summary>
-        public MrpLogDocument RunA { get; set; } = null!;
+        public MrpLogDocument RunA { get; set; } = new MrpLogDocument();
 
         /// <summary>
-        /// The second MRP run (typically the comparison or later run).
+        /// Second MRP run (comparison target).
         /// </summary>
-        public MrpLogDocument RunB { get; set; } = null!;
+        public MrpLogDocument RunB { get; set; } = new MrpLogDocument();
 
         /// <summary>
-        /// List of detected differences between the two runs.
+        /// All differences found between the runs.
         /// </summary>
-        public List<MrpDifference> Differences { get; set; } = new();
+        public List<Difference> Differences { get; set; } = new List<Difference>();
 
         /// <summary>
         /// Summary statistics of the comparison.
         /// </summary>
-        public ComparisonSummary Summary { get; set; } = new();
+        public ComparisonSummary Summary { get; set; } = new ComparisonSummary();
     }
 
     /// <summary>
-    /// Summary statistics for an MRP log comparison.
+    /// Summary statistics for a comparison.
     /// </summary>
     public class ComparisonSummary
     {
         /// <summary>
-        /// Total number of differences detected.
+        /// Total number of differences found.
         /// </summary>
         public int TotalDifferences { get; set; }
 
         /// <summary>
-        /// Number of critical severity differences.
+        /// Number of critical differences.
         /// </summary>
         public int CriticalCount { get; set; }
 
         /// <summary>
-        /// Number of warning severity differences.
+        /// Number of warning-level differences.
         /// </summary>
         public int WarningCount { get; set; }
 
         /// <summary>
-        /// Number of info severity differences.
+        /// Number of informational differences.
         /// </summary>
         public int InfoCount { get; set; }
 
@@ -60,7 +61,7 @@ namespace CrystalGroupHome.SharedRCL.Analysis
         public int JobsAdded { get; set; }
 
         /// <summary>
-        /// Number of jobs removed (present in Run A but not in Run B).
+        /// Number of jobs removed in Run B.
         /// </summary>
         public int JobsRemoved { get; set; }
 
@@ -75,8 +76,106 @@ namespace CrystalGroupHome.SharedRCL.Analysis
         public int QuantityChanges { get; set; }
 
         /// <summary>
-        /// Number of new errors that appeared in Run B.
+        /// Number of new errors in Run B.
         /// </summary>
         public int NewErrors { get; set; }
+    }
+
+    /// <summary>
+    /// Represents a single difference between two MRP runs.
+    /// </summary>
+    public class Difference
+    {
+        /// <summary>
+        /// Type of difference.
+        /// </summary>
+        public DifferenceType Type { get; set; }
+
+        /// <summary>
+        /// Severity level of the difference.
+        /// </summary>
+        public DifferenceSeverity Severity { get; set; }
+
+        /// <summary>
+        /// Human-readable description of the difference.
+        /// </summary>
+        public string Description { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Part number associated with this difference, if any.
+        /// </summary>
+        public string? PartNumber { get; set; }
+
+        /// <summary>
+        /// Job number associated with this difference, if any.
+        /// </summary>
+        public string? JobNumber { get; set; }
+
+        /// <summary>
+        /// Value in Run A.
+        /// </summary>
+        public string? ValueInRunA { get; set; }
+
+        /// <summary>
+        /// Value in Run B.
+        /// </summary>
+        public string? ValueInRunB { get; set; }
+    }
+
+    /// <summary>
+    /// Type of difference between MRP runs.
+    /// </summary>
+    public enum DifferenceType
+    {
+        /// <summary>
+        /// Job was added.
+        /// </summary>
+        JobAdded,
+
+        /// <summary>
+        /// Job was removed.
+        /// </summary>
+        JobRemoved,
+
+        /// <summary>
+        /// Date changed.
+        /// </summary>
+        DateShift,
+
+        /// <summary>
+        /// Quantity changed.
+        /// </summary>
+        QuantityChange,
+
+        /// <summary>
+        /// New error appeared.
+        /// </summary>
+        NewError,
+
+        /// <summary>
+        /// Other type of change.
+        /// </summary>
+        Other
+    }
+
+    /// <summary>
+    /// Severity level of a difference.
+    /// </summary>
+    public enum DifferenceSeverity
+    {
+        /// <summary>
+        /// Informational only.
+        /// </summary>
+        Info,
+
+        /// <summary>
+        /// Warning level.
+        /// </summary>
+        Warning,
+
+        /// <summary>
+        /// Critical issue.
+        /// </summary>
+        Critical
     }
 }
