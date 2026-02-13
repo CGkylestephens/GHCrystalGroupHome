@@ -1,13 +1,30 @@
-﻿namespace MRP.Assistant.CLI;
+using McMaster.Extensions.CommandLineUtils;
+using MRP.Assistant.CLI.Commands;
 
+namespace MRP.Assistant.CLI;
+
+[Command(Name = "mrp-assistant", Description = "Epicor MRP Log Investigation Assistant")]
+[Subcommand(typeof(CompareCommand), typeof(ParseCommand), typeof(DemoCommand))]
 public class Program
 {
     public static int Main(string[] args)
     {
-        Console.WriteLine("MRP.Assistant CLI - Epicor MRP Log Investigation Assistant");
-        Console.WriteLine("Version 0.1.0");
-        Console.WriteLine();
-        Console.WriteLine("Run 'mrp-assistant --help' for usage information.");
+        try
+        {
+            return CommandLineApplication.Execute<Program>(args);
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine($"Error: {ex.Message}");
+            Console.ResetColor();
+            return 1;
+        }
+    }
+    
+    private int OnExecute(CommandLineApplication app)
+    {
+        app.ShowHelp();
         return 0;
     }
 }
